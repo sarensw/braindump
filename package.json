@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
+    "dateformat": "^4.5.1",
     "draft-js": "^0.11.7",
     "react": "^17.0.2",
     "react-dedux": "^0.4.0-beta.4",
