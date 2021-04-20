@@ -4,7 +4,8 @@
   "description": "Dump your brain",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "snowpack dev",
+    "build": "snowpack build"
   },
   "author": "Stephan Arenswald",
   "license": "UNLICENSED",
@@ -21,6 +22,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
+    "draft-js": "^0.11.7",
     "react": "^17.0.2",
     "react-dedux": "^0.4.0-beta.4",
     "react-dom": "^17.0.2"
