@@ -6,8 +6,10 @@ const BlockDate = (props) => {
   console.log(props)
   const date = df(new Date(), 'yy-mm-dd')
   return (
-    <span 
-      className='bg-gray-300'
+    <span style={{
+      background: '#a3be8c'
+    }}
+      className=''
       data-offset-key={props.offsetKey}>
       {props.children}{date}
     </span>
