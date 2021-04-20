@@ -21,7 +21,7 @@ const Editor = _ => {
 
   return (
     <>
-      <div className="bg-gray-100">
+      <div>
         <DraftJsEditor editorState={editorState} onChange={onChange} />
       </div>
     </>
