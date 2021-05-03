@@ -49,8 +49,8 @@ const Editor = _ => {
 
   return (
     <>
-      <div className='border border-gray-300 h-full'>
-        <DraftJsEditor editorState={editorState} onChange={onChange} />
+      <div className='border border-gray-300 h-full overflow-y-auto'>
+        <DraftJsEditor className='' editorState={editorState} onChange={onChange} />
       </div>
     </>
   )
