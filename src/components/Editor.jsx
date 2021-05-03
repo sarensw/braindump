@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { CompositeDecorator, Editor as DraftJsEditor, EditorState } from 'draft-js'
 import { BlockDateSettings } from './blocks/BlockDate'
+import { BlockTaskSettings } from './blocks/BlockTask'
 //import { BlockLinkSettings } from './blocks/BlockLink'
 import useStorage from '../hooks/useStorage'
 import useInterval from '../hooks/useInterval'
@@ -8,7 +9,7 @@ import useInterval from '../hooks/useInterval'
 const Editor = _ => {
   const compositeDecorator = new CompositeDecorator([
     BlockDateSettings.decorator,
-    //BlockLinkSettings.decorator
+    BlockTaskSettings.decorator
   ])
 
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty(compositeDecorator))
