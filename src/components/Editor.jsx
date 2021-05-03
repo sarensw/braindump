@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { CompositeDecorator, Editor as DraftJsEditor, EditorState } from 'draft-js'
-//import { BlockDateSettings } from './blocks/BlockDate'
+import { BlockDateSettings } from './blocks/BlockDate'
 //import { BlockLinkSettings } from './blocks/BlockLink'
 import useStorage from '../hooks/useStorage'
 import useInterval from '../hooks/useInterval'
 
 const Editor = _ => {
   const compositeDecorator = new CompositeDecorator([
-    //BlockDateSettings.decorator,
+    BlockDateSettings.decorator,
     //BlockLinkSettings.decorator
   ])
 
@@ -20,18 +20,7 @@ const Editor = _ => {
    */
   const onChange = editorState => {
     setEditorState(editorState)
-    //db.store(editorState)
   }
-
-  /* useEffect(() => {
-    const interval = setInterval(_ => {
-      db.store(editorState)
-      console.log('stored')
-    }, 5000)
-    return () => {
-      clearInterval(interval)
-    }
-  }, []) */
 
   useEffect(async () => {
     if (db) {
@@ -39,7 +28,7 @@ const Editor = _ => {
       const contentState = await db.load()
       console.log('loaded')
       console.log(contentState)
-      setEditorState(EditorState.createWithContent(contentState))
+      setEditorState(EditorState.createWithContent(contentState, compositeDecorator))
     }
   }, [])
 
