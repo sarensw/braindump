@@ -4,7 +4,7 @@
   "description": "Dump your brain",
   "main": "index.js",
   "scripts": {
-    "start": "snowpack dev",
+    "start": "snowpack dev --polyfill-node",
     "build": "snowpack build"
   },
   "author": "Stephan Arenswald",
@@ -24,7 +24,9 @@
     "@reduxjs/toolkit": "^1.5.1",
     "dateformat": "^4.5.1",
     "draft-js": "^0.11.7",
+    "pouchdb": "^7.2.2",
     "react": "^17.0.2",
+    "react-datepicker": "^3.8.0",
     "react-dedux": "^0.4.0-beta.4",
     "react-dom": "^17.0.2"
   }

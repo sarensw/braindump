@@ -1,27 +1,55 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { CompositeDecorator, Editor as DraftJsEditor, EditorState } from 'draft-js'
-import BlockDate, { BlockDateSettings } from './blocks/BlockDate'
+//import { BlockDateSettings } from './blocks/BlockDate'
+//import { BlockLinkSettings } from './blocks/BlockLink'
+import useStorage from '../hooks/useStorage'
+import useInterval from '../hooks/useInterval'
 
 const Editor = _ => {
   const compositeDecorator = new CompositeDecorator([
-    BlockDateSettings.decorator
+    //BlockDateSettings.decorator,
+    //BlockLinkSettings.decorator
   ])
 
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty(compositeDecorator))
+  const db = useStorage()
 
   /**
    * Called when the editor state changes
    * @param {EditorState} editorState The editor state that changed
    */
   const onChange = editorState => {
-    console.log(editorState.getCurrentContent())
-    console.log(editorState.toJS())
     setEditorState(editorState)
+    //db.store(editorState)
   }
+
+  /* useEffect(() => {
+    const interval = setInterval(_ => {
+      db.store(editorState)
+      console.log('stored')
+    }, 5000)
+    return () => {
+      clearInterval(interval)
+    }
+  }, []) */
+
+  useEffect(async () => {
+    if (db) {
+      console.log('loading')
+      const contentState = await db.load()
+      console.log('loaded')
+      console.log(contentState)
+      setEditorState(EditorState.createWithContent(contentState))
+    }
+  }, [])
+
+  useInterval(_ => {
+    db.store(editorState)
+  }, 5000)
 
   return (
     <>
-      <div>
+      <div className='border border-gray-300 h-full'>
         <DraftJsEditor editorState={editorState} onChange={onChange} />
       </div>
     </>
