@@ -38,7 +38,7 @@ const useStorage = _ => {
           }
         }
       }).then(function (doc) {
-        doc.lines = value.replace(/\n\n/, "\n").split('\n')
+        doc.lines = value.replace(/\n\s*\n\s*\n/g, "\n\n").split('\n')
         return db.put(doc)
       })
     } catch (error) {
