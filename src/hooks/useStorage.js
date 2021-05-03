@@ -14,9 +14,10 @@ const useStorage = _ => {
       })
     }
     return () => {
-      if (db) {
+      // don't close as this breaks the editor with every reload
+      /* if (db) {
         db.current.close()
-      }
+      } */
     }
   }, [pdb])
 
