@@ -1,46 +1,73 @@
 import React, { useState, useEffect } from 'react'
-import { CompositeDecorator, Editor as DraftJsEditor, EditorState } from 'draft-js'
-import { BlockDateSettings } from './blocks/BlockDate'
-import { BlockTaskSettings } from './blocks/BlockTask'
-//import { BlockLinkSettings } from './blocks/BlockLink'
-import useStorage from '../hooks/useStorage'
-import useInterval from '../hooks/useInterval'
+import { UnControlled as CodeMirror } from 'react-codemirror2'
+import { useDoc, usePouch } from 'use-pouchdb'
 
 const Editor = _ => {
-  const compositeDecorator = new CompositeDecorator([
-    BlockDateSettings.decorator,
-    BlockTaskSettings.decorator
-  ])
+  const tabId = '0'
 
-  const [editorState, setEditorState] = useState(() => EditorState.createEmpty(compositeDecorator))
-  const db = useStorage()
+  const [content, setContent] = useState('hello')
+  const db = usePouch()
 
-  /**
-   * Called when the editor state changes
-   * @param {EditorState} editorState The editor state that changed
-   */
-  const onChange = editorState => {
-    setEditorState(editorState)
+  const options = {
+    /* styleActiveLine: true, */
+    lineNumbers: true,
+    /* lineWrapping: true, */
+    theme: 'material',
+    /* autofocus: true, */
+    /* scrollbarStyle: 'overlay', */
+    /* indentUnit: 4,
+    tabSize: 4,
+    indentWithTabs: true,
+    cursorScrollMargin: 40, */
+    /* foldOptions: {
+      rangeFinder: CodeMirror.fold.indent,
+      scanUp: true,
+      widget: ' … ',
+    }, */
+    /* foldGutter: true,
+    gutters: ['CodeMirror-foldgutter'], */
+    /* extraKeys */
   }
 
   useEffect(async () => {
-    if (db) {
-      console.log('loading')
-      const contentState = await db.load()
-      console.log('loaded')
-      console.log(contentState)
-      setEditorState(EditorState.createWithContent(contentState, compositeDecorator))
-    }
+    const doc = await db.get(tabId)
+    setContent(doc.text)
   }, [])
 
-  useInterval(_ => {
-    db.store(editorState)
-  }, 5000)
+  const exists = async (id) => db.get(tabId)
+
+  const handleChange = async (editor, data, value) => {
+    try {
+      console.log(value)
+
+      // doc exists
+      const doc = await db.get(tabId)
+      console.log(doc)
+      doc.text = value
+      
+      await db.put(doc)
+    } catch (error) {
+      console.log(error)
+      if (error.name === 'not_found') {
+        await db.put({
+          _id: tabId,
+          text: value
+        })
+      } else {
+        // log any other error
+        console.log(error)
+      }
+    }
+    
+  }
 
   return (
     <>
-      <div className='border border-gray-300 h-full overflow-y-auto'>
-        <DraftJsEditor className='' editorState={editorState} onChange={onChange} />
+      <div className='h-screen flex flex-row'>
+        <CodeMirror
+          value={content}
+          onChange={handleChange}
+          options={options} />
       </div>
     </>
   )
