@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
-import { useDoc, usePouch } from 'use-pouchdb'
+import { usePouch } from 'use-pouchdb'
+import handler from '../text/handler'
 
 const Editor = _ => {
   const tabId = '0'
+  const editorInstance = useRef(null)
 
   const [content, setContent] = useState('hello')
   const db = usePouch()
@@ -11,8 +13,8 @@ const Editor = _ => {
   const options = {
     /* styleActiveLine: true, */
     lineNumbers: true,
-    /* lineWrapping: true, */
-    theme: 'material',
+    lineWrapping: true,
+    theme: 'material'
     /* autofocus: true, */
     /* scrollbarStyle: 'overlay', */
     /* indentUnit: 4,
@@ -34,40 +36,52 @@ const Editor = _ => {
     setContent(doc.text)
   }, [])
 
-  const exists = async (id) => db.get(tabId)
-
-  const handleChange = async (editor, data, value) => {
+  const saveDoc = async editor => {
     try {
-      console.log(value)
-
       // doc exists
       const doc = await db.get(tabId)
-      console.log(doc)
-      doc.text = value
-      
+      doc.text = editorInstance.current.getValue()
+
       await db.put(doc)
     } catch (error) {
       console.log(error)
       if (error.name === 'not_found') {
         await db.put({
           _id: tabId,
-          text: value
+          text: editor.getValue()
         })
       } else {
         // log any other error
         console.log(error)
       }
+    } finally {
+      console.log('saved')
     }
-    
+  }
+
+  useEffect(() => {
+    const timer = setInterval(saveDoc, 2000)
+    return () => clearTimeout(timer)
+  })
+
+  const handleChange = async (editor, data, value) => {
+    if (!data.origin) {
+      // ignore when the change happened because of replaceRanger or other methods
+      return
+    }
+
+    handler.handleTextInput(editor, data)
   }
 
   return (
     <>
       <div className='h-screen flex flex-row'>
         <CodeMirror
+          editorDidMount={editor => { editorInstance.current = editor }}
           value={content}
           onChange={handleChange}
-          options={options} />
+          options={options}
+        />
       </div>
     </>
   )
