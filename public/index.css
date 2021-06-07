@@ -21,3 +21,10 @@
   right: 0;
   height: 100% !important;
 }
+
+.cm-editor {
+  flex: 1 1 auto;
+  margin-top: 0;
+  height: 100%;
+  position: relative;
+}

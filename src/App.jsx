@@ -5,12 +5,13 @@ import 'codemirror/mode/xml/xml.js'
 import 'codemirror/mode/javascript/javascript.js'
 
 import React from 'react'
-import Editor from './components/Editor'
+import EditorNext from './components/EditorNext'
 
 const App = _ => {
   return (
     <>
-      <Editor />
+      {/* <Editor /> */}
+      <EditorNext />
     </>
   )
 }
