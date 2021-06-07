@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Braindown } from '../braindown/index'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
 import { usePouch } from 'use-pouchdb'
 import handler from '../text/handler'
@@ -14,7 +15,8 @@ const Editor = _ => {
     /* styleActiveLine: true, */
     lineNumbers: true,
     lineWrapping: true,
-    theme: 'material'
+    theme: 'material',
+    mode: 'braindown'
     /* autofocus: true, */
     /* scrollbarStyle: 'overlay', */
     /* indentUnit: 4,
