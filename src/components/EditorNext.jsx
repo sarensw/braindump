@@ -22,7 +22,12 @@ const EditorNext = _ => {
         basicSetup,
         oneDark,
         Braindown(),
-        EditorView.lineWrapping
+        EditorView.lineWrapping,
+        EditorView.updateListener.of(update => {
+          if (editorView) {
+            handler.handleTextInput(editorView, update.changes)
+          }
+        })
       ]
 
       const doc = await db.get(tabId)
