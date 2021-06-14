@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react'
-import { Braindown } from '../braindown/index'
-import { usePouch } from 'use-pouchdb'
-import handler from '../text/handler'
-
+import { basicSetup, EditorView } from '@codemirror/basic-setup'
 import { EditorState } from '@codemirror/state'
-import { EditorView, basicSetup } from '@codemirror/basic-setup'
 import { oneDark } from '@codemirror/theme-one-dark'
+import React, { useEffect, useRef } from 'react'
+import { usePouch } from 'use-pouchdb'
+
+import { Braindown } from '../braindown/index'
+import handler from '../text/handler'
 
 const EditorNext = _ => {
   const tabId = '0'
@@ -30,7 +30,14 @@ const EditorNext = _ => {
         })
       ]
 
-      const doc = await db.get(tabId)
+      let doc = {
+        text: '# Welcome to braindump'
+      }
+      try {
+        doc = await db.get(tabId)
+      } catch (err) {
+        // new document, no need to do anything
+      }
 
       const state = EditorState.create({
         doc: doc.text,
