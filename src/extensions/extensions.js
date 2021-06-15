@@ -8,8 +8,7 @@ import { indentOnInput } from '@codemirror/language'
 import { lintKeymap } from '@codemirror/lint'
 import { bracketMatching } from '@codemirror/matchbrackets'
 import { highlightSelectionMatches, searchKeymap } from '@codemirror/search'
-import { EditorState } from '@codemirror/state'
-import { drawSelection, highlightActiveLine, highlightSpecialChars, keymap } from '@codemirror/view'
+import { drawSelection, highlightActiveLine, keymap } from '@codemirror/view'
 
 /// This is an extension value that just pulls together a whole lot of
 /// extensions that you might want in a basic editor. It is meant as a
@@ -49,7 +48,6 @@ import { drawSelection, highlightActiveLine, highlightSpecialChars, keymap } fro
 export const braindumpExtensions = [
   lineNumbers(),
   highlightActiveLineGutter(),
-  /* highlightSpecialChars(), */
   history(),
   foldGutter(),
   drawSelection(),
