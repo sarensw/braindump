@@ -7,6 +7,9 @@ module.exports = {
   devOptions: {
     port: 8090
   },
+  buildOptions: {
+    baseUrl: './'
+  },
   plugins: [
     '@snowpack/plugin-postcss',
     '@snowpack/plugin-react-refresh'
