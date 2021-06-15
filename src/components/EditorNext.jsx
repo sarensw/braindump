@@ -1,11 +1,9 @@
-import { basicSetup, EditorView } from '@codemirror/basic-setup'
-import { EditorState } from '@codemirror/state'
 import { oneDark } from '@codemirror/theme-one-dark'
 import React, { useEffect, useRef } from 'react'
 import { usePouch } from 'use-pouchdb'
-
 import { Braindown } from '../braindown/index'
-import handler from '../text/handler'
+import { braindumpExtensions, EditorView, EditorState } from '../extensions/extensions'
+import { newTask } from '../extensions/extensionTask'
 
 const EditorNext = _ => {
   const tabId = '0'
@@ -19,15 +17,16 @@ const EditorNext = _ => {
       console.log('mount editor')
       const currentEditor = editor.current
       const extensions = [
-        basicSetup,
+        newTask(),
+        braindumpExtensions,
         oneDark,
         Braindown(),
-        EditorView.lineWrapping,
-        EditorView.updateListener.of(update => {
+        EditorView.lineWrapping
+        /* EditorView.updateListener.of(update => {
           if (editorView) {
             handler.handleTextInput(editorView, update.changes)
           }
-        })
+        }) */
       ]
 
       let doc = {
@@ -72,10 +71,11 @@ const EditorNext = _ => {
       if (error.name === 'not_found') {
         await db.put({
           _id: tabId,
-          text: editor.getValue()
+          text: editorView.state.doc.toString()
         })
       } else {
         // log any other error
+        console.error(error.name)
         console.log(error)
       }
     } finally {
