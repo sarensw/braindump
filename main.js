@@ -14,10 +14,9 @@ function createWindow () {
     win.loadFile('./dist/index.html')
   } else {
     win.loadURL('http://localhost:8090')
+    // Open the DevTools.
+    win.webContents.openDevTools()
   }
-
-  // Open the DevTools.
-  win.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
