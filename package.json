@@ -1,5 +1,6 @@
 {
   "name": "braindump",
+  "productName": "braindump",
   "version": "0.0.1",
   "description": "Dump your brain",
   "main": "main.js",
