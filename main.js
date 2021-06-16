@@ -6,7 +6,9 @@ function createWindow () {
     width: 1280,
     height: 700,
     webPreferences: {
-      contextIsolation: true
+      contextIsolation: false,
+      enableRemoteModule: true,
+      nodeIntegration: true
     }
   })
 
