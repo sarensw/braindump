@@ -10,7 +10,7 @@
     "dev": "concurrently --names \"snowpack,electron\" \"npm run snowpack-dev\" \"npm run electron-start\"",
     "electron-start": "electron .",
     "electron-prod": "cross-env NODE_ENV=production electron .",
-    "snowpack-dev": "snowpack dev --open none"
+    "snowpack-dev": "snowpack dev --polyfill-node --open none"
   },
   "homepage": "./",
   "author": "Stephan Arenswald",

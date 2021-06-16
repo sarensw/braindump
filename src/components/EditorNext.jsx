@@ -1,16 +1,17 @@
 import { oneDark } from '@codemirror/theme-one-dark'
 import React, { useEffect, useRef } from 'react'
-import { usePouch } from 'use-pouchdb'
 import { Braindown } from '../braindown/index'
 import { braindumpExtensions, EditorView, EditorState } from '../extensions/extensions'
 import { newTask } from '../extensions/extensionTask'
+import useStorageBrowser from '../hooks/useStorageBrowser'
+import useStorageFile from '../hooks/useStorageFile'
 
 const EditorNext = _ => {
   const tabId = '0'
   const editor = useRef(null)
   let editorView = null
 
-  const db = usePouch()
+  const { getDocument, saveDocument } = useStorageFile()
 
   useEffect(_ => {
     const loadEditor = async _ => {
@@ -33,13 +34,13 @@ const EditorNext = _ => {
         text: '# Welcome to braindump'
       }
       try {
-        doc = await db.get(tabId)
+        doc = await getDocument(tabId)
       } catch (err) {
         // new document, no need to do anything
       }
 
       const state = EditorState.create({
-        doc: doc.text,
+        doc,
         extensions
       })
 
@@ -60,27 +61,8 @@ const EditorNext = _ => {
   }, [editor.current])
 
   const saveDoc = async _ => {
-    try {
-      // doc exists
-      const doc = await db.get(tabId)
-      doc.text = editorView.state.doc.toString()
-
-      await db.put(doc)
-    } catch (error) {
-      console.log(error)
-      if (error.name === 'not_found') {
-        await db.put({
-          _id: tabId,
-          text: editorView.state.doc.toString()
-        })
-      } else {
-        // log any other error
-        console.error(error.name)
-        console.log(error)
-      }
-    } finally {
-      console.log('saved')
-    }
+    const text = editorView.state.doc.toString()
+    await saveDocument(tabId, text)
   }
 
   useEffect(() => {
