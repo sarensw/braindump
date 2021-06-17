@@ -30,13 +30,11 @@ jobs:
           # release the app after building
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
 
-      - name: get-npm-version
-        id: version
-        uses: martinbeentjes/npm-get-version-action@master
+      - uses: nyaa8/package-version@v1
 
       - uses: actions/upload-artifact@v2
         with:
-          name: Braindump_${{ steps.version.outputs.current-version }}_${{ github.run_id }}
+          name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_id }}
           path: |
             ebuild/Braindump*
             !*.blockmap
