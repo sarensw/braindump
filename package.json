@@ -59,6 +59,9 @@
     },
     "win": {
       "target": "zip"
+    },
+    "directories": {
+      "output": "ebuild"
     }
   }
 }
