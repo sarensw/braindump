@@ -34,7 +34,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_id }}
+          name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
           path: |
             ebuild/Braindump*
             !*.blockmap
