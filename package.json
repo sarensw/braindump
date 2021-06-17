@@ -6,7 +6,7 @@
   "main": "main.js",
   "scripts": {
     "start": "snowpack dev --polyfill-node",
-    "build": "snowpack build",
+    "build": "snowpack build --polyfill-node",
     "dev": "concurrently --names \"snowpack,electron\" \"npm run snowpack-dev\" \"npm run electron-start\"",
     "electron-start": "electron .",
     "electron-prod": "cross-env NODE_ENV=production electron .",
