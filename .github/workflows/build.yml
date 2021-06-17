@@ -30,7 +30,13 @@ jobs:
           # release the app after building
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
 
+      - name: Git Version
+        uses: codacy/git-version@2.4.0
+        id: version
+
       - uses: actions/upload-artifact@v2
         with:
-          name: my-artifact
-          path: ebuild/*
+          name: Braindump_${{ steps.version.outputs.version }}
+          path: |
+            ebuild/Braindump*
+            !*.blockmap
