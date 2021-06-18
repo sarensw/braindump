@@ -55,7 +55,7 @@
     "productName": "Braindump",
     "copyright": "Copyright @ 2021 ${author}",
     "mac": {
-      "target": "dmg"
+      "target": "zip"
     },
     "win": {
       "target": "zip"
