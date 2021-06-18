@@ -54,8 +54,14 @@
     "appId": "com.featureninjas.braindump",
     "productName": "Braindump",
     "copyright": "Copyright @ 2021 ${author}",
+    "afterSign": "build/notarize.js",
     "mac": {
-      "target": "dmg"
+      "category": "public.app-category.productivity",
+      "target": "dmg",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
     },
     "win": {
       "target": "zip"
