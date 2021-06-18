@@ -1,0 +1,1 @@
+Notarization: https://kilianvalkhof.com/2019/electron/notarizing-your-electron-application/
