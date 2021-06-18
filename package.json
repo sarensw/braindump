@@ -23,7 +23,7 @@
     "cross-env": "^7.0.3",
     "electron": "^13.1.2",
     "electron-builder": "^22.11.7",
-    "electron-notarize": "^1.0.0",
+    "electron-builder-notarize": "^1.2.0",
     "postcss": "^8.3.4",
     "postcss-cli": "^8.3.1",
     "snowpack": "^3.5.7",
@@ -55,14 +55,14 @@
     "appId": "com.featureninjas.braindump",
     "productName": "Braindump",
     "copyright": "Copyright @ 2021 ${author}",
-    "afterSign": "build/notarize.js",
+    "afterSign": "electron-builder-notarize",
     "mac": {
       "category": "public.app-category.productivity",
       "target": "dmg",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
-      "entitlements": "entitlements.mac.plist",
-      "entitlementsInherit": "entitlements.mac.plist"
+      "entitlements": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist",
+      "entitlementsInherit": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist"
     },
     "win": {
       "target": "zip"
