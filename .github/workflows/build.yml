@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-latest]
 
     steps:
       - name: Check out Git repository
@@ -40,5 +40,5 @@ jobs:
         with:
           name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
           path: |
-            ebuild/Braindump*
+            Braindump*
             !*.blockmap
