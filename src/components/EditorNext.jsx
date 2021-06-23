@@ -3,7 +3,8 @@ import React, { useEffect, useRef } from 'react'
 import { Braindown } from '../braindown/index'
 import { braindumpExtensions, EditorView, EditorState } from '../extensions/extensions'
 import { newTask } from '../extensions/extensionTask'
-import useStorageBrowser from '../hooks/useStorageBrowser'
+import { newDate } from '../extensions/extensionDate'
+// import useStorageBrowser from '../hooks/useStorageBrowser'
 import useStorageFile from '../hooks/useStorageFile'
 
 const EditorNext = _ => {
@@ -19,6 +20,7 @@ const EditorNext = _ => {
       const currentEditor = editor.current
       const extensions = [
         newTask(),
+        newDate(),
         braindumpExtensions,
         oneDark,
         Braindown(),
