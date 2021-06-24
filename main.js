@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require('electron')
+const path = require('path')
 
 function createWindow () {
   // Create the browser window.
@@ -13,7 +14,7 @@ function createWindow () {
   })
 
   if (process.env.NODE_ENV === 'production') {
-    win.loadFile('./dist/index.html')
+    win.loadURL(new URL(`file:///${path.join(__dirname, 'build', 'index.html')}`).href)
   } else {
     win.loadURL('http://localhost:8090')
     // Open the DevTools.
