@@ -12,6 +12,7 @@ module.exports = {
   },
   plugins: [
     '@snowpack/plugin-postcss',
+    '@snowpack/plugin-dotenv',
     '@snowpack/plugin-react-refresh'
   ]
 }

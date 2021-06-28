@@ -13,12 +13,14 @@ function createWindow () {
     }
   })
 
-  if (process.env.NODE_ENV === 'production') {
-    win.loadURL(new URL(`file:///${path.join(__dirname, 'build', 'index.html')}`).href)
-  } else {
+  console.log(process.env)
+
+  if (process.env.NODE_ENV === 'dev') {
     win.loadURL('http://localhost:8090')
     // Open the DevTools.
     win.webContents.openDevTools()
+  } else {
+    win.loadURL(new URL(`file:///${path.join(__dirname, 'build', 'index.html')}`).href)
   }
 }
 
