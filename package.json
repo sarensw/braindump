@@ -9,26 +9,28 @@
     "dev": "concurrently --names \"snowpack,electron\" \"npm run snowpack-dev\" \"npm run electron-start\"",
     "electron-start": "electron .",
     "electron-prod": "cross-env NODE_ENV=production electron .",
-    "snowpack-dev": "snowpack dev --polyfill-node --open none"
+    "snowpack-dev": "snowpack dev --polyfill-node --open none",
+    "pack": "cross-env NODE_ENV=production electron-builder --dir"
   },
   "homepage": "./",
   "author": "Stephan Arenswald",
   "license": "UNLICENSED",
   "devDependencies": {
     "@redux-devtools/core": "^3.9.0",
-    "@snowpack/plugin-postcss": "^1.4.1",
+    "@snowpack/plugin-dotenv": "^2.1.0",
+    "@snowpack/plugin-postcss": "^1.4.2",
     "@snowpack/plugin-react-refresh": "^2.5.0",
     "autoprefixer": "^10.2.6",
     "concurrently": "^6.2.0",
     "cross-env": "^7.0.3",
-    "electron": "^13.1.2",
+    "electron": "^13.1.4",
     "electron-builder": "^22.11.7",
     "electron-builder-notarize": "^1.2.0",
-    "postcss": "^8.3.4",
+    "postcss": "^8.3.5",
     "postcss-cli": "^8.3.1",
-    "snowpack": "^3.5.7",
+    "snowpack": "^3.6.2",
     "standard": "^16.0.3",
-    "tailwindcss": "^2.1.4"
+    "tailwindcss": "^2.2.4"
   },
   "dependencies": {
     "@codemirror/commands": "^0.18.3",
@@ -42,7 +44,7 @@
     "@codemirror/state": "^0.18.7",
     "@codemirror/theme-one-dark": "^0.18.1",
     "@reduxjs/toolkit": "^1.6.0",
-    "codemirror": "^5.61.1",
+    "codemirror": "^5.62.0",
     "dateformat": "^4.5.1",
     "lezer": "^0.13.5",
     "pouchdb-browser": "^7.2.2",
