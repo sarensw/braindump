@@ -2,15 +2,15 @@
   "name": "braindump",
   "version": "0.1.0",
   "description": "Dump your brain",
-  "main": "main.js",
+  "private": "true",
   "scripts": {
-    "start": "snowpack dev --polyfill-node",
-    "build": "snowpack build --polyfill-node",
-    "dev": "concurrently --names \"snowpack,electron\" \"npm run snowpack-dev\" \"npm run electron-start\"",
-    "electron-start": "electron .",
-    "electron-prod": "cross-env NODE_ENV=production electron .",
-    "snowpack-dev": "snowpack dev --polyfill-node --open none",
-    "pack": "cross-env NODE_ENV=production electron-builder --dir"
+    "clean": "electron-snowpack clean",
+    "build": "electron-snowpack build",
+    "dev": "electron-snowpack dev",
+    "dist": "electron-builder",
+    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
+    "try": "run-s clean build dist:dir",
+    "pack": "cross-env NODE_ENV=production electron-builder"
   },
   "homepage": "./",
   "author": "Stephan Arenswald",
@@ -26,6 +26,7 @@
     "electron": "^13.1.4",
     "electron-builder": "^22.11.7",
     "electron-builder-notarize": "^1.2.0",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.3.5",
     "postcss-cli": "^8.3.1",
     "snowpack": "^3.6.2",
@@ -46,31 +47,16 @@
     "@reduxjs/toolkit": "^1.6.0",
     "codemirror": "^5.62.0",
     "dateformat": "^4.5.1",
+    "electron-snowpack": "^0.11.0",
     "lezer": "^0.13.5",
-    "pouchdb-browser": "^7.2.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-redux": "^7.2.4",
-    "use-pouchdb": "^1.2.3"
+    "react-redux": "^7.2.4"
   },
   "build": {
-    "appId": "com.featureninjas.braindump",
-    "productName": "Braindump",
-    "copyright": "Copyright @ 2021 ${author}",
-    "afterSign": "electron-builder-notarize",
-    "mac": {
-      "category": "public.app-category.productivity",
-      "target": "dmg",
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false,
-      "entitlements": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist",
-      "entitlementsInherit": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist"
-    },
-    "win": {
-      "target": "zip"
-    },
-    "directories": {
-      "output": "ebuild"
-    }
+    "extends": "electron-snowpack/config/electron-builder.js",
+    "files": [
+      { "from": ".", "filter": ["postcss.config.js"] }
+    ]
   }
 }
