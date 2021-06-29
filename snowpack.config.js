@@ -1,18 +1,8 @@
 /** @type {import('snowpack').SnowpackUserConfig} */
 module.exports = {
-  mount: {
-    public: '/',
-    src: '/dist'
-  },
-  devOptions: {
-    port: 8090
-  },
-  buildOptions: {
-    baseUrl: './'
-  },
+  extends: 'electron-snowpack/config/snowpack.js',
   plugins: [
     '@snowpack/plugin-postcss',
-    '@snowpack/plugin-dotenv',
     '@snowpack/plugin-react-refresh'
   ]
 }
