@@ -5,53 +5,83 @@ import { braindumpExtensions, EditorView, EditorState } from '../extensions/exte
 import { newTask } from '../extensions/extensionTask'
 import { newDate } from '../extensions/extensionDate'
 import useStorageFile from '../hooks/useStorageFile'
+import { useSelector } from 'react-redux'
+
+const extensions = [
+  newTask(),
+  newDate(),
+  braindumpExtensions,
+  oneDark,
+  Braindown(),
+  EditorView.lineWrapping
+  // EditorView.updateListener.of(update => {
+  //   if (editorView) {
+  //     handler.handleTextInput(editorView, update.changes)
+  //   }
+  // })
+]
+
+function initEditor (currentEditor, additionalExtensions) {
+  const state = EditorState.create({
+    doc: 'loading...',
+    extensions: [
+      ...extensions,
+      ...additionalExtensions
+    ]
+  })
+
+  const view = new EditorView({
+    state,
+    parent: currentEditor
+  })
+
+  return view
+}
 
 const EditorNext = _ => {
   const tabId = '0'
   const editor = useRef(null)
-  let editorView = null
+  let loading = true
+  let dirty = false
 
-  const { getDocument, saveDocument } = useStorageFile()
+  const text = useSelector(state => state.document.text)
+
+  let editorView
+
+  const { loadDocument, saveDocument } = useStorageFile()
 
   useEffect(_ => {
-    const loadEditor = async _ => {
+    /* const loadEditor = async _ => {
       console.log('mount editor')
       const currentEditor = editor.current
-      const extensions = [
-        newTask(),
-        newDate(),
-        braindumpExtensions,
-        oneDark,
-        Braindown(),
-        EditorView.lineWrapping
-        // EditorView.updateListener.of(update => {
-        //   if (editorView) {
-        //     handler.handleTextInput(editorView, update.changes)
-        //   }
-        // })
-      ]
 
-      let doc = {
-        text: '# Welcome to braindump'
-      }
       try {
-        doc = await getDocument(tabId)
+        await loadDocument(tabId)
       } catch (err) {
         // new document, no need to do anything
       }
 
-      const state = EditorState.create({
-        doc,
-        extensions
-      })
+      loading = true
 
-      const view = new EditorView({
-        state,
-        parent: currentEditor
-      })
-      editorView = view
     }
     loadEditor()
+
+    return () => {
+      console.log('unmount editor')
+      if (editorView) {
+        editorView.destroy()
+      }
+    } */
+    editorView = initEditor(
+      editor.current,
+      [
+        EditorView.updateListener.of(update => {
+          if (update.docChanged) {
+            dirty = true
+          }
+        })
+      ])
+    loadDocument(tabId)
 
     return () => {
       console.log('unmount editor')
@@ -62,8 +92,11 @@ const EditorNext = _ => {
   }, [editor.current])
 
   const saveDoc = async _ => {
-    const text = editorView.state.doc.toString()
-    await saveDocument(tabId, text)
+    if (loading === false && dirty) {
+      const text = editorView.state.doc.toString()
+      await saveDocument(tabId, text)
+      dirty = false
+    }
   }
 
   useEffect(() => {
@@ -71,15 +104,16 @@ const EditorNext = _ => {
     return () => clearTimeout(timer)
   })
 
-  /* const handleChange = async (editor, data, value) => {
-    if (!data.origin) {
-      // ignore when the change happened because of replaceRanger or other methods
-      return
+  useEffect(() => {
+    console.log(`useEffect for text: ${text}`)
+    if (text) {
+      console.log(text)
+      const tx = editorView.state.update({ changes: { from: 0, to: editorView.state.doc.length, insert: text } })
+      editorView.update([tx])
+      loading = false
     }
+  }, [text])
 
-    handler.handleTextInput(editor, data)
-  }
- */
   return (
     <>
       <div className='h-screen flex flex-row'>
