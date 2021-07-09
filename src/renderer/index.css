@@ -28,3 +28,7 @@
   height: 100%;
   position: relative;
 }
+
+.cm-content {
+  padding-bottom: calc(100vh - 2rem) !important;
+}
