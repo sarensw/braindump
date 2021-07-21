@@ -1,0 +1,28 @@
+{
+  "base": "vs",
+  "inherit": false,
+  "rules": [
+    {
+      "token": "entity.name.class",
+      "fontStyle": "bold",
+      "foreground": "FFA500"
+    },
+    {
+      "token": "custom-info",
+      "foreground": "808080"
+    },
+    {
+      "token": "custom-error",
+      "foreground": "ff0000",
+      "fontStyle": "bold"
+    },
+    {
+      "token": "custom-notice",
+      "foreground": "FFA500"
+    },
+    {
+      "token": "custom-date",
+      "foreground": "008800"
+    }
+  ]
+}

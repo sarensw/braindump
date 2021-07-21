@@ -1,5 +1,4 @@
-import { EditorView } from '@codemirror/view'
-import dateFormat from 'dateformat'
+/* import dateFormat from 'dateformat' */
 
 /**
  * Handles adding a date
@@ -10,7 +9,7 @@ import dateFormat from 'dateformat'
  * @returns true in case transaction returned, false otherwise
  */
 function handleDate (view, from, to, insert) {
-  console.log({ view, from, to, insert })
+  /* console.log({ view, from, to, insert })
   if (insert === '/') {
     console.log('/ found')
     if (view.state.doc.sliceString(from - 1, to) === '/') {
@@ -27,11 +26,11 @@ function handleDate (view, from, to, insert) {
     return false
   } else {
     return false
-  }
+  } */
 }
 
 export function newDate () {
   return [
-    EditorView.inputHandler.of(handleDate)
+    /* EditorView.inputHandler.of(handleDate) */
   ]
 }

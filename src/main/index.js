@@ -1,12 +1,15 @@
 
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import { getAssetURL } from 'electron-snowpack'
 import path from 'path'
 import Storage from './storage'
 import log from 'electron-log'
+import { Tabs, Tab } from './tabs'
+import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
 log.transports.console.level = false
 log.transports.file.resolvePath = () => path.join(app.getPath('userData'), 'logs/main.log')
+console.log(`logging to ${path.join(app.getPath('userData'), 'logs/main.log')}`)
 
 log.debug('Paths:')
 log.debug(app.getPath('appData'))
@@ -24,13 +27,15 @@ log.debug(app.getPath('userData'))
 
 let mainWindow
 const storage = new Storage()
+const tabs = new Tabs()
 
 function createMainWindow () {
   const window = new BrowserWindow({
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
-      contextIsolation: false
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false
     }
   })
 
@@ -74,8 +79,23 @@ app.on('ready', () => {
   mainWindow = createMainWindow()
 })
 
-ipcMain.on('save', async (event, someArgument) => {
-  await storage.saveDocument(someArgument)
+app.whenReady().then(() => {
+  installExtension(REDUX_DEVTOOLS)
+})
+
+ipcMain.on('log', async (event, args) => {
+  let msg = args.msg
+  if (typeof msg === 'object' && msg != null) msg = JSON.stringify(msg)
+  if (args.type === 'debug') log.debug(`[ui] ${msg}`)
+  if (args.type === 'info') log.info(`[ui] ${msg}`)
+  if (args.type === 'warn') log.warn(`[ui] ${msg}`)
+  if (args.type === 'error') log.error(`[ui] ${msg}`)
+})
+
+ipcMain.on('save', async (event, args) => {
+  console.log(args)
+  const tab = Tab.fromObject(args.tab)
+  await tab.write(args.text)
 })
 
 ipcMain.on('load', async (event, someArgument) => {
@@ -83,4 +103,34 @@ ipcMain.on('load', async (event, someArgument) => {
   const text = await storage.getDocument(someArgument)
   log.debug(text)
   event.reply('loaded', text)
+})
+
+ipcMain.on('showOpenDialog', async (event, someArgument) => {
+  log.debug('showOpenDialog')
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile']
+  })
+  console.log(result)
+})
+
+ipcMain.on('loadTab', async (event, someArgument) => {
+  log.debug('ipcMain.loadTab')
+  log.debug(someArgument)
+  const tab = Tab.fromObject(someArgument)
+  log.debug(tab)
+  const text = await tab.read()
+  log.debug('event.reply')
+  log.debug({
+    tab,
+    text
+  })
+  event.reply('tabLoaded', {
+    tab,
+    text
+  })
+})
+
+ipcMain.on('loadTabs', async (event, args) => {
+  const tabsList = await tabs.loadTabs()
+  event.reply('tabsLoaded', tabsList)
 })

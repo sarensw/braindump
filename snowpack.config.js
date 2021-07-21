@@ -4,5 +4,17 @@ module.exports = {
   plugins: [
     '@snowpack/plugin-postcss',
     '@snowpack/plugin-react-refresh'
-  ]
+  ],
+  mount: {
+    './node_modules/monaco-editor/min/vs': {
+      url: '/monaco-editor',
+      static: true,
+      resolve: false,
+    },
+    './node_modules/monaco-editor/min-maps': {
+      url: '/min-maps',
+      static: true,
+      resolve: false,
+    }
+  }
 }
