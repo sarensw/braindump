@@ -2,33 +2,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import 'codemirror/lib/codemirror.css';
-@import 'codemirror/theme/material.css';
-
-.react-codemirror2 {
-  flex: 1 1 auto;
-  margin-top: 0;
-  height: 100%;
-  position: relative;
-}
-
-.CodeMirror {
-  position:absolute !important;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100% !important;
-}
-
-.cm-editor {
-  flex: 1 1 auto;
-  margin-top: 0;
-  height: 100%;
-  position: relative;
-}
-
-.cm-content {
-  padding-bottom: calc(100vh - 2rem) !important;
-}

@@ -1,4 +1,3 @@
-import { EditorView } from '@codemirror/view'
 
 /**
  * Handles the creation of a new task
@@ -9,7 +8,7 @@ import { EditorView } from '@codemirror/view'
  * @returns true in case transaction returned, false otherwise
  */
 function handleNewTask (view, from, to, insert) {
-  console.log({ view, from, to, insert })
+  /* console.log({ view, from, to, insert })
   if (insert === ']') {
     console.log('] found')
     if (view.state.doc.sliceString(from - 1, to) === '[') {
@@ -26,16 +25,16 @@ function handleNewTask (view, from, to, insert) {
     return false
   } else {
     return false
-  }
+  } */
 }
 
-function prevChar (view, from, length) {
+/* function prevChar (view, from, length) {
   return view.state.doc.sliceString(from - length, from)
 }
 
 function nextChar (view, from, length) {
   return view.state.doc.sliceString(from, from + length)
-}
+} */
 
 /**
  * Handles the toggling a task from done to not done and vv
@@ -46,7 +45,7 @@ function nextChar (view, from, length) {
  * @returns true in case transaction returned, false otherwise
  */
 function handleToggleTask (view, from, to, insert) {
-  if (insert === 'x') {
+  /* if (insert === 'x') {
     // handle x (marking task as done)
     if (prevChar(view, from, 1) === '[' && nextChar(view, from, 2) === ' ]') {
       const tr = view.state.update({
@@ -92,14 +91,14 @@ function handleToggleTask (view, from, to, insert) {
       view.dispatch(tr)
       return true
     }
-  }
+  } */
 
   return false
 }
 
 export function newTask () {
   return [
-    EditorView.inputHandler.of(handleNewTask),
-    EditorView.inputHandler.of(handleToggleTask)
+    /* EditorView.inputHandler.of(handleNewTask),
+    EditorView.inputHandler.of(handleToggleTask) */
   ]
 }
