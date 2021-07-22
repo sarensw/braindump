@@ -5,21 +5,16 @@ import log from '../log'
 const useTabs = _ => {
   const dispatch = useDispatch()
 
-  const tabLoaded = (tab, text) => {
-    log.debug('useTabs.tabLoaded')
-    dispatch(setTabText({ tab, text }))
-  }
-
   const tabsLoaded = tabs => {
     dispatch(setTabs(tabs))
   }
 
-  const loadTab = tab => {
+  const loadTab = async (tab) => {
     try {
-      const result = window.__preload.loadTab({
-        tab,
-        tabLoaded
+      const result = await window.__preload.loadTab({
+        tab
       })
+      dispatch(setTabText(result))
       return result
     } catch (error) {
       log.error(`Could not load the tabe ${tab.name}, because ${error.message}`)

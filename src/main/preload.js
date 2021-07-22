@@ -19,13 +19,14 @@ contextBridge.exposeInMainWorld('__preload', {
   }, */
   loadTab: async (args) => {
     // console.log(`Loading tab ${args.tab.name} from ${args.tab.path}`)
-    const result = await ipcRenderer.send('loadTab', args.tab)
+    // const result = await ipcRenderer.send('loadTab', args.tab)
+    const result = await ipcRenderer.invoke('loadTab', args.tab)
 
-    ipcRenderer.on('tabLoaded', (event, arg) => {
-      console.log('event.tabLoaded')
-      console.log(arg)
-      args.tabLoaded(arg.tab, arg.text)
-    })
+    // ipcRenderer.on('tabLoaded', (event, arg) => {
+    //   console.log('event.tabLoaded')
+    //   console.log(arg)
+    //   args.tabLoaded(arg.tab, arg.text)
+    // })
 
     return result
   },
@@ -34,7 +35,6 @@ contextBridge.exposeInMainWorld('__preload', {
     const result = await ipcRenderer.send('loadTabs')
 
     ipcRenderer.on('tabsLoaded', (event, arg) => {
-      console.log('asdasasd')
       args.tabsLoaded(arg)
     })
 

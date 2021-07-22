@@ -78,12 +78,12 @@ app.on('ready', () => {
 })
 
 app.whenReady().then(() => {
-  installExtension(REDUX_DEVTOOLS, true)
+  installExtension(REDUX_DEVTOOLS)
 })
 
 ipcMain.on('log', async (event, args) => {
-  let msg = args.msg
-  if (typeof msg === 'object' && msg != null) msg = JSON.stringify(msg)
+  const msg = args.message
+  // if (typeof msg === 'object' && msg != null) msg = JSON.stringify(msg)
   if (args.type === 'debug') log.debug(`[ui] ${msg}`)
   if (args.type === 'info') log.info(`[ui] ${msg}`)
   if (args.type === 'warn') log.warn(`[ui] ${msg}`)
@@ -104,7 +104,7 @@ ipcMain.on('showOpenDialog', async (event, someArgument) => {
   console.log(result)
 })
 
-ipcMain.on('loadTab', async (event, someArgument) => {
+ipcMain.handle('loadTab', async (event, someArgument) => {
   log.debug('ipcMain.loadTab')
   log.debug(someArgument)
   const tab = Tab.fromObject(someArgument)
@@ -115,10 +115,14 @@ ipcMain.on('loadTab', async (event, someArgument) => {
     tab,
     text
   })
-  event.reply('tabLoaded', {
+  // event.reply('tabLoaded', {
+  //   tab,
+  //   text
+  // })
+  return {
     tab,
     text
-  })
+  }
 })
 
 ipcMain.on('loadTabs', async (event, args) => {

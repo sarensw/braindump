@@ -27,7 +27,7 @@ export class Tab {
         return text.toString()
       } else {
         log.debug(`${this.name} not found. Just returning the default`)
-        return ''
+        return '# Welcome to braindump'
       }
     }
   }
