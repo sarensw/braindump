@@ -1,8 +1,10 @@
+import stringify from 'json-stringify-safe'
 
 const logToMain = (type, msg) => {
+  const message = (typeof msg === 'object' && msg !== null ? stringify(msg, null, 2) : msg)
   window.__preload.log({
     type,
-    msg
+    message
   })
 }
 
