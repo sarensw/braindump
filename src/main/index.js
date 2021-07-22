@@ -2,7 +2,6 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import { getAssetURL } from 'electron-snowpack'
 import path from 'path'
-import Storage from './storage'
 import log from 'electron-log'
 import { Tabs, Tab } from './tabs'
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
@@ -26,7 +25,6 @@ log.debug(app.getPath('userData'))
 })() */
 
 let mainWindow
-const storage = new Storage()
 const tabs = new Tabs()
 
 function createMainWindow () {
@@ -80,7 +78,7 @@ app.on('ready', () => {
 })
 
 app.whenReady().then(() => {
-  installExtension(REDUX_DEVTOOLS)
+  installExtension(REDUX_DEVTOOLS, true)
 })
 
 ipcMain.on('log', async (event, args) => {
@@ -96,13 +94,6 @@ ipcMain.on('save', async (event, args) => {
   console.log(args)
   const tab = Tab.fromObject(args.tab)
   await tab.write(args.text)
-})
-
-ipcMain.on('load', async (event, someArgument) => {
-  log.debug('loading text')
-  const text = await storage.getDocument(someArgument)
-  log.debug(text)
-  event.reply('loaded', text)
 })
 
 ipcMain.on('showOpenDialog', async (event, someArgument) => {
