@@ -20,7 +20,8 @@ const setCurrentTab = createAsyncThunk(
 const setSettingsAsCurrentTab = createAsyncThunk(
   'tabs/setSettingsAsCurrentTab',
   async (args, thunkApi) => {
-    const result = await window.__preload.loadSettings()
+    log.debug('setSettingsAsCurrentTab')
+    const result = await window.__preload.invoke({ channel: 'loadSettings' })
     return result
   }
 )

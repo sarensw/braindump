@@ -12,12 +12,12 @@ const logToMain = (type, msg) => {
 }
 
 const debug = (msg, ...args) => {
-  let message = ''
+  let tm = ''
   for (const arg of args) {
-    message += `[${arg}]`
+    tm += `[${arg}]`
   }
-  message += message.length === 0 ? msg : ` ${msg}`
-  logToMain('debug', message)
+  tm += tm.length === 0 ? stringify(msg, null, 2) : ` ${stringify(msg, null, 2)}`
+  logToMain('debug', tm)
 }
 
 const info = msg => {
