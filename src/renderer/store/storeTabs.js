@@ -5,8 +5,9 @@ const setCurrentTab = createAsyncThunk(
   'tabs/setCurrentTab',
   async (tab, thunkApi) => {
     if (!tab.loaded) {
-      const result = await window.__preload.loadTab({
-        tab
+      const result = await window.__preload.invoke({
+        channel: 'loadTab',
+        payload: tab
       })
       return result
     } else {
@@ -16,12 +17,30 @@ const setCurrentTab = createAsyncThunk(
   }
 )
 
+const setSettingsAsCurrentTab = createAsyncThunk(
+  'tabs/setSettingsAsCurrentTab',
+  async (args, thunkApi) => {
+    const result = await window.__preload.loadSettings()
+    return result
+  }
+)
+
+/**
+ * tab = {
+ *  name,
+ *  path,
+ *  loaded,
+ *  text
+ * }
+ */
+
 export const tabsSlice = createSlice({
   name: 'tabs',
   initialState: {
     initialText: '# Welcome to braindump',
     currentTab: null,
-    list: null
+    list: null,
+    showSettings: false
   },
   reducers: {
     set: (state, action) => {
@@ -33,23 +52,8 @@ export const tabsSlice = createSlice({
         text: null
       }))
     },
-    setTabText: (state, action) => {
-      const tab = action.payload.tab
-      const text = action.payload.text
-      log.debug('setting tab text')
-      log.debug(action.payload)
-      log.debug(state.list[0].path)
-      log.debug(action.payload.tab.path)
-      state.list = state.list.map((t, index) => {
-        if (t.path === tab.path) {
-          return {
-            ...t,
-            text
-          }
-        } else {
-          return t
-        }
-      })
+    updateDump: (state, action) => {
+
     }
   },
   extraReducers: {
@@ -71,6 +75,7 @@ export const tabsSlice = createSlice({
           return tab
         }
       })
+      state.showSettings = false
     },
     [setCurrentTab.rejected]: (state, action) => {
       log.debug('setCurrentTab.rejected')
@@ -79,10 +84,29 @@ export const tabsSlice = createSlice({
     [setCurrentTab.pending]: (state, action) => {
       log.debug('setCurrentTab.pending')
       log.debug(action)
+    },
+    [setSettingsAsCurrentTab.fulfilled]: (state, action) => {
+      log.debug('setSettingsAsCurrentTab.fulfilled')
+      log.debug(action)
+      state.currentTab = {
+        name: '__settings',
+        path: action.payload.path,
+        loaded: true,
+        text: JSON.stringify(action.payload.settings)
+      }
+      state.showSettings = true
+    },
+    [setSettingsAsCurrentTab.rejected]: (state, action) => {
+      log.debug('setSettingsAsCurrentTab.rejected')
+      log.debug(action)
+    },
+    [setSettingsAsCurrentTab.pending]: (state, action) => {
+      log.debug('setSettingsAsCurrentTab.pending')
+      log.debug(action)
     }
   }
 })
 
 export const { set, setTabText } = tabsSlice.actions
-export { setCurrentTab }
+export { setCurrentTab, setSettingsAsCurrentTab }
 export default tabsSlice.reducer

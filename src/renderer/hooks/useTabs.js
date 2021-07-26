@@ -1,32 +1,16 @@
 import { useDispatch } from 'react-redux'
-import { set as setTabs, setTabText } from '../store/storeTabs'
+import { set as setTabs } from '../store/storeTabs'
 import log from '../log'
 
 const useTabs = _ => {
   const dispatch = useDispatch()
 
-  const tabsLoaded = tabs => {
-    dispatch(setTabs(tabs))
-  }
-
-  const loadTab = async (tab) => {
+  const loadTabs = async _ => {
     try {
-      const result = await window.__preload.loadTab({
-        tab
-      })
-      dispatch(setTabText(result))
-      return result
-    } catch (error) {
-      log.error(`Could not load the tabe ${tab.name}, because ${error.message}`)
-    }
-  }
-
-  const loadTabs = _ => {
-    try {
-      const result = window.__preload.loadTabs({
-        tabsLoaded
-      })
-      return result
+      log.debug('loading tabs')
+      const tabs = await window.__preload.invoke({ channel: 'loadTabs' })
+      log.debug(tabs)
+      dispatch(setTabs(tabs))
     } catch (error) {
       log.error(`Could not load the tabs because ${error.message}`)
     }
@@ -35,7 +19,7 @@ const useTabs = _ => {
   const saveTab = (tab, text) => {
     try {
       log.debug(tab)
-      window.__preload.save({
+      window.__preload.invoke('saveTab', {
         tab,
         text
       })
@@ -46,8 +30,8 @@ const useTabs = _ => {
   }
 
   return {
-    loadTab,
-    loadTabs,
+    /* loadTab,
+     */loadTabs,
     saveTab
   }
 }

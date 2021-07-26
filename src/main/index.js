@@ -4,7 +4,9 @@ import { getAssetURL } from 'electron-snowpack'
 import path from 'path'
 import log from 'electron-log'
 import { Tabs, Tab } from './tabs'
+import { Settings } from './settings'
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
+import Store from 'electron-store'
 
 log.transports.console.level = false
 log.transports.file.resolvePath = () => path.join(app.getPath('userData'), 'logs/main.log')
@@ -19,13 +21,11 @@ log.debug(app.getPath('logs'))
 log.debug(app.getPath('module'))
 log.debug(app.getPath('userData'))
 
-/* (function () {
-  app.setName('braindump')
-  app.setPath('userData', path.join(app.getPath('appData'), 'braindump'))
-})() */
+Store.initRenderer()
 
 let mainWindow
 const tabs = new Tabs()
+const settings = new Settings()
 
 function createMainWindow () {
   const window = new BrowserWindow({
@@ -81,7 +81,7 @@ app.whenReady().then(() => {
   installExtension(REDUX_DEVTOOLS)
 })
 
-ipcMain.on('log', async (event, args) => {
+ipcMain.on('log', (event, args) => {
   const msg = args.message
   // if (typeof msg === 'object' && msg != null) msg = JSON.stringify(msg)
   if (args.type === 'debug') log.debug(`[ui] ${msg}`)
@@ -90,8 +90,18 @@ ipcMain.on('log', async (event, args) => {
   if (args.type === 'error') log.error(`[ui] ${msg}`)
 })
 
-ipcMain.on('save', async (event, args) => {
-  console.log(args)
+ipcMain.handle('loadSettings', async (event, someArgument) => {
+  const result = await settings.read()
+  return result
+})
+
+ipcMain.handle('saveSettings', async (event, someArgument) => {
+  await settings.write(someArgument)
+})
+
+ipcMain.on('saveDump', async (event, args) => {
+  log.debug('ipcMain.saveDump')
+  log.debug(args)
   const tab = Tab.fromObject(args.tab)
   await tab.write(args.text)
 })
@@ -125,7 +135,10 @@ ipcMain.handle('loadTab', async (event, someArgument) => {
   }
 })
 
-ipcMain.on('loadTabs', async (event, args) => {
+ipcMain.handle('loadTabs', async (event, args) => {
+  log.debug('main.loadTabs')
   const tabsList = await tabs.loadTabs()
-  event.reply('tabsLoaded', tabsList)
+  log.debug('tabsList')
+  log.debug(tabsList)
+  return tabsList
 })
