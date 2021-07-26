@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import useTabs from './hooks/useTabs'
-import Dumps from './components/Dumps'
 import MonacoEditor from './components/EditorMonaco'
+import Dumps from './components/Dumps'
 
 const App = _ => {
   const { loadTabs } = useTabs()

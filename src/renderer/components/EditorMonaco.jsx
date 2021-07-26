@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react'
 import Editor, { loader, useMonaco } from '@monaco-editor/react'
-import useTabs from '../hooks/useTabs'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import themes from '../themes'
 import registerBraindownLanguage from '../braindown'
 import log from '../log'
+import { randomString } from '../services/utilitiesService'
+import { set as setDump } from '../store/storeDump'
 
 loader.config({
   paths: {
@@ -13,28 +14,21 @@ loader.config({
 })
 
 const MonacoEditor = _ => {
+  const id = randomString(4)
+  log.debug('rerender MonacoEditor', id)
+  const dispatch = useDispatch()
   const editorRef = useRef(null)
   const monaco = useMonaco()
-  const currentTab = useSelector(state => state.tabs.currentTab)
-  let dirty = false
-  const { saveTab } = useTabs()
-
-  const saveDoc = async _ => {
-    if (monaco && dirty) {
-      try {
-        const text = editorRef.current.getValue()
-        log.debug(`intent to save text of length ${text.length}`)
-        await saveTab(currentTab, text)
-      } finally {
-        dirty = false
-      }
-    }
-  }
+  const tabs = useSelector(state => state.tabs)
 
   useEffect(() => {
-    const timer = setInterval(saveDoc, 2000)
-    return () => clearTimeout(timer)
-  }, [])
+    log.debug(`monaco is now available: ${monaco}`, id)
+    if (monaco) {
+      registerBraindownLanguage(monaco)
+      monaco.editor.defineTheme('braindown', themes.braindown)
+      monaco.editor.setTheme('braindown')
+    }
+  }, [monaco])
 
   const loadTheme = theme => {
     if (monaco) {
@@ -43,29 +37,32 @@ const MonacoEditor = _ => {
     }
   }
 
+  const saveSettings = async _ => {
+    await window.__preload.send('saveSettings', editorRef.current.getValue())
+  }
+
   function handleEditorDidMount (editor, monaco) {
+    log.debug('editor did mount', id)
     editorRef.current = editor
   }
 
   const modelChanged = _ => {
-    dirty = true
+    dispatch(setDump(editorRef.current.getValue()))
   }
 
   return (
     <>
+      {tabs && tabs.showSettings && <button className='items-start' onClick={() => saveSettings()}>Save &amp; Restart</button>}
       <Editor
         height='400px'
         width='100%'
-        language='markdown'
-        theme='monokai'
-        keepCurrentModel
-        path={currentTab && currentTab.path}
+        path={tabs && tabs.currentTab && tabs.currentTab.path}
         defaultLanguage='braindown'
-        defaultValue={currentTab && (currentTab.text ? currentTab.text : 'helloooo')}
+        defaultValue={tabs && tabs.currentTab && (tabs.currentTab.text ? tabs.currentTab.text : 'helloooo')}
         onChange={modelChanged}
         onMount={handleEditorDidMount}
       />
-      <button onClick={() => loadTheme('braindown')}>Braindown</button>
+      <button onClick={() => loadTheme('braindown')}>Default</button>
       <button onClick={() => loadTheme('monokai')}>Monokai</button>
       <button onClick={() => loadTheme('nightowl')}>Night Owl</button>
     </>
