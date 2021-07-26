@@ -17,11 +17,12 @@ function saveDump () {
 
   if (state) {
     const currentTab = state.tabs.currentTab
+    const showSettings = state.tabs.showSettings
     const dump = state.dump
     if (dump) {
-      if (dump.dirty) {
+      if (dump.dirty && !showSettings) {
         const text = dump.text
-        log.debug(`intent to save text of length ${text.length}`, id)
+        log.debug(`intent to save text of length ${text.length}`, id, showSettings)
 
         window.__preload.send({
           channel: 'saveDump',
