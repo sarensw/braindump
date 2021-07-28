@@ -1,9 +1,17 @@
-import NightOwl from './NightOwl.json'
-import Monokai from './Monokai.json'
-import Braindown from './Braindown.json'
+import Monokai from './MonokaiVs.json'
+import NordLight from './NordLight.json'
+import SolarizedLight from './SolarizedLight.json'
+import log from '../log'
+import { convertTheme } from './convert'
+
+export function getMonarchTheme (theme) {
+  log.debug('loading theme')
+  const convertedTheme = convertTheme(theme)
+  return convertedTheme
+}
 
 export default {
-  braindown: Braindown,
-  nightowl: NightOwl,
+  solarizedlight: SolarizedLight,
+  nordlight: NordLight,
   monokai: Monokai
 }

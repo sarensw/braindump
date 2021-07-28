@@ -1,12 +1,13 @@
 
-import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, crashReporter } from 'electron'
 import { getAssetURL } from 'electron-snowpack'
 import path from 'path'
 import log from 'electron-log'
 import { Tabs, Tab } from './tabs'
 import { Settings } from './settings'
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
-import Store from 'electron-store'
+
+crashReporter.start({ uploadToServer: false })
 
 log.transports.console.level = false
 log.transports.file.resolvePath = () => path.join(app.getPath('userData'), 'logs/main.log')
@@ -20,8 +21,6 @@ log.debug(app.getPath('exe'))
 log.debug(app.getPath('logs'))
 log.debug(app.getPath('module'))
 log.debug(app.getPath('userData'))
-
-Store.initRenderer()
 
 let mainWindow
 const tabs = new Tabs()
