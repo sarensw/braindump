@@ -1,5 +1,11 @@
+/* eslint-disable no-template-curly-in-string */
+
 import log from '../log'
 
+/**
+ * Registers and configures the braindown language
+ * @param {import('monaco-editor')} monaco monaco editor
+ */
 const registerBraindownLanguage = monaco => {
   if (monaco) {
     log.debug('registerBraindownLanguage')
@@ -12,9 +18,7 @@ const registerBraindownLanguage = monaco => {
       tokenizer: {
         root: [
           [/^# .*/, 'entity.name.class'],
-          [/\[error.*/, 'custom-error'],
-          [/\[notice.*/, 'custom-notice'],
-          [/\[info.*/, 'custom-info'],
+          [/\/\/[\w\d-:_;>=+]+\S/, 'keyword'],
           [/\[[a-zA-Z 0-9:]+\]/, 'custom-date']
         ]
       }
@@ -58,6 +62,75 @@ const registerBraindownLanguage = monaco => {
           documentation: 'If-Else Statement'
         }]
         return { suggestions: suggestions }
+      }
+    })
+
+    monaco.languages.registerOnTypeFormattingEditProvider('braindown', {
+      autoFormatTriggerCharacters: [']'],
+      /** @param {import('monaco-editor/esm/vs/editor/editor.api').editor.IModel} model */
+      provideOnTypeFormattingEdits: (model, position, ch, options, token) => {
+        const t = model.getValueInRange({
+          startLineNumber: position.lineNumber,
+          startColumn: position.column - 2,
+          endLineNumber: position.lineNumber,
+          endColumn: position.column
+        })
+        if (t === '[]') {
+          return [
+            {
+              range: {
+                startLineNumber: position.lineNumber,
+                startColumn: position.column - 2,
+                endLineNumber: position.lineNumber,
+                endColumn: position.column
+              },
+              text: '[ ] '
+            }
+          ]
+        }
+      }
+    })
+
+    monaco.languages.registerCompletionItemProvider('braindown', {
+      triggerCharacters: ['/'],
+      /**
+       * @param {import('monaco-editor').editor.ITextModel} model the text model
+       * @param {import('monaco-editor').Position} position the current position
+       * @param {import('monaco-editor').languages.CompletionContext} context the completion context
+       * @param {import('monaco-editor').CancellationToken} token the cancellation token
+       */
+      provideCompletionItems: (model, position, context, token) => {
+        const t = model.getValueInRange({
+          startLineNumber: position.lineNumber,
+          endLineNumber: position.lineNumber,
+          startColumn: position.column - 2,
+          endColumn: position.column
+        })
+
+        if (t === '//') {
+          return {
+            suggestions: [
+              {
+                label: '//date',
+                kind: monaco.languages.CompletionItemKind.Property,
+                documentation: 'current date',
+                insertText: '2021-07-28'
+              },
+              {
+                label: '//time',
+                kind: monaco.languages.CompletionItemKind.Property,
+                documentation: 'current time',
+                insertText: '04:21'
+              },
+              {
+                label: '//date+time',
+                kind: monaco.languages.CompletionItemKind.Property,
+                documentation: 'current date',
+                insertText: '2021-07-28_04:21'
+              }
+            ]
+          }
+        }
       }
     })
 
