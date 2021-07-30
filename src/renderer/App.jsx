@@ -3,6 +3,7 @@ import useTabs from './hooks/useTabs'
 import MonacoEditor from './components/EditorMonaco'
 import Dumps from './components/Dumps'
 import { useSelector } from 'react-redux'
+import ThemeChanger from './components/ThemeChanger'
 
 const App = _ => {
   const theme = useSelector(state => state.theme.theme)
@@ -16,14 +17,20 @@ const App = _ => {
   return (
     <>
       <div
-        className='w-screen h-screen bg-red-400 flex flex-row' style={{
-          backgroundColor: theme.colors['editor.background']
+        className='w-screen h-screen bg-red-400 grid overflow-hidden' style={{
+          backgroundColor: theme.colors['editor.background'],
+          gridTemplateColumns: '[sidebar] 11rem [main] minmax(0, 1fr)',
+          gridTemplateRows: '[header] 2rem [shell] minmax(0, 1fr)'
         }}
       >
-        <div className='w-44'>
-          <Dumps />
+        <div style={{ gridColumn: '1 / span 2' }}>
+          hello
         </div>
-        <div className='flex-auto'>
+        <div>
+          <Dumps />
+          <ThemeChanger />
+        </div>
+        <div>
           <MonacoEditor />
         </div>
       </div>
