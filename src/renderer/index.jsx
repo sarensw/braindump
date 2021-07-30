@@ -5,18 +5,28 @@ import App from './App'
 
 import store from './store.js'
 import { Provider } from 'react-redux'
+import CustomThemeProvider from './themes/CustomThemeProvider'
 
+import startupService from './services/startupService'
 import dumpService from './services/dumpService'
-dumpService.initializeDumpService()
 
-ReactDOM.render(
-  <Provider store={store}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </Provider>,
-  document.getElementById('root')
-)
+async function initialize () {
+  await startupService.startup()
+  dumpService.initializeDumpService()
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <CustomThemeProvider>
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      </CustomThemeProvider>
+    </Provider>,
+    document.getElementById('root')
+  )
+}
+
+initialize()
 
 // HMR
 if (import.meta.hot) {

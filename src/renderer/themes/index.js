@@ -5,7 +5,7 @@ import log from '../log'
 import { convertTheme } from './convert'
 
 export function getMonarchTheme (theme) {
-  log.debug('loading theme')
+  log.debug('converting theme')
   const convertedTheme = convertTheme(theme)
   return convertedTheme
 }

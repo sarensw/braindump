@@ -23,6 +23,10 @@ export const configSlice = createSlice({
     path: null
   },
   reducers: {
+    set: (state, action) => {
+      state.path = action.payload.path
+      state.settings = action.payload.settings
+    }
   },
   extraReducers: {
     [loadSettings.fulfilled]: (state, action) => {
@@ -54,6 +58,6 @@ export const configSlice = createSlice({
   }
 })
 
-// export const {} = settingsSlice.actions
+export const { set } = configSlice.actions
 export { loadSettings, saveSettings }
 export default configSlice.reducer
