@@ -46,7 +46,9 @@
     "monaco-themes": "^0.3.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-redux": "^7.2.4"
+    "react-redux": "^7.2.4",
+    "shade-blend-color": "^1.0.0",
+    "styled-components": "^5.3.0"
   },
   "build": {
     "extends": "electron-snowpack/config/electron-builder.js",

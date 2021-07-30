@@ -4,6 +4,7 @@ import storeDocument from './store/storeDocument'
 import storeTabs from './store/storeTabs'
 import storeSettings from './store/storeSettings'
 import storeDump from './store/storeDump'
+import storeTheme from './store/storeTheme'
 
 export default configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export default configureStore({
     document: storeDocument,
     tabs: storeTabs,
     settings: storeSettings,
-    dump: storeDump
+    dump: storeDump,
+    theme: storeTheme
   },
   devTools: true
 })

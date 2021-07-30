@@ -90,6 +90,7 @@ ipcMain.on('log', (event, args) => {
 })
 
 ipcMain.handle('loadSettings', async (event, someArgument) => {
+  log.debug('ipcMain.loadSettings')
   const result = await settings.read()
   return result
 })
@@ -99,7 +100,7 @@ ipcMain.handle('saveSettings', async (event, someArgument) => {
 })
 
 ipcMain.on('saveDump', async (event, args) => {
-  log.debug('ipcMain.saveDump')
+  log.debug('ipcMain.saveDumps')
   log.debug(args)
   const tab = Tab.fromObject(args.tab)
   await tab.write(args.text)

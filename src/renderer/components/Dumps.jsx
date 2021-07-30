@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import log from '../log'
 import { setCurrentTab, setSettingsAsCurrentTab } from '../store/storeTabs'
 import dumpService from '../services/dumpService'
+import Button from './elements/Button'
 
 const Dumps = _ => {
   const tabs = useSelector(state => state.tabs.list)
@@ -24,9 +25,9 @@ const Dumps = _ => {
     <>
       <div className='flex flex-row'>
         {tabs && tabs.map((tab, index) => {
-          return <button key={index} onClick={() => loadDump(tab)} className={(currentTab && currentTab.path === tab.path ? 'bg-yellow-100' : 'bg-blue-100')}>{tab.name}</button>
+          return <Button key={index} onClick={() => loadDump(tab)}>{tab.name}</Button>
         })}
-        <button onClick={showSettings}>settings</button>
+        <Button onClick={showSettings}>settings</Button>
       </div>
     </>
   )
