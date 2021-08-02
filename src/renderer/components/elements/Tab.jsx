@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const eitherOrActive = (props, styleActive, styleInactive) => {
+  console.log(props.theme['tab.activeForeground'])
   if (props.active) return props.theme[styleActive]
   return props.theme[styleInactive]
 }
