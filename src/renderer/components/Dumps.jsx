@@ -33,7 +33,7 @@ const Dumps = _ => {
         {tabs && tabs.map((tab, index) => {
           return <Tab key={index} onClick={() => loadDump(tab)} active={isCurrentTabActive(tab)}>{tab.name}</Tab>
         })}
-        <Tab onClick={showSettings}>settings</Tab>
+        {/* <Tab onClick={showSettings}>settings</Tab> */}
       </ul>
     </>
   )
