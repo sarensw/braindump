@@ -33,7 +33,8 @@ function createMainWindow () {
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false
-    }
+    },
+    titleBarStyle: 'hidden'
   })
 
   if (process.env.MODE !== 'production') {
