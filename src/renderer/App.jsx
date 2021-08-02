@@ -19,16 +19,13 @@ const App = _ => {
       <div
         className='w-screen h-screen bg-red-400 grid overflow-hidden' style={{
           backgroundColor: theme.colors['editor.background'],
-          gridTemplateColumns: '[sidebar] 11rem [main] minmax(0, 1fr)',
-          gridTemplateRows: '[header] 2rem [shell] minmax(0, 1fr)'
+          gridTemplateColumns: '[shell] minmax(0, 1fr)',
+          gridTemplateRows: '[header] 4rem [main] minmax(0, 1fr)'
         }}
       >
         <div style={{ gridColumn: '1 / span 2' }}>
-          hello
-        </div>
-        <div>
-          <Dumps />
           <ThemeChanger />
+          <Dumps />
         </div>
         <div>
           <MonacoEditor />
