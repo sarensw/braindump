@@ -2,21 +2,13 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 import pSBC from 'shade-blend-color'
+import { colorRegistry } from './ColorRegistry'
 
 const CustomThemeProvider = ({ children }) => {
   const tc = useSelector(state => state.theme.theme.colors)
   const theme = useSelector(state => state.theme.theme)
-  const defaultThemeLight = {
-    'button.foreground': '#000',
-    'button.background': '#007ACC',
-    'button.hoverBackground': '#0085dd'
-  }
-  const defaultThemeDark = {
-    'button.foreground': '#fff',
-    'button.background': '#0E639C',
-    'button.hoverBackground': '#0085dd'
-  }
-  const defaultTheme = (theme && theme.type) ? (theme.type === 'dark' ? defaultThemeDark : defaultThemeLight) : defaultThemeLight
+
+  const defaultTheme = colorRegistry.getColors(theme.type)
 
   const correctedTheme = {}
   if (tc['button.hoverBackground']) {

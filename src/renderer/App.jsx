@@ -20,12 +20,15 @@ const App = _ => {
         className='w-screen h-screen bg-red-400 grid overflow-hidden' style={{
           backgroundColor: theme.colors['editor.background'],
           gridTemplateColumns: '[shell] minmax(0, 1fr)',
-          gridTemplateRows: '[header] 4rem [main] minmax(0, 1fr)'
+          gridTemplateRows: '[header] 2.5rem [main] minmax(0, 1fr)'
         }}
       >
-        <div style={{ gridColumn: '1 / span 2' }}>
-          <ThemeChanger />
-          <Dumps />
+        <div>
+          <div className='flex flex-row'>
+            <Dumps />
+            <div className='flex-grow' />
+            <ThemeChanger />
+          </div>
         </div>
         <div>
           <MonacoEditor />
