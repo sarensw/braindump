@@ -20,9 +20,10 @@ const App = _ => {
         className='w-screen h-screen bg-red-400 grid overflow-hidden' style={{
           backgroundColor: theme.colors['editor.background'],
           gridTemplateColumns: '[shell] minmax(0, 1fr)',
-          gridTemplateRows: '[header] 2.5rem [main] minmax(0, 1fr)'
+          gridTemplateRows: '[title] 1.6rem [header] 2.2rem [main] minmax(0, 1fr)'
         }}
       >
+        <div className='text-center text-sm self-center'>braindump</div>
         <div>
           <div className='flex flex-row'>
             <Dumps />
