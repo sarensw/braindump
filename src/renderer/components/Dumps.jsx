@@ -1,9 +1,14 @@
 import React from 'react'
+import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import log from '../log'
 import { setCurrentTab/* , setSettingsAsCurrentTab */ } from '../store/storeTabs'
 import dumpService from '../services/dumpService'
 import Tab from './elements/Tab'
+
+const AddDumpButton = styled.button`
+  color: ${props => props.theme.foreground};
+`
 
 const Dumps = _ => {
   const tabs = useSelector(state => state.tabs.list)
@@ -14,6 +19,12 @@ const Dumps = _ => {
     log.debug(`loading dump ${tab.name} from ${tab.path} as per user request`)
     dumpService.flush()
     dispatch(setCurrentTab(tab))
+  }
+
+  const addDump = tab => {
+    log.debug('adding new dump')
+    dumpService.flush()
+    dispatch(setCurrentTab(null))
   }
 
   /* const showSettings = settings => {
@@ -35,6 +46,7 @@ const Dumps = _ => {
         })}
         {/* <Tab onClick={showSettings}>settings</Tab> */}
       </ul>
+      <AddDumpButton className='text-xl px-2' onClick={addDump}>+</AddDumpButton>
     </>
   )
 }

@@ -29,6 +29,8 @@ const MonacoEditor = _ => {
       registerBraindownLanguage(monaco)
       /* loadTheme('monokai') */
       if (theme) {
+        console.log('MonacoEditor.useEffect[monaco]')
+        console.log(theme)
         changeTheme(theme)
       }
     }
@@ -44,7 +46,11 @@ const MonacoEditor = _ => {
 
   const changeTheme = theme => {
     try {
-      const writableTheme = JSON.parse(JSON.stringify(theme.theme))
+      const writableTheme = JSON.parse(JSON.stringify({
+        type: theme.type,
+        colors: theme.colors,
+        tokenColors: theme.tokenColors
+      }))
       log.debug(writableTheme)
       log.debug('trying hello world')
       writableTheme.hello = 'world'
