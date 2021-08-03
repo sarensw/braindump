@@ -4,7 +4,7 @@ import log from '../log'
 const setCurrentTab = createAsyncThunk(
   'tabs/setCurrentTab',
   async (tab, thunkApi) => {
-    if (!tab.loaded) {
+    if (tab === null || (tab !== null && !tab.loaded)) {
       const result = await window.__preload.invoke({
         channel: 'loadTab',
         payload: tab
@@ -61,12 +61,19 @@ export const tabsSlice = createSlice({
     [setCurrentTab.fulfilled]: (state, action) => {
       log.debug('setCurrentTab.fulfilled')
       log.debug(action)
+      // set the selected tab
       state.currentTab = {
         ...action.payload.tab,
         loaded: true,
         text: action.payload.text
       }
-      state.list = state.list.map((tab) => {
+      // update the list
+      const newList = action.payload.tabs.map((tab) => ({
+        ...tab,
+        loaded: false,
+        text: null
+      }))
+      state.list = newList.map((tab) => {
         if (tab.path === action.payload.tab.path) {
           return {
             ...tab,
