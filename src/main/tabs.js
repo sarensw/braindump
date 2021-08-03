@@ -50,16 +50,33 @@ export class Tabs {
     log.info('initialize tabs')
     this.userDataPath = electron.app.getPath('userData')
     this.tabs = []
+    this.tabsFilePath = path.join(this.userDataPath, 'tabs.json')
+  }
+
+  async newTab () {
+    const lastTab = this.tabs[this.tabs.length - 1]
+    const lastChar = lastTab.name.charAt(lastTab.name.length - 1)
+    const lastInt = parseInt(lastChar)
+    const newInt = lastInt + 1
+    const newTabName = `dump_${newInt}`
+    const newTabFile = `dump_${newInt}_${Date.now()}`
+
+    const tab = new Tab(newTabName, path.join(this.userDataPath, newTabFile))
+    this.tabs.push(tab)
+
+    await fs.writeFile(this.tabsFilePath, JSON.stringify(this.tabs))
+
+    return tab
   }
 
   async loadTabs () {
-    const tabsFilePath = path.join(this.userDataPath, 'tabs.json')
-    const exists = await fileExists(tabsFilePath)
+    const exists = await fileExists(this.tabsFilePath)
     if (exists) {
       // load
       log.debug('tabs.json found. Loading...')
-      const raw = await fs.readFile(tabsFilePath)
+      const raw = await fs.readFile(this.tabsFilePath)
       const tabs = JSON.parse(raw)
+      this.tabs = tabs
       return tabs
     } else {
       // create as new
@@ -67,7 +84,8 @@ export class Tabs {
       const tab = new Tab('dump 0', path.join(this.userDataPath, 'dump_0'))
       tab.write('')
       const tabs = [tab]
-      await fs.writeFile(tabsFilePath, JSON.stringify(tabs))
+      await fs.writeFile(this.tabsFilePath, JSON.stringify(tabs))
+      this.tabs = tabs
       return tabs
     }
   }

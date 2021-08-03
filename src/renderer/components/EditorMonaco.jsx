@@ -129,7 +129,7 @@ const MonacoEditor = _ => {
         }}
         path={tabs && tabs.currentTab && tabs.currentTab.path}
         defaultLanguage='braindown'
-        defaultValue={tabs && tabs.currentTab && (tabs.currentTab.text ? tabs.currentTab.text : 'helloooo')}
+        defaultValue={tabs && tabs.currentTab && (tabs.currentTab.text ? tabs.currentTab.text : '')}
         onChange={modelChanged}
         onMount={handleEditorDidMount}
       />

@@ -118,21 +118,28 @@ ipcMain.on('showOpenDialog', async (event, someArgument) => {
 ipcMain.handle('loadTab', async (event, someArgument) => {
   log.debug('ipcMain.loadTab')
   log.debug(someArgument)
-  const tab = Tab.fromObject(someArgument)
-  log.debug(tab)
-  const text = await tab.read()
-  log.debug('event.reply')
-  log.debug({
-    tab,
-    text
-  })
-  // event.reply('tabLoaded', {
-  //   tab,
-  //   text
-  // })
-  return {
-    tab,
-    text
+  if (someArgument === null) {
+    const tab = await tabs.newTab()
+    return {
+      tabs: tabs.tabs,
+      tab,
+      text: ''
+    }
+  } else {
+    const tab = Tab.fromObject(someArgument)
+    log.debug(tab)
+    const text = await tab.read()
+    log.debug('event.reply')
+    log.debug({
+      tab,
+      text
+    })
+
+    return {
+      tabs: tabs.tabs,
+      tab,
+      text
+    }
   }
 })
 
