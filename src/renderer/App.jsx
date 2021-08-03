@@ -24,7 +24,7 @@ const App = _ => {
         }}
       >
         <div
-          className='text-center text-sm items-end select-none'
+          className='text-center text-sm items-end select-none pt-0.5'
           style={{
             backgroundColor: colors['titleBar.activeBackground'],
             color: colors.foreground,
