@@ -3,7 +3,7 @@
 //
 // Taken from: https://github.com/microsoft/vscode/blob/c980ea2307905fd1efeee38915bf1e5ccdff1754/src/vs/workbench/common/theme.ts
 
-import { editorBackground, Color, transparent, contrastBorder, treeIndentGuidesStroke, focusBorder, listActiveSelectionBackground, listActiveSelectionForeground, editorInfoForeground, errorForeground, editorWarningForeground, darken, editorWidgetForeground, editorWidgetBackground, activeContrastBorder, lighten, editorErrorForeground, textLinkForeground } from './ColorRegistry'
+import { Color, transparent, contrastBorder, treeIndentGuidesStroke, focusBorder, listActiveSelectionBackground, listActiveSelectionForeground, editorInfoForeground, errorForeground, editorWarningForeground, darken, editorWidgetForeground, editorWidgetBackground, activeContrastBorder, lighten, editorErrorForeground, textLinkForeground } from './ColorRegistry'
 
 const localize = (id, text) => text
 
@@ -43,6 +43,7 @@ export function registerExtendedColors (type, intermediaryTheme) {
   // To make sure the code below doesn't need to be updated when copied,
   // the dependencies are defined above.
 
+  /* eslint-disable */
   const TAB_ACTIVE_BACKGROUND = registerColor('tab.activeBackground', {
     dark: editorBackground,
     light: editorBackground,
@@ -722,6 +723,7 @@ export function registerExtendedColors (type, intermediaryTheme) {
     light: null,
     hc: contrastBorder
   }, localize('windowInactiveBorder', 'The color used for the border of the window when it is inactive. Only supported in the desktop client when using the custom title bar.'))
+  /* eslint-enable */
 
   return extendedTheme
 }
