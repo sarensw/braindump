@@ -1,5 +1,5 @@
 // source: https://github.com/Nishkalkashyap/monaco-vscode-textmate-theme-converter
-
+/* eslint-disable */
 import * as monaco from 'monaco-editor';
 
 export interface IVSCodeTheme {
@@ -64,3 +64,4 @@ export function convertTheme(theme: IVSCodeTheme): monaco.editor.IStandaloneThem
 
     return returnTheme;
 }
+/* eslint-enable */
