@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import ThemeChanger from './components/ThemeChanger'
 
 const App = _ => {
-  const theme = useSelector(state => state.theme.theme)
+  const colors = useSelector(state => state.theme.colors)
   const { loadTabs } = useTabs()
 
   useEffect(() => {
@@ -18,14 +18,28 @@ const App = _ => {
     <>
       <div
         className='w-screen h-screen bg-red-400 grid overflow-hidden' style={{
-          backgroundColor: theme.colors['editor.background'],
+          backgroundColor: colors['editor.background'],
           gridTemplateColumns: '[shell] minmax(0, 1fr)',
           gridTemplateRows: '[title] 1.6rem [header] 2.2rem [main] minmax(0, 1fr)'
         }}
       >
-        <div className='text-center text-sm self-center'>braindump</div>
+        <div
+          className='text-center text-sm items-end select-none'
+          style={{
+            backgroundColor: colors['titleBar.activeBackground'],
+            color: colors.foreground,
+            '-webkit-app-region': 'drag'
+          }}
+        >
+          <div className='self-center'>braindump</div>
+        </div>
         <div>
-          <div className='flex flex-row'>
+          <div
+            className='flex flex-row'
+            style={{
+              backgroundColor: colors['editorGroupHeader.tabsBackground']
+            }}
+          >
             <Dumps />
             <div className='flex-grow' />
             <ThemeChanger />

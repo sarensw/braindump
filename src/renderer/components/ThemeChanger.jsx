@@ -28,9 +28,9 @@ const ThemeChanger = _ => {
     <>
       <div className='flex flex-row items-center mr-1'>
         <Select onChange={changeThemeByUser}>
+          <option value='nordlight'>Nord Light</option>
           <option value='monokai'>Monokai</option>
           <option value='solarizedlight'>Solarized Light</option>
-          <option value='nordlight'>Nord Light</option>
         </Select>
       </div>
     </>
