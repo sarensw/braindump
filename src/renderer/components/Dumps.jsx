@@ -40,9 +40,9 @@ const Dumps = _ => {
 
   return (
     <>
-      <ul>
+      <ul role='tablist' className='float-left overflow-x-auto'>
         {tabs && tabs.map((tab, index) => {
-          return <Tab key={index} onClick={() => loadDump(tab)} active={isCurrentTabActive(tab)}>{tab.name}</Tab>
+          return <Tab key={index} onClick={() => loadDump(tab)} active={isCurrentTabActive(tab)} tab={tab}>{tab.name}</Tab>
         })}
         {/* <Tab onClick={showSettings}>settings</Tab> */}
       </ul>

@@ -17,6 +17,19 @@ const setCurrentTab = createAsyncThunk(
   }
 )
 
+const closeTab = createAsyncThunk(
+  'tabs/closeTab',
+  async (tab, thunkApi) => {
+    if (tab !== null) {
+      const result = await window.__preload.invoke({
+        channel: 'closeTab',
+        payload: tab
+      })
+      return result
+    }
+  }
+)
+
 const setSettingsAsCurrentTab = createAsyncThunk(
   'tabs/setSettingsAsCurrentTab',
   async (args, thunkApi) => {
@@ -68,21 +81,23 @@ export const tabsSlice = createSlice({
         text: action.payload.text
       }
       // update the list
-      const newList = action.payload.tabs.map((tab) => ({
-        ...tab,
-        loaded: false,
-        text: null
-      }))
-      state.list = newList.map((tab) => {
-        if (tab.path === action.payload.tab.path) {
-          return {
-            ...tab,
-            loaded: true
+      if (action.payload.tabs) {
+        const newList = action.payload.tabs.map((tab) => ({
+          ...tab,
+          loaded: false,
+          text: null
+        }))
+        state.list = newList.map((tab) => {
+          if (tab.path === action.payload.tab.path) {
+            return {
+              ...tab,
+              loaded: true
+            }
+          } else {
+            return tab
           }
-        } else {
-          return tab
-        }
-      })
+        })
+      }
       state.showSettings = false
     },
     [setCurrentTab.rejected]: (state, action) => {
@@ -91,6 +106,19 @@ export const tabsSlice = createSlice({
     },
     [setCurrentTab.pending]: (state, action) => {
       log.debug('setCurrentTab.pending')
+      log.debug(action)
+    },
+    [closeTab.fulfilled]: (state, action) => {
+      log.debug('closeTab.fulfilled')
+      log.debug(action)
+      state.list = state.list.filter(tab => tab.path !== action.payload.path)
+    },
+    [closeTab.rejected]: (state, action) => {
+      log.debug('closeTab.rejected')
+      log.debug(action)
+    },
+    [closeTab.pending]: (state, action) => {
+      log.debug('closeTab.pending')
       log.debug(action)
     },
     [setSettingsAsCurrentTab.fulfilled]: (state, action) => {
@@ -116,5 +144,5 @@ export const tabsSlice = createSlice({
 })
 
 export const { set, setTabText } = tabsSlice.actions
-export { setCurrentTab, setSettingsAsCurrentTab }
+export { setCurrentTab, setSettingsAsCurrentTab, closeTab }
 export default tabsSlice.reducer

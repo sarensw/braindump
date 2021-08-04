@@ -143,6 +143,15 @@ ipcMain.handle('loadTab', async (event, someArgument) => {
   }
 })
 
+ipcMain.handle('closeTab', async (event, someArgument) => {
+  log.debug('ipcMain.closeTab')
+  log.debug(someArgument)
+  if (someArgument) {
+    await tabs.closeTab(someArgument)
+    return someArgument
+  }
+})
+
 ipcMain.handle('loadTabs', async (event, args) => {
   log.debug('main.loadTabs')
   const tabsList = await tabs.loadTabs()
