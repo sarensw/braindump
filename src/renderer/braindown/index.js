@@ -116,6 +116,37 @@ const registerBraindownLanguage = monaco => {
       }
     })
 
+    monaco.languages.registerFoldingRangeProvider('braindown', {
+      provideFoldingRanges: (model, context, token) => {
+        console.log('provideFoldingRange')
+        const ranges = []
+        let start = -1
+        const lines = model.getLinesContent()
+        const linesCount = lines.length
+        lines.forEach((line, i) => {
+          if (line.startsWith('#')) {
+            console.log({ line, i })
+            if (start >= 0) {
+              ranges.push({
+                start: start + 1,
+                end: i,
+                kind: monaco.languages.FoldingRangeKind.Region
+              })
+            }
+            start = i
+          }
+          if (linesCount - 1 === i && start >= 0) {
+            ranges.push({
+              start: start + 1,
+              end: i + 1,
+              kind: monaco.languages.FoldingRangeKind.Region
+            })
+          }
+        })
+        return ranges
+      }
+    })
+
     // monaco.editor.create(document.getElementById("container"), {
     //   theme: 'braindownTheme',
     //   value: getCode(),

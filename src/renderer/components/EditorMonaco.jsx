@@ -125,7 +125,8 @@ const MonacoEditor = _ => {
         options={{
           formatOnType: true,
           wordWrap: true,
-          automaticLayout: true
+          automaticLayout: true,
+          showFoldingControls: 'always'
         }}
         path={tabs && tabs.currentTab && tabs.currentTab.path}
         defaultLanguage='braindown'
