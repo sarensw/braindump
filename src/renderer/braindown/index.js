@@ -1,6 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 
 import log from '../log'
+import { loadSuggestions } from './suggestions'
 
 /**
  * Registers and configures the braindown language
@@ -109,26 +110,7 @@ const registerBraindownLanguage = monaco => {
 
         if (t === '//') {
           return {
-            suggestions: [
-              {
-                label: '//date',
-                kind: monaco.languages.CompletionItemKind.Property,
-                documentation: 'current date',
-                insertText: '2021-07-28'
-              },
-              {
-                label: '//time',
-                kind: monaco.languages.CompletionItemKind.Property,
-                documentation: 'current time',
-                insertText: '04:21'
-              },
-              {
-                label: '//date+time',
-                kind: monaco.languages.CompletionItemKind.Property,
-                documentation: 'current date',
-                insertText: '2021-07-28_04:21'
-              }
-            ]
+            suggestions: loadSuggestions(monaco)
           }
         }
       }
