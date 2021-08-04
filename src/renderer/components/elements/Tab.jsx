@@ -1,5 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useDispatch } from 'react-redux'
+import Icon from './Icon'
+import { closeTab } from '../../store/storeTabs'
 
 const eitherOrActive = (props, styleActive, styleInactive) => {
   if (props.active) return props.theme[styleActive]
@@ -12,7 +15,8 @@ const ifExists = (props, attribute, yes, no) => {
 }
 
 const NewTab = styled.li`
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   padding: 0.4rem;
   padding-left: 0.6rem;
   padding-right: 0.6rem;
@@ -34,10 +38,35 @@ const NewTab = styled.li`
   }
 `
 
+const CloseButton = styled.button`
+  padding: 0.1rem;
+  margin-left: 0.3rem;
+  height: 1rem;
+  width: 1rem;
+  color: ${props => eitherOrActive(props, 'tab.activeForeground', 'tab.inactiveForeground')};
+  &:hover {
+    background-color: ${props => props.theme['toolbar.hoverBackground']};
+  }
+`
+
 const Tab = (props) => {
+  const dispatch = useDispatch()
+
+  const close = (event, tab) => {
+    event.stopPropagation()
+    event.nativeEvent.stopImmediatePropagation()
+    console.log('closing tab ' + tab.name)
+    dispatch(closeTab(tab))
+  }
+
   return (
     <>
-      <NewTab active={props.active} onClick={props.onClick}>{props.children}</NewTab>
+      <NewTab active={props.active} onClick={props.onClick}>
+        {props.children}
+        <CloseButton onClick={(event) => close(event, props.tab)}>
+          <Icon name='window_close' />
+        </CloseButton>
+      </NewTab>
     </>
   )
 }
