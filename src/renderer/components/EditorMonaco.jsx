@@ -109,6 +109,7 @@ const MonacoEditor = _ => {
     log.debug('editor did mount', id)
     editorRef.current = editor
     editorRef.current.onDidType(function (text) {
+      console.log('typed ' + text)
       extensions.run(text, editor)
     })
   }
@@ -126,7 +127,10 @@ const MonacoEditor = _ => {
           formatOnType: true,
           wordWrap: true,
           automaticLayout: true,
-          showFoldingControls: 'always'
+          showFoldingControls: 'always',
+          suggest: {
+            preview: true
+          }
         }}
         path={tabs && tabs.currentTab && tabs.currentTab.path}
         defaultLanguage='braindown'

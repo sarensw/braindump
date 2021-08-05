@@ -1,7 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 
 import log from '../log'
-import { loadSuggestions } from './suggestions'
+import { loadCommandSuggestions, loadContactSuggestions, loadWordSuggestions } from './suggestions'
 
 /**
  * Registers and configures the braindown language
@@ -110,22 +110,50 @@ const registerBraindownLanguage = monaco => {
 
         if (t === '//') {
           return {
-            suggestions: loadSuggestions(monaco)
+            suggestions: loadCommandSuggestions(monaco)
           }
+        }
+      }
+    })
+
+    monaco.languages.registerCompletionItemProvider('braindown', {
+      triggerCharacters: ['@'],
+      /**
+       * @param {import('monaco-editor').editor.ITextModel} model the text model
+       * @param {import('monaco-editor').Position} position the current position
+       * @param {import('monaco-editor').languages.CompletionContext} context the completion context
+       * @param {import('monaco-editor').CancellationToken} token the cancellation token
+       */
+      provideCompletionItems: async (model, position, context, token) => {
+        return {
+          suggestions: await loadContactSuggestions(monaco, '@')
+        }
+      }
+    })
+
+    monaco.languages.registerCompletionItemProvider('braindown', {
+      triggerCharacters: 'abcdefghijklmnopqrstuvwxyz'.split(''),
+      /**
+       * @param {import('monaco-editor').editor.ITextModel} model the text model
+       * @param {import('monaco-editor').Position} position the current position
+       * @param {import('monaco-editor').languages.CompletionContext} context the completion context
+       * @param {import('monaco-editor').CancellationToken} token the cancellation token
+       */
+      provideCompletionItems: async (model, position, context, token) => {
+        return {
+          suggestions: await loadWordSuggestions(monaco)
         }
       }
     })
 
     monaco.languages.registerFoldingRangeProvider('braindown', {
       provideFoldingRanges: (model, context, token) => {
-        console.log('provideFoldingRange')
         const ranges = []
         let start = -1
         const lines = model.getLinesContent()
         const linesCount = lines.length
         lines.forEach((line, i) => {
           if (line.startsWith('#')) {
-            console.log({ line, i })
             if (start >= 0) {
               ranges.push({
                 start: start + 1,

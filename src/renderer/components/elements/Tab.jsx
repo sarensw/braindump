@@ -55,7 +55,6 @@ const Tab = (props) => {
   const close = (event, tab) => {
     event.stopPropagation()
     event.nativeEvent.stopImmediatePropagation()
-    console.log('closing tab ' + tab.name)
     dispatch(closeTab(tab))
   }
 
