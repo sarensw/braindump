@@ -19,6 +19,7 @@ const registerBraindownLanguage = monaco => {
       tokenizer: {
         root: [
           [/^# .*/, 'entity.name.class'],
+          [/[[\]]/, 'entity.name.tag'],
           [/\/\/[\w\d-:_;>=+]+\S/, 'keyword'],
           [/\[[a-zA-Z 0-9:]+\]/, 'custom-date']
         ]
