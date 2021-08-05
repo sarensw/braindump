@@ -4,16 +4,24 @@ import log from '../log'
 const setCurrentTab = createAsyncThunk(
   'tabs/setCurrentTab',
   async (tab, thunkApi) => {
+    let result = null
     if (tab === null || (tab !== null && !tab.loaded)) {
-      const result = await window.__preload.invoke({
+      result = await window.__preload.invoke({
         channel: 'loadTab',
         payload: tab
       })
-      return result
     } else {
       log.debug('text was loaded before, no need to do this again')
-      return { tab }
+      result = { tab }
     }
+
+    // update the last used tab
+    window.__preload.invoke({
+      channel: 'lastUsedTabChanged',
+      tab: result.tab
+    })
+
+    return result
   }
 )
 

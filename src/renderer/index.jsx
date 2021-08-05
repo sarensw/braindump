@@ -13,6 +13,7 @@ import dumpService from './services/dumpService'
 async function initialize () {
   await startupService.startup()
   dumpService.initializeDumpService()
+  await dumpService.initializeDumps()
 
   ReactDOM.render(
     <Provider store={store}>

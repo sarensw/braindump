@@ -59,7 +59,8 @@ export class Tabs {
 
     await fs.writeFile(this.tabsFilePath, JSON.stringify({
       tabs: this.tabs,
-      count: this.count
+      count: this.count,
+      lastUsed: this.tabs[this.tabs.length].path
     }))
   }
 
@@ -71,9 +72,24 @@ export class Tabs {
     const tab = new Tab(newTabName, path.join(this.userDataPath, newTabFile))
     this.tabs.push(tab)
 
+    this.lastUsed = tab.path
+
     await fs.writeFile(this.tabsFilePath, JSON.stringify({
       tabs: this.tabs,
-      count: this.count
+      count: this.count,
+      lastUsed: this.lastUsed
+    }))
+
+    return tab
+  }
+
+  async lastUsedTabChanged (tab) {
+    this.lastUsed = tab.path
+
+    await fs.writeFile(this.tabsFilePath, JSON.stringify({
+      tabs: this.tabs,
+      count: this.count,
+      lastUsed: this.lastUsed
     }))
 
     return tab
@@ -85,10 +101,14 @@ export class Tabs {
       // load
       log.debug('tabs.json found. Loading...')
       const raw = await fs.readFile(this.tabsFilePath)
-      const { tabs, count } = JSON.parse(raw)
+      const { tabs, count, lastUsed } = JSON.parse(raw)
       this.tabs = tabs
       this.count = count
-      return tabs
+      this.lastUsed = lastUsed
+      return {
+        tabs,
+        lastUsed
+      }
     } else {
       // create as new
       log.debug('No tabs.json existing. Creating a new one')
@@ -101,7 +121,11 @@ export class Tabs {
       }))
       this.tabs = tabs
       this.count = 0
-      return tabs
+      this.lastUsed = tab.path
+      return {
+        tabs,
+        lastUsed: this.lastUsed
+      }
     }
   }
 }
