@@ -6,10 +6,8 @@
  * @returns true in case the extension did change anything, false otherwise
  */
 function handleToggleTask (text, editor) {
-  console.log(text)
   const model = editor.getModel()
   const position = editor.getPosition()
-  console.log(position)
 
   // handle the cases [xx] and [ x]
   //                    |        |
@@ -20,9 +18,7 @@ function handleToggleTask (text, editor) {
     endLineNumber: position.lineNumber,
     endColumn: position.column + 1
   })
-  console.log(token)
   if (token === '[ x]') {
-    console.log('token found')
     model.pushEditOperations([],
       [{
         range: {
@@ -39,7 +35,6 @@ function handleToggleTask (text, editor) {
     return true
   }
   if (token === '[xx]') {
-    console.log('token found')
     model.pushEditOperations([],
       [{
         range: {
@@ -65,9 +60,7 @@ function handleToggleTask (text, editor) {
     endLineNumber: position.lineNumber,
     endColumn: position.column + 2
   })
-  console.log(token)
   if (token === '[x ]') {
-    console.log('token found')
     model.pushEditOperations([],
       [{
         range: {
@@ -84,7 +77,6 @@ function handleToggleTask (text, editor) {
     return true
   }
   if (token === '[xx]') {
-    console.log('token found')
     model.pushEditOperations([],
       [{
         range: {
