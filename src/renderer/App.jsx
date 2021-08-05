@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import useTabs from './hooks/useTabs'
+import React from 'react'
 import MonacoEditor from './components/EditorMonaco'
 import Dumps from './components/Dumps'
 import { useSelector } from 'react-redux'
@@ -7,12 +6,6 @@ import ThemeChanger from './components/ThemeChanger'
 
 const App = _ => {
   const colors = useSelector(state => state.theme.colors)
-  const { loadTabs } = useTabs()
-
-  useEffect(() => {
-    // load the tabs exactly once, then show them
-    loadTabs()
-  }, [])
 
   return (
     <>
