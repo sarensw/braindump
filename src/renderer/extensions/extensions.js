@@ -1,7 +1,9 @@
 import extensionTask from './extensionTask'
+import extensionWord from './extensionContact'
 
 const extensions = [
-  ...extensionTask
+  ...extensionTask,
+  ...extensionWord
 ]
 
 /**

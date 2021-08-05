@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
+import suggestionService from '../services/suggestionService'
 
-function loadSuggestions (monaco) {
+function loadCommandSuggestions (monaco) {
   const suggestions = [
     {
       label: '//date',
@@ -23,8 +24,6 @@ function loadSuggestions (monaco) {
       insertText: `cw${DateTime.now().toFormat('WW')}`
     }
   ]
-  console.log('loadSuggestions')
-  console.log(suggestions[0].insertText)
   return suggestions.map(s => {
     return {
       ...s,
@@ -33,4 +32,26 @@ function loadSuggestions (monaco) {
   })
 }
 
-export { loadSuggestions }
+async function loadContactSuggestions (monaco, start) {
+  const suggestions = await suggestionService.get('contact', start)
+  return suggestions.map(suggestion => ({
+    label: suggestion.contact,
+    filterText: suggestion.contact.substring(1),
+    documentation: suggestion.contact,
+    insertText: suggestion.contact.substring(1),
+    kind: monaco.languages.CompletionItemKind.Text
+  }))
+}
+
+async function loadWordSuggestions (monaco) {
+  const suggestions = await suggestionService.get('word')
+  return suggestions.map(suggestion => ({
+    label: suggestion.word,
+    filterText: suggestion.word,
+    documentation: suggestion.word,
+    insertText: suggestion.word,
+    kind: monaco.languages.CompletionItemKind.Text
+  }))
+}
+
+export { loadCommandSuggestions, loadContactSuggestions, loadWordSuggestions }
