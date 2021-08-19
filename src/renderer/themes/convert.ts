@@ -1,6 +1,7 @@
 // source: https://github.com/Nishkalkashyap/monaco-vscode-textmate-theme-converter
 /* eslint-disable */
 import * as monaco from 'monaco-editor';
+import log from '../log';
 
 export interface IVSCodeTheme {
   "$schema": "vscode://schemas/color-theme",
@@ -23,42 +24,40 @@ export function convertTheme(theme: IVSCodeTheme): monaco.editor.IStandaloneThem
 
     const monacoThemeRule: IMonacoThemeRule = [];
     const returnTheme: monaco.editor.IStandaloneThemeData = {
-        inherit: true,
-        base: 'vs-dark',
-        colors: theme.colors,
-        rules: monacoThemeRule,
-        encodedTokensColors: []
+      inherit: true,
+      base: 'vs-dark',
+      colors: theme.colors,
+      rules: monacoThemeRule,
+      encodedTokensColors: []
     };
 
     returnTheme.base = theme.type === 'dark' ? 'vs-dark' : 'vs'
 
     theme.tokenColors.map((color) => {
+      if (typeof color.scope == 'string') {
+        const split = color.scope.split(',');
 
-        if (typeof color.scope == 'string') {
-
-            const split = color.scope.split(',');
-
-            if (split.length > 1) {
-                color.scope = split;
-                evalAsArray();
-                return;
-            }
-
-            monacoThemeRule.push(Object.assign({}, color.settings, {
-                // token: color.scope.trim().replace(/\s/g, '')
-                token: color.scope.trim()
-            }));
+        if (split.length > 1) {
+            color.scope = split;
+            evalAsArray();
             return;
         }
 
-        evalAsArray();
+        monacoThemeRule.push(Object.assign({}, color.settings, {
+            // token: color.scope.trim().replace(/\s/g, '')
+            token: color.scope.trim()
+        }));
+        return;
+      }
 
-        function evalAsArray() {
-            (color.scope as string[])?.map((scope) => {
-                monacoThemeRule.push(Object.assign({}, color.settings, {
-                    token: scope.trim()
-                }));
-            });
+      evalAsArray();
+
+      function evalAsArray() {
+          (color.scope as string[])?.map((scope) => {
+              monacoThemeRule.push(Object.assign({}, color.settings, {
+                  token: scope.trim()
+              }));
+          });
         }
     });
 
