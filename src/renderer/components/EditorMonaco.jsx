@@ -30,7 +30,6 @@ const MonacoEditor = _ => {
       /* loadTheme('monokai') */
       if (theme) {
         console.log('MonacoEditor.useEffect[monaco]')
-        console.log(theme)
         changeTheme(theme)
       }
     }

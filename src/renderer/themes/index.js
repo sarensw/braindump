@@ -7,6 +7,13 @@ import { convertTheme } from './convert'
 export function getMonarchTheme (theme) {
   log.debug('converting theme')
   const convertedTheme = convertTheme(theme)
+
+  if (convertedTheme.colors['editor.background']) {
+    convertedTheme.rules.push({
+      background: convertedTheme.colors['editor.background']
+    })
+  }
+
   return convertedTheme
 }
 
