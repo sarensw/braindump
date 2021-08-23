@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import log from '../log'
@@ -14,6 +14,7 @@ const Dumps = _ => {
   const tabs = useSelector(state => state.tabs.list)
   const currentTab = useSelector(state => state.tabs.currentTab)
   const dispatch = useDispatch()
+  const scrollContainer = useRef()
 
   const loadDump = tab => {
     log.debug(`loading dump ${tab.name} from ${tab.path} as per user request`)
@@ -38,9 +39,16 @@ const Dumps = _ => {
     return false
   }
 
+  const onWheel = (evt) => {
+    evt.preventDefault()
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.scrollLeft += evt.deltaY
+    }
+  }
+
   return (
     <>
-      <ul role='tablist' className='float-left overflow-x-auto'>
+      <ul ref={scrollContainer} role='tablist' className='flex flex-nowrap overflow-x-scroll tablist' onWheel={onWheel}>
         {tabs && tabs.map((tab, index) => {
           return <Tab key={index} onClick={() => loadDump(tab)} active={isCurrentTabActive(tab)} tab={tab}>{tab.name}</Tab>
         })}
