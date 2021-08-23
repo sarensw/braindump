@@ -28,13 +28,13 @@ const App = _ => {
         </div>
         <div>
           <div
-            className='flex flex-row'
+            className='grid'
             style={{
-              backgroundColor: colors['editorGroupHeader.tabsBackground']
+              backgroundColor: colors['editorGroupHeader.tabsBackground'],
+              gridTemplateColumns: '1fr 26px 120px'
             }}
           >
             <Dumps />
-            <div className='flex-grow' />
             <ThemeChanger />
           </div>
         </div>

@@ -15,7 +15,8 @@ const ifExists = (props, attribute, yes, no) => {
 }
 
 const NewTab = styled.li`
-  display: inline-flex;
+  /* display: inline-flex; */
+  flex: 0 0 auto;
   align-items: center;
   padding: 0.4rem;
   padding-left: 0.6rem;

@@ -2,3 +2,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* .tablist {
+  transform: rotate(-90deg) translateY(-100px);
+  transform-origin: right top;
+}
+
+.tablist > li {
+  transform: rotate(90deg);
+  transform-origin: right top;
+} */
+
+.tablist::-webkit-scrollbar {
+  display: none;
+}
