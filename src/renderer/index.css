@@ -3,15 +3,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* .tablist {
-  transform: rotate(-90deg) translateY(-100px);
-  transform-origin: right top;
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  outline: none;
 }
-
-.tablist > li {
-  transform: rotate(90deg);
-  transform-origin: right top;
-} */
 
 .tablist::-webkit-scrollbar {
   display: none;
