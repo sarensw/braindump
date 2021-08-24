@@ -11,6 +11,10 @@ const Select = styled.select`
   border-color: ${props => props.theme['dropdown.border']};
   background-color: ${props => props.theme['dropdown.background']};
   color: ${props => props.theme['dropdown.foreground']};
+
+  :focus {
+    border-color: ${props => props.theme.focusBorder};
+  }
 `
 
 const ThemeChanger = _ => {
