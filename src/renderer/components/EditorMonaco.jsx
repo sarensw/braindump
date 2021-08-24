@@ -7,6 +7,7 @@ import log from '../log'
 import { randomString } from '../services/utilitiesService'
 import { set as setDump } from '../store/storeDump'
 import extensions from '../extensions/extensions'
+import { Range } from 'monaco-editor'
 
 loader.config({
   paths: {
@@ -22,6 +23,7 @@ const MonacoEditor = _ => {
   const monaco = useMonaco()
   const tabs = useSelector(state => state.tabs)
   const theme = useSelector(state => state.theme)
+  const search = useSelector(state => state.search)
 
   useEffect(() => {
     log.debug(`monaco is now available: ${monaco}`, id)
@@ -42,6 +44,42 @@ const MonacoEditor = _ => {
       changeTheme(theme)
     }
   }, [theme])
+
+  useEffect(() => {
+    if (!editorRef.current) return
+
+    if (search.text === '') {
+      editorRef.current.setHiddenAreas([])
+      return
+    }
+
+    editorRef.current.setHiddenAreas([])
+
+    const regex = `${search.text}`
+    const matches = editorRef.current.getModel().findMatches(new RegExp(regex, 'g'), false, true, false, null, true)
+    log.debug(matches)
+
+    const lineCount = editorRef.current.getModel().getLineCount()
+    const rangesFound = matches.map(match => match.range)
+    const rangesExclude = [new Range(1, 0, lineCount, 0)]
+    for (const range of rangesFound) {
+      log.debug(rangesExclude)
+      rangesExclude.forEach((value, index) => {
+        if (range.startLineNumber > value.startLineNumber && range.endLineNumber < value.endLineNumber) {
+          rangesExclude.splice(index, 1)
+          rangesExclude.push(new Range(value.startLineNumber, 0, range.startLineNumber - 1))
+          rangesExclude.push(new Range(range.endLineNumber + 1, 0, value.endLineNumber, 0))
+        } else if (range.startLineNumber >= value.startLineNumber && range.endLineNumber < value.endLineNumber) {
+          rangesExclude.splice(index, 1)
+          rangesExclude.push(new Range(value.startLineNumber + 1, 0, value.endLineNumber, 0))
+        } else if (range.startLineNumber >= value.startLineNumber && range.endLineNumber === value.endLineNumber) {
+          rangesExclude.splice(index, 1)
+        }
+      })
+    }
+    editorRef.current.setHiddenAreas(rangesExclude)
+    /* editorRef.current.setHiddenAreas([new Range(1, 0, 10, 0), new Range(20, 0, 30, 0)]) */
+  }, [search.text])
 
   const changeTheme = theme => {
     try {
@@ -119,7 +157,7 @@ const MonacoEditor = _ => {
 
   return (
     <>
-        {/* {tabs && tabs.showSettings && <button className='items-start' onClick={() => saveSettings()}>Save &amp; Restart</button>} */}
+      {/* {tabs && tabs.showSettings && <button className='items-start' onClick={() => saveSettings()}>Save &amp; Restart</button>} */}
 
       <Editor
         options={{

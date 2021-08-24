@@ -1,6 +1,8 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { set as setSearch } from '../store/storeSearch'
 import styled from 'styled-components'
+import log from '../log'
 
 const SearchBox = styled.input`
   width: 100%;
@@ -32,7 +34,13 @@ const SearchBox = styled.input`
 `
 
 const Search = _ => {
+  const dispatch = useDispatch()
   const theme = useSelector(state => state.theme)
+
+  const handleChange = event => {
+    log.debug(event.target.value)
+    dispatch(setSearch(event.target.value))
+  }
 
   return (
     <>
@@ -42,7 +50,7 @@ const Search = _ => {
           backgroundColor: theme.colors['editorGroupHeader.tabsBackground']
         }}
       >
-        <SearchBox placeholder='⌘P for search for any...' />
+        <SearchBox placeholder='⌘P for search for any...' onChange={handleChange} />
       </div>
     </>
   )
