@@ -56,6 +56,11 @@ const MonacoEditor = _ => {
     editorRef.current.setHiddenAreas([])
 
     const regex = `${search.text}`
+    try {
+      const re = RegExp(regex, 'g')
+    } catch (err) {
+      return
+    }
     const matches = editorRef.current.getModel().findMatches(new RegExp(regex, 'g'), false, true, false, null, true)
     log.debug(matches)
 
