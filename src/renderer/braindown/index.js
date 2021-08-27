@@ -144,8 +144,27 @@ const registerBraindownLanguage = monaco => {
        * @param {import('monaco-editor').CancellationToken} token the cancellation token
        */
       provideCompletionItems: async (model, position, context, token) => {
-        return {
-          suggestions: await loadWordSuggestions(monaco)
+        const t1 = model.getValueInRange({
+          startLineNumber: position.lineNumber,
+          startColumn: position.column - 1,
+          endLineNumber: position.lineNumber,
+          endColumn: position.column
+        })
+        const t4 = model.getValueInRange({
+          startLineNumber: position.lineNumber,
+          startColumn: position.column,
+          endLineNumber: position.lineNumber,
+          endColumn: position.column + 1
+        })
+
+        if (t1 !== '[' && (t4 === ' ' || t4 === '')) {
+          return {
+            suggestions: await loadWordSuggestions(monaco)
+          }
+        } else {
+          return {
+            suggestions: []
+          }
         }
       }
     })

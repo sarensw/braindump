@@ -50,7 +50,7 @@ const Search = _ => {
           backgroundColor: theme.colors['editorGroupHeader.tabsBackground']
         }}
       >
-        <SearchBox placeholder='⌘P for search for any...' onChange={handleChange} />
+        <SearchBox placeholder='search via regex...' onChange={handleChange} />
       </div>
     </>
   )
