@@ -57,7 +57,7 @@ const MonacoEditor = _ => {
 
     const regex = `${search.text}`
     try {
-      const re = RegExp(regex, 'g')
+      RegExp(regex, 'g')
     } catch (err) {
       return
     }
@@ -151,7 +151,6 @@ const MonacoEditor = _ => {
     log.debug('editor did mount', id)
     editorRef.current = editor
     editorRef.current.onDidType(function (text) {
-      console.log('typed ' + text)
       extensions.run(text, editor)
     })
   }
