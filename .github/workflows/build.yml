@@ -45,6 +45,16 @@ jobs:
           API_KEY_ISSUER_ID: ${{ secrets.API_KEY_ISSUER_ID }}
 
       - uses: nyaa8/package-version@v1
+      
+      - name: print mac
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          find ./dist
+          
+      - name: print win
+        if: startsWith(matrix.os, 'windows')
+        run: |
+          tree ./dist
 
       - uses: actions/upload-artifact@v2
         with:
