@@ -50,5 +50,5 @@ jobs:
         with:
           name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
           path: |
-            dist/braindump-[0123456789.]-*
+            dist/braindump-*
             !dist/*.blockmap
