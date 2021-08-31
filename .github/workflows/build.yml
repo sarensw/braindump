@@ -57,8 +57,17 @@ jobs:
           tree ./dist /f
 
       - uses: actions/upload-artifact@v2
+        if: startsWith(matrix.os, 'macos')
         with:
           name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
           path: |
             dist/braindump-*
+            !dist/*.blockmap
+            
+      - uses: actions/upload-artifact@v2
+        if: startsWith(matrix.os, 'windows')
+        with:
+          name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
+          path: |
+            dist/braindump*
             !dist/*.blockmap
