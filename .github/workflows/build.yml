@@ -54,7 +54,7 @@ jobs:
       - name: print win
         if: startsWith(matrix.os, 'windows')
         run: |
-          tree ./dist
+          tree ./dist /f
 
       - uses: actions/upload-artifact@v2
         with:
