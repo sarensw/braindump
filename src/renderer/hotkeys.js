@@ -1,15 +1,17 @@
 import log from './log'
 import store from './store'
-import { setCurrentTab/* , setSettingsAsCurrentTab */ } from './store/storeTabs'
+import { setCurrentTab, closeTab } from './store/storeTabs'
 import dumpService from './services/dumpService'
 
 const keyHandlers = {
   'cmd+p': handleCmdP,
-  'cmd+t': handleCmdT
+  'cmd+t': handleOpenNewTab,
+  'cmd+w': handleCloseActiveTab
 }
 const keys = [
   'cmd+p',
-  'cmd+t'
+  'cmd+t',
+  'cmd+w'
 ].join(',')
 
 function handleKeyDownEvent (event, source) {
@@ -32,10 +34,22 @@ function handleCmdP () {
 
 }
 
-function handleCmdT () {
-  log.debug('adding new dump')
+function handleOpenNewTab () {
+  log.debug('adding new dump via hotkey')
   dumpService.flush()
   store.dispatch(setCurrentTab(null))
+}
+
+function handleCloseActiveTab () {
+  log.debug('close current tab via hotkey')
+  dumpService.flush()
+  const state = store.getState()
+  if (state) {
+    const currentTab = state.tabs.currentTab
+    if (currentTab) {
+      store.dispatch(closeTab(currentTab))
+    }
+  }
 }
 
 export { keys, handleKeyDownEvent }
