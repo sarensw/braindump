@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { set as setSearch } from '../store/storeSearch'
 import styled from 'styled-components'
 import log from '../log'
+import { handleKeyDownEvent } from '../hotkeys'
 
 const SearchBox = styled.input`
   width: 100%;
@@ -42,6 +43,10 @@ const Search = _ => {
     dispatch(setSearch(event.target.value))
   }
 
+  const handleKeyDown = (event) => {
+    handleKeyDownEvent(event, 'input')
+  }
+
   return (
     <>
       <div
@@ -50,7 +55,7 @@ const Search = _ => {
           backgroundColor: theme.colors['editorGroupHeader.tabsBackground']
         }}
       >
-        <SearchBox placeholder='search via regex...' onChange={handleChange} />
+        <SearchBox placeholder='search via regex...' onChange={handleChange} onKeyDown={handleKeyDown} />
       </div>
     </>
   )

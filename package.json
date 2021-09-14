@@ -49,6 +49,7 @@
     "monaco-themes": "^0.3.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-hotkeys-hook": "^3.4.0",
     "react-redux": "^7.2.5",
     "shade-blend-color": "^1.0.0",
     "styled-components": "^5.3.1"

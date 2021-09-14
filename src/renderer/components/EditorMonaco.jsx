@@ -8,6 +8,7 @@ import { randomString } from '../services/utilitiesService'
 import { set as setDump } from '../store/storeDump'
 import extensions from '../extensions/extensions'
 import { Range } from 'monaco-editor'
+import { handleKeyDownEvent } from '../hotkeys'
 
 loader.config({
   paths: {
@@ -152,6 +153,9 @@ const MonacoEditor = _ => {
     editorRef.current = editor
     editorRef.current.onDidType(function (text) {
       extensions.run(text, editor)
+    })
+    editorRef.current.onKeyDown((event) => {
+      handleKeyDownEvent(event.browserEvent, 'monaco')
     })
   }
 

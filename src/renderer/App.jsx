@@ -4,9 +4,15 @@ import Dumps from './components/Dumps'
 import { useSelector } from 'react-redux'
 import ThemeChanger from './components/ThemeChanger'
 import Search from './components/Search'
+import { useHotkeys } from 'react-hotkeys-hook'
+import { keys, handleKeyDownEvent } from './hotkeys'
 
 const App = _ => {
   const colors = useSelector(state => state.theme.colors)
+
+  useHotkeys(keys, (event) => {
+    handleKeyDownEvent(event, 'window')
+  })
 
   return (
     <>
