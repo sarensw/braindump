@@ -147,8 +147,13 @@ ipcMain.handle('closeTab', async (event, someArgument) => {
   log.debug('ipcMain.closeTab')
   log.debug(someArgument)
   if (someArgument) {
-    await tabs.closeTab(someArgument)
-    return someArgument
+    const newLastUsedTab = await tabs.closeTab(someArgument)
+    const text = await newLastUsedTab.read()
+    return {
+      tabs: tabs.tabs,
+      tab: newLastUsedTab,
+      text
+    }
   }
 })
 

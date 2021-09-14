@@ -54,14 +54,23 @@ export class Tabs {
     this.tabsFilePath = path.join(this.userDataPath, 'tabs.json')
   }
 
+  /**
+   * Close the given tab
+   * @param {{name: string, path: string}} tab The tab to be closed
+   * @returns {{name: string, path: string}} The new tab that has the focus
+   */
   async closeTab (tab) {
     this.tabs = this.tabs.filter(t => t.path !== tab.path)
+
+    const newActiveTab = Tab.fromObject(this.tabs[this.tabs.length - 1])
 
     await fs.writeFile(this.tabsFilePath, JSON.stringify({
       tabs: this.tabs,
       count: this.count,
-      lastUsed: this.tabs[this.tabs.length].path
+      lastUsed: newActiveTab.path
     }))
+
+    return newActiveTab
   }
 
   async newTab () {

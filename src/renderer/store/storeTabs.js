@@ -33,6 +33,13 @@ const closeTab = createAsyncThunk(
         channel: 'closeTab',
         payload: tab
       })
+
+      // update the last used tab
+      window.__preload.invoke({
+        channel: 'lastUsedTabChanged',
+        tab: result.tab
+      })
+
       return result
     }
   }
@@ -119,7 +126,30 @@ export const tabsSlice = createSlice({
     [closeTab.fulfilled]: (state, action) => {
       log.debug('closeTab.fulfilled')
       log.debug(action)
-      state.list = state.list.filter(tab => tab.path !== action.payload.path)
+      state.currentTab = {
+        ...action.payload.tab,
+        loaded: true,
+        text: action.payload.text
+      }
+      // update the list
+      if (action.payload.tabs) {
+        const newList = action.payload.tabs.map((tab) => ({
+          ...tab,
+          loaded: false,
+          text: null
+        }))
+        state.list = newList.map((tab) => {
+          if (tab.path === action.payload.tab.path) {
+            return {
+              ...tab,
+              loaded: true
+            }
+          } else {
+            return tab
+          }
+        })
+      }
+      // state.list = state.list.filter(tab => tab.path !== action.payload.path)
     },
     [closeTab.rejected]: (state, action) => {
       log.debug('closeTab.rejected')
