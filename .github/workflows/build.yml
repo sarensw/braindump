@@ -19,38 +19,13 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Prepare for app notarization
+      - name: Build
         if: startsWith(matrix.os, 'macos')
-        # Import Apple API key for app notarization on macOS
         run: |
-          mkdir -p ~/private_keys/
-          echo '${{ secrets.API_KEY }}' > ~/private_keys/AuthKey_${{ secrets.API_KEY_ID }}.p8
-
-      - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          # GitHub token, automatically provided to the action
-          # (No need to define this secret in the repo settings)
-          github_token: ${{ secrets.github_token }}
-
-          # If the commit is tagged with a version (e.g. "v1.0.0"),
-          # release the app after building
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
-
-          # code signing
-          mac_certs: ${{ secrets.CSC_LINK }}
-          mac_certs_password: ${{ secrets.CSC_KEY_PASSWORD }}
-        env:
-          API_KEY_ID: ${{ secrets.API_KEY_ID }}
-          API_KEY_ISSUER_ID: ${{ secrets.API_KEY_ISSUER_ID }}
+          ${GITHUB_WORKSPACE}/.dist/build_mac.sh ${CSC_LINK} ${CSC_KEY_PASSWORD} ${APPLEID} ${APPLEIDPASS}
 
       - uses: nyaa8/package-version@v1
-      
-      - name: print mac
-        if: startsWith(matrix.os, 'macos')
-        run: |
-          find ./dist
-          
+
       - name: print win
         if: startsWith(matrix.os, 'windows')
         run: |
@@ -59,15 +34,15 @@ jobs:
       - uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'macos')
         with:
-          name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
+          name: BrainDump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
           path: |
             dist/braindump-*
             !dist/*.blockmap
-            
+
       - uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'windows')
         with:
-          name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
+          name: BrainDump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
           path: |
             dist/braindump*
             !dist/*.blockmap

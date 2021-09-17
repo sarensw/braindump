@@ -1,4 +1,8 @@
 braindump-*
+build_local*.sh
+**/*.p12
+**/*.cer
+**/.DS_Store
 
 # Logs
 logs
