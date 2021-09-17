@@ -25,7 +25,7 @@ jobs:
         if: startsWith(matrix.os, 'macos')
         run: |
           chmod +x ${GITHUB_WORKSPACE}/build_mac.sh
-          ${GITHUB_WORKSPACE}/build_mac.sh ${CSC_LINK} ${CSC_KEY_PASSWORD} ${APPLEID} ${APPLEIDPASS}
+          ${GITHUB_WORKSPACE}/build_mac.sh ${{ secrets.CSC_LINK }} ${{ secrets.CSC_KEY_PASSWORD }} ${{ secrets.APPLEID }} ${{ secrets.APPLEIDPASS }}
 
       - uses: nyaa8/package-version@v1
 
