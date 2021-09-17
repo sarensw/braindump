@@ -19,6 +19,8 @@ jobs:
         with:
           node-version: '14'
 
+      - run: npm install
+
       - name: Build
         if: startsWith(matrix.os, 'macos')
         run: |
