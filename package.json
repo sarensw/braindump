@@ -33,7 +33,7 @@
     "redux-devtools-extension": "^2.13.9",
     "snowpack": "^3.8.8",
     "standard": "^16.0.3",
-    "tailwindcss": "^2.2.10"
+    "tailwindcss": "^2.2.15"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.2.2",
