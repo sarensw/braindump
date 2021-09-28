@@ -5,7 +5,7 @@ import fs from 'fs/promises'
 import { fileExists } from './helper'
 
 const defaultSettings = {
-  theme: 'default'
+  theme: 'nordlight'
 }
 
 export class Settings {
