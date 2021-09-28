@@ -9,6 +9,7 @@ import { set as setDump } from '../store/storeDump'
 import extensions from '../extensions/extensions'
 import { Range } from 'monaco-editor'
 import { handleKeyDownEvent } from '../hotkeys'
+import { BraindownLanguage } from '../braindown/braindownLanguage'
 
 loader.config({
   paths: {
@@ -25,6 +26,7 @@ const MonacoEditor = _ => {
   const tabs = useSelector(state => state.tabs)
   const theme = useSelector(state => state.theme)
   const search = useSelector(state => state.search)
+  const braindown = useRef(null)
 
   useEffect(() => {
     log.debug(`monaco is now available: ${monaco}`, id)
@@ -150,12 +152,18 @@ const MonacoEditor = _ => {
    */
   function handleEditorDidMount (editor, monaco) {
     log.debug('editor did mount', id)
+
+    // register the new language handler
+    braindown.current = new BraindownLanguage(editor)
+
     editorRef.current = editor
     editorRef.current.onDidType(function (text) {
       extensions.run(text, editor)
+      braindown.current.handleInput(text)
     })
     editorRef.current.onKeyDown((event) => {
       handleKeyDownEvent(event.browserEvent, 'monaco')
+      console.log(event.browserEvent)
     })
   }
 
@@ -172,6 +180,7 @@ const MonacoEditor = _ => {
           formatOnType: true,
           wordWrap: true,
           automaticLayout: true,
+          autoIndent: false,
           showFoldingControls: 'always',
           suggest: {
             preview: true
