@@ -1,13 +1,12 @@
 import React from 'react'
-import MonacoEditor from './components/EditorMonaco'
-import Dumps from './components/Dumps'
-import { useSelector } from 'react-redux'
-import ThemeChanger from './components/ThemeChanger'
-import Search from './components/Search'
+import { useSelector, useDispatch } from 'react-redux'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { keys, handleKeyDownEvent } from './hotkeys'
+import PageContainer from './pages/PageContainer'
+import { set as setPage } from './store/storeApp'
 
 const App = _ => {
+  const dispatch = useDispatch()
   const colors = useSelector(state => state.theme.colors)
 
   useHotkeys(keys, (event) => {
@@ -20,37 +19,25 @@ const App = _ => {
         className='w-screen h-screen bg-red-400 grid overflow-hidden' style={{
           backgroundColor: colors['editor.background'],
           gridTemplateColumns: '[shell] minmax(0, 1fr)',
-          gridTemplateRows: '[title] 1.6rem [search] 2.0rem [header] 2.2rem [main] minmax(0, 1fr)'
+          gridTemplateRows: '[title] 1.8rem [container] minmax(0, 1fr)'
         }}
       >
         <div
-          className='text-center text-sm items-end select-none pt-0.5'
+          className='grid grid-cols-3 content-center'
           style={{
             backgroundColor: colors['titleBar.activeBackground'],
             color: colors['titleBar.activeForeground'],
             '-webkit-app-region': 'drag'
           }}
         >
-          <div className='self-center text-xs mt-1'>braindump</div>
-        </div>
-        <div>
-          <Search />
-        </div>
-        <div>
-          <div
-            className='grid'
-            style={{
-              backgroundColor: colors['editorGroupHeader.tabsBackground'],
-              gridTemplateColumns: '1fr 26px 120px'
-            }}
-          >
-            <Dumps />
-            <ThemeChanger />
+          <div />
+          <div className='text-center text-xs select-none self-center'>braindump</div>
+          <div className='flex flex-row justify-end gap-2 pr-2'>
+            <button onClick={() => dispatch(setPage('editor'))}>e</button>
+            <button onClick={() => dispatch(setPage('settings'))}>s</button>
           </div>
         </div>
-        <div>
-          <MonacoEditor />
-        </div>
+        <PageContainer />
       </div>
     </>
   )

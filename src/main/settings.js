@@ -4,10 +4,6 @@ import path from 'path'
 import fs from 'fs/promises'
 import { fileExists } from './helper'
 
-const defaultSettings = {
-  theme: 'nordlight'
-}
-
 export class Settings {
   constructor () {
     this.userDataPath = electron.app.getPath('userData')
@@ -27,8 +23,7 @@ export class Settings {
       }
     } else {
       log.debug('settings not found, creating based on default settings')
-      await fs.writeFile(this.path, JSON.stringify(defaultSettings))
-      return defaultSettings
+      return null
     }
   }
 

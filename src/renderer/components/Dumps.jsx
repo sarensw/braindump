@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import log from '../log'
-import { setCurrentTab/* , setSettingsAsCurrentTab */ } from '../store/storeTabs'
+import { setCurrentTab } from '../store/storeTabs'
 import dumpService from '../services/dumpService'
 import Tab from './elements/Tab'
 
@@ -27,11 +27,6 @@ const Dumps = _ => {
     dumpService.flush()
     dispatch(setCurrentTab(null))
   }
-
-  /* const showSettings = settings => {
-    log.debug('loading settings as per user request')
-    dispatch(setSettingsAsCurrentTab())
-  } */
 
   const isCurrentTabActive = (tab) => {
     if (!currentTab) return false

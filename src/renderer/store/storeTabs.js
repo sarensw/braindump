@@ -45,15 +45,6 @@ const closeTab = createAsyncThunk(
   }
 )
 
-const setSettingsAsCurrentTab = createAsyncThunk(
-  'tabs/setSettingsAsCurrentTab',
-  async (args, thunkApi) => {
-    log.debug('setSettingsAsCurrentTab')
-    const result = await window.__preload.invoke({ channel: 'loadSettings' })
-    return result
-  }
-)
-
 /**
  * tab = {
  *  name,
@@ -158,29 +149,10 @@ export const tabsSlice = createSlice({
     [closeTab.pending]: (state, action) => {
       log.debug('closeTab.pending')
       log.debug(action)
-    },
-    [setSettingsAsCurrentTab.fulfilled]: (state, action) => {
-      log.debug('setSettingsAsCurrentTab.fulfilled')
-      log.debug(action)
-      state.currentTab = {
-        name: '__settings',
-        path: action.payload.path,
-        loaded: true,
-        text: JSON.stringify(action.payload.settings)
-      }
-      state.showSettings = true
-    },
-    [setSettingsAsCurrentTab.rejected]: (state, action) => {
-      log.debug('setSettingsAsCurrentTab.rejected')
-      log.debug(action)
-    },
-    [setSettingsAsCurrentTab.pending]: (state, action) => {
-      log.debug('setSettingsAsCurrentTab.pending')
-      log.debug(action)
     }
   }
 })
 
 export const { set, setTabText } = tabsSlice.actions
-export { setCurrentTab, setSettingsAsCurrentTab, closeTab }
+export { setCurrentTab, closeTab }
 export default tabsSlice.reducer

@@ -1,18 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import log from '../log'
 
-const loadSettings = createAsyncThunk(
-  'settings/loadSettings',
-  async (args, thunkApi) => {
-    const result = await window.__preload.loadSettings()
-    return result
-  }
-)
-
 const saveSettings = createAsyncThunk(
   'settings/save',
   async (args, thunkApi) => {
-    window.__preload.saveSettings(args)
+    log.debug(thunkApi.getState().settings.settings)
+    window.__preload.invoke({
+      channel: 'saveSettings',
+      payload: thunkApi.getState().settings.settings
+    })
   }
 )
 
@@ -26,23 +22,12 @@ export const configSlice = createSlice({
     set: (state, action) => {
       state.path = action.payload.path
       state.settings = action.payload.settings
+    },
+    update: (state, action) => {
+      state.settings[action.payload.id] = action.payload.value
     }
   },
   extraReducers: {
-    [loadSettings.fulfilled]: (state, action) => {
-      log.debug('loadSettings.fulfilled')
-      log.debug(action)
-      state.path = action.payload.path
-      state.settings = action.payload.settings
-    },
-    [loadSettings.rejected]: (state, action) => {
-      log.debug('loadSettings.rejected')
-      log.debug(action)
-    },
-    [loadSettings.pending]: (state, action) => {
-      log.debug('loadSettings.pending')
-      log.debug(action)
-    },
     [saveSettings.fulfilled]: (state, action) => {
       log.debug('saveSettings.fulfilled')
       log.debug(action)
@@ -58,6 +43,6 @@ export const configSlice = createSlice({
   }
 })
 
-export const { set } = configSlice.actions
-export { loadSettings, saveSettings }
+export const { set, update } = configSlice.actions
+export { saveSettings }
 export default configSlice.reducer

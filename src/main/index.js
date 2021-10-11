@@ -5,7 +5,7 @@ import path from 'path'
 import log from 'electron-log'
 import { Tabs, Tab } from './tabs'
 import { Settings } from './settings'
-import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
+import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
 
 crashReporter.start({ uploadToServer: false })
 
@@ -79,6 +79,7 @@ app.on('ready', () => {
 
 app.whenReady().then(() => {
   installExtension(REDUX_DEVTOOLS)
+  installExtension(REACT_DEVELOPER_TOOLS)
 })
 
 ipcMain.on('log', (event, args) => {

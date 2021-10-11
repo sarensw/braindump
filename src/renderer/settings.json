@@ -1,0 +1,28 @@
+[
+  {
+    "id": "settings.general",
+    "category": "General",
+    "settings": [
+      {
+        "id": "app.theme",
+        "type": "enum",
+        "title": "Theme",
+        "default": "nordlight",
+        "values": [
+          {
+            "id": "nordlight",
+            "label": "Nord Light"
+          },
+          {
+            "id": "monokai",
+            "label": "Monokai"
+          },
+          {
+            "id": "solarizedlight",
+            "label": "Solarized Light"
+          }
+        ]
+      }
+    ]
+  }
+]

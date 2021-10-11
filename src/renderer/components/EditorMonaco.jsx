@@ -21,22 +21,20 @@ const MonacoEditor = _ => {
   const id = randomString(4)
   log.debug('rerender MonacoEditor', id)
   const dispatch = useDispatch()
+
   const editorRef = useRef(null)
+  const braindown = useRef(null)
+
   const monaco = useMonaco()
+
   const tabs = useSelector(state => state.tabs)
   const theme = useSelector(state => state.theme)
   const search = useSelector(state => state.search)
-  const braindown = useRef(null)
 
   useEffect(() => {
     log.debug(`monaco is now available: ${monaco}`, id)
     if (monaco) {
       registerBraindownLanguage(monaco)
-      /* loadTheme('monokai') */
-      if (theme) {
-        console.log('MonacoEditor.useEffect[monaco]')
-        changeTheme(theme)
-      }
     }
   }, [monaco])
 
@@ -89,60 +87,21 @@ const MonacoEditor = _ => {
     /* editorRef.current.setHiddenAreas([new Range(1, 0, 10, 0), new Range(20, 0, 30, 0)]) */
   }, [search.text])
 
-  const changeTheme = theme => {
+  const changeTheme = (theme, monaco) => {
+    log.debug('changeTheme ', id)
     try {
       const writableTheme = JSON.parse(JSON.stringify({
         type: theme.type,
         colors: theme.colors,
         tokenColors: theme.tokenColors
       }))
-      log.debug(writableTheme)
-      log.debug('trying hello world')
-      writableTheme.hello = 'world'
-      log.debug(writableTheme.hello)
       const th = getMonarchTheme(writableTheme)
       monaco.editor.defineTheme(theme.id, th)
       monaco.editor.setTheme(theme.id)
+      log.debug(`Theme set ${theme.id}`)
     } catch (err) {
       log.error(`Could not set the theme because ${err.message}`)
     }
-  }
-
-  /* const loadTheme = themeId => {
-    if (monaco) {
-      let theme = themes[themeId]
-      if (themeId === 'monokai' || themeId === 'solarizedlight' || themeId === 'nordlight') {
-        theme = getMonarchTheme(theme)
-        // theme = {
-        //   inherit: true,
-        //   base: 'vs-dark',
-        //   rules: [
-        //     {
-        //       fontStyle: 'underline',
-        //       foreground: '#A6E22E',
-        //       token: 'entity.name.class'
-        //     }
-        //   ],
-        //   colors: {
-        //     'editor.foreground': '#F8F8F2',
-        //     'editor.background': '#272822',
-        //     'editor.selectionBackground': '#49483E',
-        //     'editor.lineHighlightBackground': '#3E3D32',
-        //     'editorCursor.foreground': '#F8F8F0',
-        //     'editorWhitespace.foreground': '#3B3A32',
-        //     'editorIndentGuide.activeBackground': '#9D550FB0',
-        //     'editor.selectionHighlightBorder': '#222218'
-        //   }
-        // }
-        log.debug(theme)
-      }
-      monaco.editor.defineTheme(themeId, theme)
-      monaco.editor.setTheme(themeId)
-    }
-  } */
-
-  const saveSettings = async _ => {
-    await window.__preload.send('saveSettings', editorRef.current.getValue())
   }
 
   /**
@@ -155,6 +114,7 @@ const MonacoEditor = _ => {
 
     // register the new language handler
     braindown.current = new BraindownLanguage(editor)
+    changeTheme(theme, monaco)
 
     editorRef.current = editor
     editorRef.current.onDidType(function (text) {

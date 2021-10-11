@@ -6,9 +6,11 @@ import storeSettings from './store/storeSettings'
 import storeDump from './store/storeDump'
 import storeTheme from './store/storeTheme'
 import storeSearch from './store/storeSearch'
+import storeApp from './store/storeApp'
 
 export default configureStore({
   reducer: {
+    app: storeApp,
     sample: storeSample,
     document: storeDocument,
     tabs: storeTabs,
