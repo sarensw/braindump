@@ -21,6 +21,7 @@
     "@snowpack/plugin-postcss": "^1.4.3",
     "@snowpack/plugin-react-refresh": "^2.5.0",
     "@snowpack/plugin-typescript": "^1.2.1",
+    "@types/json-stringify-safe": "^5.0.0",
     "@types/styled-components": "^5.1.15",
     "autoprefixer": "^10.3.7",
     "concurrently": "^6.3.0",
