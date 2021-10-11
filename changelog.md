@@ -1,2 +1,5 @@
+# 0.3
+- [feat] new settings page
+
 # 0.2
-- [new] allow to scroll past the last line
+- [feat] allow to scroll past the last line
