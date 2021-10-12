@@ -1,5 +1,5 @@
 
-import { app, BrowserWindow, ipcMain, dialog, crashReporter } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, crashReporter, globalShortcut } from 'electron'
 import { getAssetURL } from 'electron-snowpack'
 import path from 'path'
 import log from 'electron-log'
@@ -78,8 +78,29 @@ app.on('ready', () => {
 })
 
 app.whenReady().then(() => {
+  // register extensions
   installExtension(REDUX_DEVTOOLS)
   installExtension(REACT_DEVELOPER_TOOLS)
+})
+
+app.on('will-quit', () => {
+  // Unregister all shortcuts.
+  globalShortcut.unregisterAll()
+})
+
+ipcMain.on('showMainWindow', (event, args) => {
+  mainWindow.show()
+})
+
+ipcMain.on('registerShortcuts', (event, args) => {
+  globalShortcut.unregisterAll()
+  for (const shortcut of args) {
+    globalShortcut.register(shortcut.keys, () => {
+      log.debug(`shortcut ${shortcut.keys} triggered and mapped to id: ${shortcut.id}`)
+      mainWindow.webContents.send('shortcut', shortcut.id)
+    })
+  }
+  log.debug(args)
 })
 
 ipcMain.on('log', (event, args) => {
@@ -113,7 +134,8 @@ ipcMain.on('showOpenDialog', async (event, someArgument) => {
   const result = await dialog.showOpenDialog({
     properties: ['openFile']
   })
-  console.log(result)
+  log.debug('about to open a file')
+  log.debug(result)
 })
 
 ipcMain.handle('loadTab', async (event, someArgument) => {

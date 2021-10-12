@@ -9,11 +9,13 @@ import CustomThemeProvider from './themes/CustomThemeProvider'
 
 import startupService from './services/startupService'
 import dumpService from './services/dumpService'
+import registerShortcuts from './services/shortcutService'
 
 async function initialize () {
   await startupService.startup()
   dumpService.initializeDumpService()
   await dumpService.initializeDumps()
+  registerShortcuts()
 
   ReactDOM.render(
     <Provider store={store}>

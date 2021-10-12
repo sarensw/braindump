@@ -12,5 +12,20 @@ contextBridge.exposeInMainWorld('__preload', {
   },
   send: args => {
     ipcRenderer.send(args.channel, args.payload)
+  },
+  receive: (channel, func) => {
+    const validChannels = ['shortcut']
+    if (validChannels.includes(channel)) {
+      // Deliberately strip event as it includes `sender`
+      ipcRenderer.on(channel, (event, ...args) => func(...args))
+    }
+  },
+  removeEventListener: (channel) => {
+    try {
+      console.log(`Remove listener for ${channel}`)
+      ipcRenderer.removeAllListeners(channel)
+    } catch (err) {
+      // silent catch
+    }
   }
 })

@@ -10,6 +10,7 @@ import extensions from '../extensions/extensions'
 import { Range } from 'monaco-editor'
 import { handleKeyDownEvent } from '../hotkeys'
 import { BraindownLanguage } from '../braindown/braindownLanguage'
+import { addListener } from '../events'
 
 loader.config({
   paths: {
@@ -30,6 +31,14 @@ const MonacoEditor = _ => {
   const tabs = useSelector(state => state.tabs)
   const theme = useSelector(state => state.theme)
   const search = useSelector(state => state.search)
+
+  useEffect(() => {
+    // register events
+    const removeListener = addListener('event.editor.focus', () => { editorRef.current.focus() })
+    return () => {
+      removeListener()
+    }
+  }, [editorRef.current])
 
   useEffect(() => {
     log.debug(`monaco is now available: ${monaco}`, id)
