@@ -149,7 +149,6 @@ export class Files {
 
     // starting from scratch, first create a new dump file
     const firstDumpFile = await this.createNewDump(0)
-    this.fileList.push(firstDumpFile)
     this.lastUsed = firstDumpFile.id
     this.count = 1
 
