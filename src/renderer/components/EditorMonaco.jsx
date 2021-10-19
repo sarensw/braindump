@@ -5,12 +5,13 @@ import { getMonarchTheme } from '../themes'
 import registerBraindownLanguage from '../braindown'
 import log from '../log'
 import { randomString } from '../services/utilitiesService'
-import { set as setDump } from '../store/storeDump'
+import { setDirtyText } from '../store/storeFiles'
 import extensions from '../extensions/extensions'
-import { Range } from 'monaco-editor'
+import { Range, Uri } from 'monaco-editor'
 import { handleKeyDownEvent } from '../hotkeys'
 import { BraindownLanguage } from '../braindown/braindownLanguage'
 import { addListener } from '../events'
+import { loadFileContent } from '../services/fileService'
 
 loader.config({
   paths: {
@@ -28,9 +29,31 @@ const MonacoEditor = _ => {
 
   const monaco = useMonaco()
 
-  const tabs = useSelector(state => state.tabs)
+  const files = useSelector(state => state.files)
   const theme = useSelector(state => state.theme)
   const search = useSelector(state => state.search)
+
+  useEffect(async () => {
+    log.debug(`current tab has changed to ${files.current}`)
+    if (monaco) {
+      const i = monaco.editor.getModels().findIndex(m => {
+        if (m.uri.path === undefined) return false
+        const matches = m.uri.path.endsWith(files.current)
+        return matches
+      })
+      if (i === -1) {
+        log.debug(`model for ${files.current} not loaded yet -> load text from text file`)
+        const content = await loadFileContent(files.current)
+        const uri = new Uri()
+        uri.path = '/' + files.current
+        const model = monaco.editor.createModel(content, 'braindown', uri)
+        editorRef.current.setModel(model)
+      } else {
+        log.debug(`model for ${files.current} loaded already`)
+        editorRef.current.setModel(monaco.editor.getModels()[i])
+      }
+    }
+  }, [files.current])
 
   useEffect(() => {
     // register events
@@ -40,7 +63,7 @@ const MonacoEditor = _ => {
     }
   }, [editorRef.current])
 
-  useEffect(() => {
+  useEffect(async () => {
     log.debug(`monaco is now available: ${monaco}`, id)
     if (monaco) {
       registerBraindownLanguage(monaco)
@@ -118,7 +141,7 @@ const MonacoEditor = _ => {
    * @param {import('monaco-editor').editor.IStandaloneCodeEditor} editor the editor
    * @param {import('monaco-editor')} monaco
    */
-  function handleEditorDidMount (editor, monaco) {
+  async function handleEditorDidMount (editor, monaco) {
     log.debug('editor did mount', id)
 
     // register the new language handler
@@ -134,16 +157,24 @@ const MonacoEditor = _ => {
       handleKeyDownEvent(event.browserEvent, 'monaco')
       console.log(event.browserEvent)
     })
+
+    // load the files
+    const modelLoaded = monaco.editor.getModels().some(m => m.id === files.current)
+    if (!modelLoaded) {
+      const content = await loadFileContent(files.current)
+      const uri = new Uri()
+      uri.path = '/' + files.current
+      const model = monaco.editor.createModel(content, 'braindown', uri)
+      editorRef.current.setModel(model)
+    }
   }
 
   const modelChanged = (value, event) => {
-    dispatch(setDump(editorRef.current.getValue()))
+    dispatch(setDirtyText(editorRef.current.getValue()))
   }
 
   return (
     <>
-      {/* {tabs && tabs.showSettings && <button className='items-start' onClick={() => saveSettings()}>Save &amp; Restart</button>} */}
-
       <Editor
         options={{
           formatOnType: true,
@@ -155,9 +186,7 @@ const MonacoEditor = _ => {
             preview: true
           }
         }}
-        path={tabs && tabs.currentTab && tabs.currentTab.path}
         defaultLanguage='braindown'
-        defaultValue={tabs && tabs.currentTab && (tabs.currentTab.text ? tabs.currentTab.text : '')}
         onChange={modelChanged}
         onMount={handleEditorDidMount}
       />

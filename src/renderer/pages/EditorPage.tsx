@@ -1,12 +1,12 @@
 import React, { ReactElement } from 'react'
-import { useSelector } from 'react-redux'
 import Page from './Page'
 import Search from '../components/Search'
 import MonacoEditor from '../components/EditorMonaco'
 import Dumps from '../components/Dumps'
+import { useAppSelector } from '../hooks'
 
 const EditorPage: React.FunctionComponent = (): ReactElement => {
-  const colors = useSelector(state => state.theme.colors)
+  const colors = useAppSelector(state => state.theme.colors)
   return (
     <Page>
       <div

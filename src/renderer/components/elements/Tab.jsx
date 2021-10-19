@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useDispatch } from 'react-redux'
 import Icon from './Icon'
-import { closeTab } from '../../store/storeTabs'
+import { closeFile } from '../../services/fileService'
 
 const eitherOrActive = (props, styleActive, styleInactive) => {
   if (props.active) return props.theme[styleActive]
@@ -51,12 +50,10 @@ const CloseButton = styled.button`
 `
 
 const Tab = (props) => {
-  const dispatch = useDispatch()
-
-  const close = (event, tab) => {
+  const close = async (event, tab) => {
     event.stopPropagation()
     event.nativeEvent.stopImmediatePropagation()
-    dispatch(closeTab(tab))
+    await closeFile(props.fid)
   }
 
   return (

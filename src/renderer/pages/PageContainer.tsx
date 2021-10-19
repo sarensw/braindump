@@ -1,10 +1,10 @@
 import React, { ReactElement, FunctionComponent, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../hooks'
 import EditorPage from './EditorPage'
 import SettingsPage from './SettingsPage'
 
 const PageContainer: FunctionComponent = (): ReactElement => {
-  const app = useSelector(state => state.app)
+  const app = useAppSelector(state => state.app)
   const [page, setPage] = useState<FunctionComponent>(() => SettingsPage)
 
   useEffect(() => {

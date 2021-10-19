@@ -1,19 +1,18 @@
 import log from '../log'
-import store from '../store'
-import { setCurrentTab } from '../store/storeTabs'
 import { emit } from '../events'
+import { createNewFile, loadFiles } from './fileService'
 
 const shortcuts = [
   {
     id: 'shortcut.dumps.new',
     keys: 'CmdOrCtrl+Alt+N',
-    action: () => {
+    action: async () => {
       window.__preload.send({
         channel: 'showMainWindow',
         payload: ''
       })
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      store.dispatch(setCurrentTab(null))
+      await createNewFile()
+      await loadFiles()
       emit('event.editor.focus')
     }
   },

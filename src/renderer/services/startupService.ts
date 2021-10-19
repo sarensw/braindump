@@ -1,9 +1,10 @@
 import log from '../log'
-import store from '../store'
+import { store } from '../store'
 import { set as setTheme } from '../store/storeTheme'
-import { set as setSettings } from '../store/storeSettings'
 import themes from '../themes'
 import { Settings } from '../settings/Settings'
+import { loadFiles } from './fileService'
+import { loadSettings } from './settingsService'
 
 /**
  * This is the startup method that is run when braindump starts up. It will
@@ -12,22 +13,18 @@ import { Settings } from '../settings/Settings'
  */
 async function startup (): Promise<void> {
   log.info('startup braindown')
+
+  // load the settings
   const settings = await loadSettings()
   log.debug('settings loaded')
-  log.debug(settings)
+
+  // load the theme
   await loadTheme(settings)
   log.debug('theme loaded')
-}
 
-async function loadSettings (): Promise<Settings> {
-  log.debug('loading the settings')
-  const settings = await window.__preload.invoke({
-    channel: 'loadSettings'
-  })
-  log.debug('settings loaded')
-  log.debug(settings)
-  store.dispatch(setSettings(settings))
-  return settings.settings
+  // load the files
+  await loadFiles()
+  log.debug('files loaded')
 }
 
 async function loadTheme (settings: Settings): Promise<void> {

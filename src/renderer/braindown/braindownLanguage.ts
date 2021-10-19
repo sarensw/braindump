@@ -129,7 +129,7 @@ abstract class BraindownLanguageExtension {
         endColumn: position.column - length
       })
       log.debug(`testing regex ${regex.toString()} on token [${token}]`)
-      log.debug(regex.test(token))
+      log.debug(String(regex.test(token)))
 
       if (regex.test(token)) {
         return true
@@ -151,7 +151,7 @@ abstract class BraindownLanguageExtension {
         endColumn: position.column
       })
       log.debug(`testing regex ${regex.toString()} on token [${token}]`)
-      log.debug(regex.test(token))
+      log.debug(String(regex.test(token)))
 
       if (regex.test(token)) {
         return true

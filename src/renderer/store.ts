@@ -1,23 +1,24 @@
 import { configureStore } from '@reduxjs/toolkit'
 import storeSample from './store/storeSample'
 import storeDocument from './store/storeDocument'
-import storeTabs from './store/storeTabs'
+import storeFiles from './store/storeFiles'
 import storeSettings from './store/storeSettings'
-import storeDump from './store/storeDump'
 import storeTheme from './store/storeTheme'
 import storeSearch from './store/storeSearch'
 import storeApp from './store/storeApp'
 
-export default configureStore({
+export const store = configureStore({
   reducer: {
     app: storeApp,
     sample: storeSample,
     document: storeDocument,
-    tabs: storeTabs,
+    files: storeFiles,
     settings: storeSettings,
-    dump: storeDump,
     theme: storeTheme,
     search: storeSearch
   },
   devTools: true
 })
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

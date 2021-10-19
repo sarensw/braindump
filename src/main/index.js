@@ -1,9 +1,9 @@
 
-import { app, BrowserWindow, ipcMain, dialog, crashReporter, globalShortcut } from 'electron'
+import { app, BrowserWindow, ipcMain, crashReporter, globalShortcut } from 'electron'
 import { getAssetURL } from 'electron-snowpack'
 import path from 'path'
 import log from 'electron-log'
-import { Tabs, Tab } from './tabs'
+import { Files } from './files'
 import { Settings } from './settings'
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
 
@@ -23,7 +23,7 @@ log.debug(app.getPath('module'))
 log.debug(app.getPath('userData'))
 
 let mainWindow
-const tabs = new Tabs()
+const files = new Files()
 const settings = new Settings()
 
 function createMainWindow () {
@@ -122,77 +122,37 @@ ipcMain.handle('saveSettings', async (event, someArgument) => {
   await settings.write(someArgument)
 })
 
-ipcMain.on('saveDump', async (event, args) => {
-  log.debug('ipcMain.saveDumps')
-  log.debug(args)
-  const tab = Tab.fromObject(args.tab)
-  await tab.write(args.text)
-})
-
-ipcMain.on('showOpenDialog', async (event, someArgument) => {
-  log.debug('showOpenDialog')
-  const result = await dialog.showOpenDialog({
-    properties: ['openFile']
-  })
-  log.debug('about to open a file')
-  log.debug(result)
-})
-
-ipcMain.handle('loadTab', async (event, someArgument) => {
-  log.debug('ipcMain.loadTab')
-  log.debug(someArgument)
-  if (someArgument === null) {
-    const tab = await tabs.newTab()
-    return {
-      tabs: tabs.tabs,
-      tab,
-      text: ''
-    }
-  } else {
-    const tab = Tab.fromObject(someArgument)
-    log.debug(tab)
-    const text = await tab.read()
-    log.debug('event.reply')
-    log.debug({
-      tab,
-      text
-    })
-
-    return {
-      tabs: tabs.tabs,
-      tab,
-      text
-    }
+ipcMain.handle('files/lastUsedChanged', async (event, args) => {
+  log.debug('files/lastUsedChanged')
+  if (args) {
+    await files.lastUsedChanged(args)
+    return args
   }
 })
 
-ipcMain.handle('closeTab', async (event, someArgument) => {
-  log.debug('ipcMain.closeTab')
-  log.debug(someArgument)
-  if (someArgument) {
-    const newLastUsedTab = await tabs.closeTab(someArgument)
-    const text = await newLastUsedTab.read()
-    return {
-      tabs: tabs.tabs,
-      tab: newLastUsedTab,
-      text
-    }
+ipcMain.handle('files/load', async (event, args) => {
+  await files.loadFiles()
+  const fileList = {
+    files: files.files,
+    lastUsed: files.lastUsedFile
   }
+  return fileList
 })
 
-ipcMain.handle('lastUsedTabChanged', async (event, someArgument) => {
-  log.debug('ipcMain.lastUsedTabChanged')
-  log.debug(someArgument)
-  if (someArgument) {
-    await tabs.lastUsedTabChanged(someArgument)
-    return someArgument
-  }
+ipcMain.on('file/save', async (event, args) => {
+  await files.write(args.id, args.text)
 })
 
-ipcMain.handle('loadTabs', async (event, args) => {
-  log.debug('main.loadTabs')
-  const tabsList = await tabs.loadTabs()
-  log.debug('tabsList')
-  log.debug(tabsList)
-  return tabsList
+ipcMain.handle('file/new', async (event, args) => {
+  const file = await files.createNewDump()
+  return file.id
+})
+
+ipcMain.handle('file/content', async (event, args) => {
+  const content = await files.loadFileContent(args)
+  return content
+})
+
+ipcMain.handle('file/close', async (event, args) => {
+  await files.close(args.id)
 })

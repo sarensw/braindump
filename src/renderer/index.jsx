@@ -3,18 +3,17 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 
-import store from './store.js'
+import { store } from './store.js'
 import { Provider } from 'react-redux'
 import CustomThemeProvider from './themes/CustomThemeProvider'
 
 import startupService from './services/startupService'
-import dumpService from './services/dumpService'
+import { initializeFileService } from './services/fileService'
 import registerShortcuts from './services/shortcutService'
 
 async function initialize () {
   await startupService.startup()
-  dumpService.initializeDumpService()
-  await dumpService.initializeDumps()
+  initializeFileService()
   registerShortcuts()
 
   ReactDOM.render(

@@ -11,26 +11,43 @@ const logToMain = (type: string, msg: string): void => {
   })
 }
 
-const debug = (msg: string, ...args: string[]): void => {
-  let tm = ''
+const log = (level: string, msg: any, ...args: string[]): void => {
+  let tm: string = ''
   for (const arg of args) {
     tm += `[${arg}]`
   }
-  const s = stringify(String(msg), null, 2)
-  tm += tm.length === 0 ? String(s) : ` ${String(s)}`
-  logToMain('debug', tm)
+  const isString: boolean = typeof msg === 'string'
+  const s: string = isString ? msg : stringify(msg, null, 2)
+  tm += tm.length === 0 ? s : ` ${s}`
+  logToMain(level, tm)
+
+  var err = new Error()
+  if (err.stack !== undefined) {
+    const callerLine = err.stack.split('\n')[3]
+    const index = callerLine.lastIndexOf('/')
+    const line = callerLine.slice(index + 1, callerLine.length)
+    const match = line.match(/([\w.]*)(\?mtime=[0-9]*)?(:.*)\)+/)
+    if (match !== null) {
+      tm += ` (${match[1]}:${match[3]})`
+    }
+  }
+  console.log(tm)
 }
 
-const info = (msg: string): void => {
-  logToMain('info', msg)
+const debug = (msg: any, ...args: string[]): void => {
+  log('debug', msg, ...args)
 }
 
-const warn = (msg: string): void => {
-  logToMain('warn', msg)
+const info = (msg: any): void => {
+  log('info', msg)
 }
 
-const error = (msg: string): void => {
-  logToMain('error', msg)
+const warn = (msg: any): void => {
+  log('warn', msg)
+}
+
+const error = (msg: any): void => {
+  log('error', msg)
 }
 
 export default {
