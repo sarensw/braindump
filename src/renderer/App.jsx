@@ -4,6 +4,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { keys, handleKeyDownEvent } from './hotkeys'
 import PageContainer from './pages/PageContainer'
 import { set as setPage } from './store/storeApp'
+import Icon from './components/elements/Icon'
 
 const App = _ => {
   const dispatch = useDispatch()
@@ -31,10 +32,14 @@ const App = _ => {
           }}
         >
           <div />
-          <div className='text-center text-xs select-none self-center'>braindump</div>
+          <div className='text-center text-xs select-none self-center'>Braindump</div>
           <div className='flex flex-row justify-end gap-2 pr-2'>
-            <button onClick={() => dispatch(setPage('editor'))}>e</button>
-            <button onClick={() => dispatch(setPage('settings'))}>s</button>
+            <button onClick={() => dispatch(setPage('editor'))}>
+              <Icon icon='notepad' />
+            </button>
+            <button onClick={() => dispatch(setPage('settings'))}>
+              <Icon icon='cog' />
+            </button>
           </div>
         </div>
         <PageContainer />

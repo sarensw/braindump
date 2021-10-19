@@ -62,6 +62,7 @@
   },
   "build": {
     "appId": "com.featureninjas.braindump",
+    "productName": "Braindump",
     "extends": "electron-snowpack/config/electron-builder.js",
     "afterSign": "build/notarize.js",
     "copyright": "Copyright @ 2021 ${author}",
@@ -75,6 +76,7 @@
     ],
     "mac": {
       "category": "public.app-category.productivity",
+      "icon": "build/logo.icns",
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
       "type": "distribution",
