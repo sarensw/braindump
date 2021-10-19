@@ -1,10 +1,13 @@
 echo 'starting braindump build'
 
 # init env variables
-# export CSC_LINK=$1
-# export CSC_KEY_PASSWORD=$2
-# export APPLEID=$3
-# export APPLEIDPASS=$4
+if [ -n "$1" ]; then
+  echo 'local build'
+  export CSC_LINK=$2
+  export CSC_KEY_PASSWORD=$3
+  export APPLEID=$4
+  export APPLEIDPASS=$5
+fi
 
 # print the env
 printenv
