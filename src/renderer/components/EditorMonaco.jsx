@@ -167,6 +167,9 @@ const MonacoEditor = _ => {
       const model = monaco.editor.createModel(content, 'braindown', uri)
       editorRef.current.setModel(model)
     }
+
+    // set the focus once
+    if (editorRef.current !== null) editorRef.current.focus()
   }
 
   const modelChanged = (value, event) => {
