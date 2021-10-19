@@ -25,7 +25,7 @@ npm run dist
 # print files
 find ./dist
 
-codesign -vvv --deep --strict ./dist/mac/braindump.app
-codesign -dvv ./dist/mac/braindump.app
-spctl -a -vv ./dist/mac/braindump.app
+codesign -vvv --deep --strict ./dist/mac/Braindump.app
+codesign -dvv ./dist/mac/Braindump.app
+spctl -a -vv ./dist/mac/Braindump.app
 xcrun altool --list-providers -u $APPLEID -p $APPLEIDPASS

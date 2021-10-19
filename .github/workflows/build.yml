@@ -42,15 +42,15 @@ jobs:
       - uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'macos')
         with:
-          name: BrainDump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
+          name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
           path: |
-            dist/braindump-*
+            dist/Braindump-*
             !dist/*.blockmap
 
       - uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'windows')
         with:
-          name: BrainDump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
+          name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
           path: |
-            dist/braindump*
+            dist/Braindump*
             !dist/*.blockmap
