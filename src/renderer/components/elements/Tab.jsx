@@ -58,10 +58,10 @@ const Tab = (props) => {
 
   return (
     <>
-      <NewTab active={props.active} onClick={props.onClick}>
-        {props.children}
+      <NewTab active={props.active} onClick={props.onClick} className='flex flex-row'>
+        <div>{props.children}</div>
         <CloseButton onClick={(event) => close(event, props.tab)}>
-          <Icon name='window_close' />
+          <Icon icon='window_close' />
         </CloseButton>
       </NewTab>
     </>

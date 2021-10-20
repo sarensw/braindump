@@ -10,7 +10,7 @@ const Icon = ({ icon, state = 'normal', height = '16' }): ReactElement => {
 
   if (icon === 'window_close') {
     return (
-      <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+      <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke={getColor()}>
         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
       </svg>
     )
@@ -59,7 +59,7 @@ const Icon = ({ icon, state = 'normal', height = '16' }): ReactElement => {
           </g>
         </g>
         <g id='Invisible_Shape'>
-          <rect fill='none' width='24' height='24'/>
+          <rect fill='none' width='24' height='24' />
         </g>
       </svg>
     )
