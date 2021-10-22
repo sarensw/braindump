@@ -1,13 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Settings } from '../../shared/types'
+import SettingsStructure from '../settings/settings.json'
 
-interface SettingsState {
-  settings: any
-  path: string | null
+function getDefaultValue<T> (id: string): T | null {
+  for (const category of SettingsStructure) {
+    for (const setting of category.settings) {
+      if (setting.id === id) {
+        return setting.default as unknown as T
+      }
+    }
+  }
+
+  return null
 }
 
-const initialState: SettingsState = {
-  settings: {},
-  path: null
+const initialState: Settings = {
+  'app.theme': getDefaultValue<string>('app.theme') ?? '',
+  'editor.minimap.show': getDefaultValue<boolean>('editor.minimap.show') ?? false
 }
 
 export const configSlice = createSlice({
@@ -15,11 +24,10 @@ export const configSlice = createSlice({
   initialState,
   reducers: {
     set: (state, action) => {
-      state.path = action.payload.path
-      state.settings = action.payload.settings
+      return action.payload
     },
-    update: (state: SettingsState, action) => {
-      state.settings[action.payload.id] = action.payload.value
+    update: (state: Settings, action) => {
+      state[action.payload.id] = action.payload.value
     }
   }
 })

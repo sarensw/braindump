@@ -32,6 +32,17 @@ const MonacoEditor = _ => {
   const files = useSelector(state => state.files)
   const theme = useSelector(state => state.theme)
   const search = useSelector(state => state.search)
+  const settings = useSelector(state => state.settings)
+
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.updateOptions({
+        minimap: {
+          enabled: false
+        }
+      })
+    }
+  }, [settings])
 
   useEffect(async () => {
     log.debug(`current tab has changed to ${files.current}`)
@@ -159,13 +170,21 @@ const MonacoEditor = _ => {
     })
 
     // load the files
-    const modelLoaded = monaco.editor.getModels().some(m => m.id === files.current)
-    if (!modelLoaded) {
+    const i = monaco.editor.getModels().findIndex(m => {
+      if (m.uri.path === undefined) return false
+      const matches = m.uri.path.endsWith(files.current)
+      return matches
+    })
+    if (i === -1) {
+      log.debug(`model for ${files.current} not loaded yet -> load text from text file`)
       const content = await loadFileContent(files.current)
       const uri = new Uri()
       uri.path = '/' + files.current
       const model = monaco.editor.createModel(content, 'braindown', uri)
       editorRef.current.setModel(model)
+    } else {
+      log.debug(`model for ${files.current} loaded already`)
+      editorRef.current.setModel(monaco.editor.getModels()[i])
     }
 
     // set the focus once
@@ -187,6 +206,9 @@ const MonacoEditor = _ => {
           showFoldingControls: 'always',
           suggest: {
             preview: true
+          },
+          minimap: {
+            enabled: settings['editor.minimap.show']
           }
         }}
         defaultLanguage='braindown'

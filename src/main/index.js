@@ -4,7 +4,7 @@ import { getAssetURL } from 'electron-snowpack'
 import path from 'path'
 import log from 'electron-log'
 import { Files } from './files'
-import { Settings } from './settings'
+import { SettingsFile } from './settings'
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
 
 crashReporter.start({ uploadToServer: false })
@@ -24,7 +24,7 @@ log.debug(app.getPath('userData'))
 
 let mainWindow
 const files = new Files()
-const settings = new Settings()
+const settings = new SettingsFile()
 
 function createMainWindow () {
   const window = new BrowserWindow({

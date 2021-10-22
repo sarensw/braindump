@@ -2,7 +2,7 @@ import log from '../log'
 import { store } from '../store'
 import { set as setTheme } from '../store/storeTheme'
 import themes from '../themes'
-import { Settings } from '../settings/Settings'
+import { Settings } from '../../shared/types'
 import { loadFiles } from './fileService'
 import { loadSettings } from './settingsService'
 

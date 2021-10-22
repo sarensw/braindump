@@ -50,11 +50,11 @@ const Icon = ({ icon, state = 'normal', height = '16' }): ReactElement => {
           <g id='New_icons_1_'>
             <g>
               <g>
-                <polygon fill='none' stroke={getColor()} stroke-linejoin='round' stroke-miterlimit='10' points='15.5,15.5 15.5,23.5 0.5,23.5 0.5,0.5 23.5,0.5 23.5,15.5 ' />
-                <line fill='none' stroke={getColor()} stroke-linejoin='round' stroke-miterlimit='10' x1='23.5' y1='15.5' x2='15.5' y2='23.5' />
+                <polygon fill='none' stroke={getColor()} strokeLinejoin='round' strokeMiterlimit='10' points='15.5,15.5 15.5,23.5 0.5,23.5 0.5,0.5 23.5,0.5 23.5,15.5 ' />
+                <line fill='none' stroke={getColor()} strokeLinejoin='round' strokeMiterlimit='10' x1='23.5' y1='15.5' x2='15.5' y2='23.5' />
               </g>
-              <path fill='none' stroke={getColor()} stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' d='M5,10l1-1 c0.553-0.552,1.447-0.552,2,0c0.553,0.553,1.447,0.553,2,0c0.553-0.552,1.447-0.552,2,0c0.553,0.553,1.447,0.553,2,0 c0.553-0.552,1.447-0.552,2,0c0.553,0.553,1.447,0.553,2,0l1-1' />
-              <path fill='none' stroke={getColor()} stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' d='M5,15l1-1 c0.553-0.552,1.447-0.552,2,0c0.553,0.553,1.447,0.553,2,0' />
+              <path fill='none' stroke={getColor()} strokeLinecap='round' strokeLinejoin='round' strokeMiterlimit='10' d='M5,10l1-1 c0.553-0.552,1.447-0.552,2,0c0.553,0.553,1.447,0.553,2,0c0.553-0.552,1.447-0.552,2,0c0.553,0.553,1.447,0.553,2,0 c0.553-0.552,1.447-0.552,2,0c0.553,0.553,1.447,0.553,2,0l1-1' />
+              <path fill='none' stroke={getColor()} strokeLinecap='round' strokeLinejoin='round' strokeMiterlimit='10' d='M5,15l1-1 c0.553-0.552,1.447-0.552,2,0c0.553,0.553,1.447,0.553,2,0' />
             </g>
           </g>
         </g>

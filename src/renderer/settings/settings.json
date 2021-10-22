@@ -24,5 +24,17 @@
         ]
       }
     ]
+  },
+  {
+    "id": "settings.editor",
+    "category": "Editor",
+    "settings": [
+      {
+        "id": "editor.minimap.show",
+        "type": "boolean",
+        "title": "Show Minimap",
+        "default": false
+      }
+    ]
   }
 ]
