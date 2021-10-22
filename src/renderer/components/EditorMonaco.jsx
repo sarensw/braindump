@@ -29,7 +29,7 @@ const MonacoEditor = _ => {
 
   const monaco = useMonaco()
 
-  const files = useSelector(state => state.files)
+  const currentFile = useSelector(state => state.files.current)
   const theme = useSelector(state => state.theme)
   const search = useSelector(state => state.search)
   const settings = useSelector(state => state.settings)
@@ -45,26 +45,26 @@ const MonacoEditor = _ => {
   }, [settings])
 
   useEffect(async () => {
-    log.debug(`current tab has changed to ${files.current}`)
+    log.debug(`current tab has changed to ${currentFile}`)
     if (monaco) {
       const i = monaco.editor.getModels().findIndex(m => {
         if (m.uri.path === undefined) return false
-        const matches = m.uri.path.endsWith(files.current)
+        const matches = m.uri.path.endsWith(currentFile)
         return matches
       })
       if (i === -1) {
-        log.debug(`model for ${files.current} not loaded yet -> load text from text file`)
-        const content = await loadFileContent(files.current)
+        log.debug(`model for ${currentFile} not loaded yet -> load text from text file`)
+        const content = await loadFileContent(currentFile)
         const uri = new Uri()
-        uri.path = '/' + files.current
+        uri.path = '/' + currentFile
         const model = monaco.editor.createModel(content, 'braindown', uri)
         editorRef.current.setModel(model)
       } else {
-        log.debug(`model for ${files.current} loaded already`)
+        log.debug(`model for ${currentFile} loaded already`)
         editorRef.current.setModel(monaco.editor.getModels()[i])
       }
     }
-  }, [files.current])
+  }, [currentFile])
 
   useEffect(() => {
     // register events
@@ -172,18 +172,18 @@ const MonacoEditor = _ => {
     // load the files
     const i = monaco.editor.getModels().findIndex(m => {
       if (m.uri.path === undefined) return false
-      const matches = m.uri.path.endsWith(files.current)
+      const matches = m.uri.path.endsWith(currentFile)
       return matches
     })
     if (i === -1) {
-      log.debug(`model for ${files.current} not loaded yet -> load text from text file`)
-      const content = await loadFileContent(files.current)
+      log.debug(`model for ${currentFile} not loaded yet -> load text from text file`)
+      const content = await loadFileContent(currentFile)
       const uri = new Uri()
-      uri.path = '/' + files.current
+      uri.path = '/' + currentFile
       const model = monaco.editor.createModel(content, 'braindown', uri)
       editorRef.current.setModel(model)
     } else {
-      log.debug(`model for ${files.current} loaded already`)
+      log.debug(`model for ${currentFile} loaded already`)
       editorRef.current.setModel(monaco.editor.getModels()[i])
     }
 
