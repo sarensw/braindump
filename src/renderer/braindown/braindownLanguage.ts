@@ -398,7 +398,7 @@ class BraindownLanguage {
         }
       }
     },
-    '!suggestWidgetVisible')
+    '!suggestWidgetVisible && !findWidgetVisible')
     this.editor.addCommand(monaco.KeyCode.Tab, () => {
       for (const handler of this.languageHandlers) {
         if (handler.willHandleTab()) {
@@ -408,7 +408,7 @@ class BraindownLanguage {
         }
       }
     },
-    '!suggestWidgetVisible')
+    '!suggestWidgetVisible && !findWidgetVisible')
   }
 
   /**
