@@ -53,6 +53,14 @@ async function loadFileContent (id: string): Promise<string> {
   return content
 }
 
+async function readFile (path: string): Promise<string> {
+  const content: string = await window.__preload.invoke({
+    channel: 'file/read',
+    payload: path
+  })
+  return content
+}
+
 async function loadFiles (): Promise<void> {
   const result: SharedFileList = await window.__preload.invoke({
     channel: 'files/load'
@@ -115,4 +123,4 @@ async function closeFile (id: string): Promise<void> {
   await loadFiles()
 }
 
-export { initializeFileService, loadFiles, loadFile, loadFileContent, saveFile, flushFile, createNewFile, closeFile }
+export { initializeFileService, loadFiles, loadFile, loadFileContent, saveFile, flushFile, createNewFile, closeFile, readFile }

@@ -18,3 +18,9 @@ export interface Settings {
   'app.theme': string
   'editor.minimap.show': boolean
 }
+
+export interface Snippet {
+  name: string
+  description: string
+  body: string
+}

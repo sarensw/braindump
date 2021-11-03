@@ -1,7 +1,8 @@
 /* eslint-disable no-template-curly-in-string */
 
 import log from '../log'
-import { loadCommandSuggestions, loadContactSuggestions, loadWordSuggestions } from './suggestions'
+import { loadContactSuggestions, loadWordSuggestions } from './suggestions'
+import { loadCommandSuggestions } from './suggestions/commandSuggestions'
 
 /**
  * Registers and configures the braindown language
@@ -73,7 +74,7 @@ const registerBraindownLanguage = monaco => {
 
         if (t === '//') {
           return {
-            suggestions: loadCommandSuggestions(monaco)
+            suggestions: loadCommandSuggestions(monaco, model, position)
           }
         }
       }

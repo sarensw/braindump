@@ -22,6 +22,7 @@
     "@snowpack/plugin-react-refresh": "^2.5.0",
     "@snowpack/plugin-typescript": "^1.2.1",
     "@types/json-stringify-safe": "^5.0.0",
+    "@types/luxon": "^2.0.5",
     "@types/styled-components": "^5.1.15",
     "@types/uuid": "^8.3.1",
     "autoprefixer": "^10.3.7",
@@ -58,7 +59,9 @@
     "react-redux": "^7.2.5",
     "shade-blend-color": "^1.0.0",
     "styled-components": "^5.3.1",
-    "uuid": "^8.3.2"
+    "use-async-effect": "^2.2.3",
+    "uuid": "^8.3.2",
+    "yaml": "^1.10.2"
   },
   "build": {
     "appId": "com.featureninjas.braindump",

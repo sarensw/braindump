@@ -5,6 +5,7 @@ import path from 'path'
 import log from 'electron-log'
 import { Files } from './files'
 import { SettingsFile } from './settings'
+import { FileSystem } from './fs'
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
 
 crashReporter.start({ uploadToServer: false })
@@ -25,6 +26,7 @@ log.debug(app.getPath('userData'))
 let mainWindow
 const files = new Files()
 const settings = new SettingsFile()
+const fileSystem = new FileSystem()
 
 function createMainWindow () {
   const window = new BrowserWindow({
@@ -155,4 +157,13 @@ ipcMain.handle('file/content', async (event, args) => {
 
 ipcMain.handle('file/close', async (event, args) => {
   await files.close(args.id)
+})
+
+ipcMain.handle('file/read', async (event, args) => {
+  const content = await fileSystem.read(args.path)
+  return content
+})
+
+ipcMain.on('file/write', async (event, args) => {
+  await fileSystem.write(args.path, args.text)
 })

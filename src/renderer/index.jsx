@@ -10,11 +10,13 @@ import CustomThemeProvider from './themes/CustomThemeProvider'
 import startupService from './services/startupService'
 import { initializeFileService } from './services/fileService'
 import registerShortcuts from './services/shortcutService'
+import { initializeSnippetsService } from './services/snippetsService'
 
 async function initialize () {
   await startupService.startup()
   initializeFileService()
   registerShortcuts()
+  initializeSnippetsService()
 
   ReactDOM.render(
     <Provider store={store}>
