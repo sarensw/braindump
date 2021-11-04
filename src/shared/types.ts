@@ -9,11 +9,6 @@ export interface Dump extends File {
   title: string
 }
 
-export interface SharedFileList {
-  files: SharedFile[]
-  lastUsed: string
-}
-
 export interface Settings {
   'app.theme': string
   'editor.minimap.show': boolean

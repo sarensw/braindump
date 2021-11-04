@@ -1,12 +1,14 @@
-import { SharedFileList } from '../../shared/types'
 import log from '../log'
 import { store } from '../store'
 import { File } from '../store/files/file'
-import { setFiles, setCurrentFile, cleanDirtyText } from '../store/storeFiles'
+import { setFiles, closeFile as closeFileInStore, setCurrentFile, cleanDirtyText, setCount, addFile } from '../store/storeFiles'
 import { randomString } from './utilitiesService'
+import { v4 as uuidv4 } from 'uuid'
 
 const id = randomString(4)
 const timerInterval = 2000
+
+const PATH_FILE_FILES: string = 'files.json'
 
 function initializeFileService (): void {
   log.debug('initializing the dump service', id)
@@ -15,73 +17,126 @@ function initializeFileService (): void {
 }
 
 async function createNewFile (): Promise<void> {
-  const id: string = await window.__preload.invoke({
-    channel: 'file/new'
-  })
-  await window.__preload.invoke({
-    channel: 'files/lastUsedChanged',
-    payload: id
+  let state = store.getState()
+  const files = state.files
+  const counter = files.count + 1
+
+  // create a new dump
+  const newFileName = `dump_${counter}_${Date.now()}`
+  const newFileId = uuidv4()
+
+  const file: File = {
+    id: newFileId,
+    name: `dump ${counter}`,
+    path: newFileName,
+    loaded: false,
+    text: '# Welcome to Braindump'
+  }
+
+  window.__preload.send({
+    channel: 'file/write',
+    payload: {
+      path: file.path,
+      text: file.text
+    }
   })
 
-  await loadFiles()
-}
+  store.dispatch(addFile(file))
+  log.debug(`Added ${file.id} to files`)
 
-async function loadFile (file: File): Promise<void> {
-  const result: string = await window.__preload.invoke({
-    channel: 'file/content',
-    payload: file.id
-  })
-  const loadedFile = new File()
-  loadedFile.id = file.id
-  loadedFile.name = file.name
-  loadedFile.path = file.path
-  loadedFile.loaded = true
-  loadedFile.text = result
-  store.dispatch(setCurrentFile(loadedFile.id))
+  store.dispatch(setCurrentFile(file.id))
+  log.debug(`File ${file.id} loaded`)
 
-  await window.__preload.invoke({
-    channel: 'files/lastUsedChanged',
-    payload: file.id
-  })
-}
+  store.dispatch(setCount(counter))
+  log.debug(`File count set to ${counter}`)
 
-async function loadFileContent (id: string): Promise<string> {
-  const content: string = await window.__preload.invoke({
-    channel: 'file/content',
-    payload: id
+  state = store.getState()
+  const newFiles = {
+    files: state.files.files,
+    lastUsed: state.files.current,
+    count: state.files.count
+  }
+
+  window.__preload.send({
+    channel: 'file/write',
+    payload: {
+      path: PATH_FILE_FILES,
+      text: JSON.stringify(newFiles, null, 2)
+    }
   })
-  return content
 }
 
 async function readFile (path: string): Promise<string> {
   const content: string = await window.__preload.invoke({
     channel: 'file/read',
-    payload: path
+    payload: {
+      path
+    }
   })
   return content
 }
 
 async function loadFiles (): Promise<void> {
-  const result: SharedFileList = await window.__preload.invoke({
-    channel: 'files/load'
-  })
-
-  const files = result.files.map(f => {
-    const file: File = {
-      id: f.id,
-      name: f.name,
-      path: f.path,
-      loaded: false,
-      text: ''
+  const filesRaw: string = await window.__preload.invoke({
+    channel: 'file/read',
+    payload: {
+      path: PATH_FILE_FILES
     }
-    return file
   })
-  store.dispatch(setFiles(files))
-  log.debug(`Loaded ${files.length} files`)
 
-  const id = result.lastUsed
-  store.dispatch(setCurrentFile(id))
-  log.debug(`File ${id} loaded`)
+  if (filesRaw === null) {
+    log.debug(`no ${PATH_FILE_FILES} file existing yet. Creating the default`)
+
+    // create a new dump
+    const newFileName = `dump_0_${Date.now()}`
+    const newFileId = uuidv4()
+    window.__preload.send({
+      channel: 'file/write',
+      payload: {
+        path: newFileName,
+        text: '# Welcome to Braindump'
+      }
+    })
+    const files = {
+      files: [
+        {
+          id: newFileId,
+          name: 'dump 0',
+          path: newFileName
+        }
+      ],
+      lastUsed: newFileId,
+      count: 1
+    }
+
+    window.__preload.send({
+      channel: 'file/write',
+      payload: {
+        path: PATH_FILE_FILES,
+        text: JSON.stringify(files, null, 2)
+      }
+    })
+
+    store.dispatch(setFiles(files.files as File[]))
+    log.debug(`Loaded ${files.files.length} files`)
+
+    store.dispatch(setCurrentFile(newFileId))
+    log.debug(`File ${newFileId} loaded`)
+
+    store.dispatch(setCount(1))
+    log.debug('File count set to 1')
+  } else {
+    const files = JSON.parse(filesRaw)
+
+    store.dispatch(setFiles(files.files as File[]))
+    log.debug(`Loaded ${(files.files as File[]).length} files`)
+
+    store.dispatch(setCurrentFile(files.lastUsed))
+    log.debug(`File ${files.lastUsed as number} loaded`)
+
+    store.dispatch(setCount(files.count as number))
+    log.debug(`File count set to ${files.count as number}`)
+  }
 }
 
 function saveFile (): void {
@@ -89,21 +144,18 @@ function saveFile (): void {
 
   if (state !== undefined) {
     const id = state.files.current
-    const files = state.files
-    if (files !== undefined) {
-      if (files.dirty) {
-        const text = files.text
+    const file = state.files.files?.find(f => f.id === id)
 
-        window.__preload.send({
-          channel: 'file/save',
-          payload: {
-            id,
-            text
-          }
-        })
+    if (state.files.dirty && file !== null) {
+      window.__preload.send({
+        channel: 'file/write',
+        payload: {
+          path: file?.path,
+          text: state.files.text
+        }
+      })
 
-        store.dispatch(cleanDirtyText())
-      }
+      store.dispatch(cleanDirtyText())
     }
   }
 }
@@ -113,14 +165,31 @@ function flushFile (): void {
 }
 
 async function closeFile (id: string): Promise<void> {
-  await window.__preload.invoke({
-    channel: 'file/close',
+  let state = store.getState()
+  const files = state.files.files
+
+  log.debug(`current number of files is ${state.files?.count}`)
+  if (files?.length === 1) {
+    await createNewFile()
+  }
+
+  store.dispatch(closeFileInStore(id))
+  log.debug(`new number of files is ${state.files?.count}`)
+
+  state = store.getState()
+  const newFiles = {
+    files: state.files.files,
+    lastUsed: state.files.current,
+    count: state.files.count
+  }
+
+  window.__preload.send({
+    channel: 'file/write',
     payload: {
-      id
+      path: PATH_FILE_FILES,
+      text: JSON.stringify(newFiles, null, 2)
     }
   })
-
-  await loadFiles()
 }
 
-export { initializeFileService, loadFiles, loadFile, loadFileContent, saveFile, flushFile, createNewFile, closeFile, readFile }
+export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile }

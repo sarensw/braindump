@@ -3,14 +3,17 @@ import styled from 'styled-components'
 import log from '../log'
 import Tab from './elements/Tab'
 import { File } from '../store/files/file'
-import { loadFile, flushFile, createNewFile } from '../services/fileService'
+import { flushFile, createNewFile } from '../services/fileService'
 import { useAppSelector } from '../hooks'
+import { useDispatch } from 'react-redux'
+import { setCurrentFile } from '../store/storeFiles'
 
 const AddDumpButton = styled.button`
   color: ${props => props.theme.foreground};
 `
 
 const Dumps = (): ReactElement => {
+  const dispatch = useDispatch()
   const files = useAppSelector(state => state.files.files)
   const currentFile = useAppSelector(state => state.files.current)
   const scrollContainer = useRef<HTMLUListElement>(null)
@@ -18,7 +21,7 @@ const Dumps = (): ReactElement => {
   const loadDump = async (file: File): Promise<void> => {
     log.debug(`loading dump ${file.name} from ${file.path} as per user request`)
     flushFile()
-    await loadFile(file)
+    dispatch(setCurrentFile(file.id))
   }
 
   const addDump = async (): Promise<void> => {

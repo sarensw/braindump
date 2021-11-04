@@ -20,4 +20,4 @@ function run (text, editor) {
   }
 }
 
-export default { run }
+export { run }

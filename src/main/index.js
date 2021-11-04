@@ -3,7 +3,6 @@ import { app, BrowserWindow, ipcMain, crashReporter, globalShortcut } from 'elec
 import { getAssetURL } from 'electron-snowpack'
 import path from 'path'
 import log from 'electron-log'
-import { Files } from './files'
 import { SettingsFile } from './settings'
 import { FileSystem } from './fs'
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
@@ -24,7 +23,6 @@ log.debug(app.getPath('module'))
 log.debug(app.getPath('userData'))
 
 let mainWindow
-const files = new Files()
 const settings = new SettingsFile()
 const fileSystem = new FileSystem()
 
@@ -122,41 +120,6 @@ ipcMain.handle('loadSettings', async (event, someArgument) => {
 
 ipcMain.handle('saveSettings', async (event, someArgument) => {
   await settings.write(someArgument)
-})
-
-ipcMain.handle('files/lastUsedChanged', async (event, args) => {
-  log.debug('files/lastUsedChanged')
-  if (args) {
-    await files.lastUsedChanged(args)
-    return args
-  }
-})
-
-ipcMain.handle('files/load', async (event, args) => {
-  await files.loadFiles()
-  const fileList = {
-    files: files.files,
-    lastUsed: files.lastUsedFile
-  }
-  return fileList
-})
-
-ipcMain.on('file/save', async (event, args) => {
-  await files.write(args.id, args.text)
-})
-
-ipcMain.handle('file/new', async (event, args) => {
-  const file = await files.createNewDump()
-  return file.id
-})
-
-ipcMain.handle('file/content', async (event, args) => {
-  const content = await files.loadFileContent(args)
-  return content
-})
-
-ipcMain.handle('file/close', async (event, args) => {
-  await files.close(args.id)
 })
 
 ipcMain.handle('file/read', async (event, args) => {
