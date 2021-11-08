@@ -39,7 +39,7 @@ const SnippetsPage: React.FunctionComponent = (): ReactElement => {
   return (
     <Page>
       <div className='flex flex-col h-full'>
-        <ThemedEditor language='yaml' path={editorProps.path} initialText={editorProps.text} onTextChanged={onTextChanged} />
+        <ThemedEditor language='yaml' path={editorProps.path} initialText={editorProps.text} onTextChanged={onTextChanged} showMinimap={false} />
         <div className='p-2 self-end'>
           <Button onClick={save}>Save</Button>
         </div>

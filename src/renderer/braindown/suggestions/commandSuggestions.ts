@@ -1,4 +1,5 @@
 import { Monaco } from '@monaco-editor/react'
+import * as monaco from 'monaco-editor'
 import { DateTime } from 'luxon'
 import { Position } from 'monaco-editor'
 import { store } from '../../store'

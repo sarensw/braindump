@@ -1,5 +1,5 @@
 import log from '../log'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import * as monaco from 'monaco-editor'
 import { BraindownLanguageExtension } from './braindownLanguageExtension'
 import { NewLineExtensionHandler } from './extensions/newLineExtensionHandler'
 import { ListExtensionHandler } from './extensions/listExtensionHandler'

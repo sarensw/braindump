@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useRef } from 'react'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import * as monaco from 'monaco-editor'
 import Editor, { Monaco, useMonaco } from '@monaco-editor/react'
 import { useAppSelector } from '../hooks'
 import log from '../log'

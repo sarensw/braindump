@@ -1,5 +1,5 @@
 import React, { ReactElement, useRef } from 'react'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import * as monaco from 'monaco-editor'
 import { ThemedEditor } from './ThemedEditor'
 import { Monaco } from '@monaco-editor/react'
 import log from '../log'

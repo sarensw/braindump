@@ -32,7 +32,6 @@ const registerBraindownLanguage = monaco => {
 
     monaco.languages.registerOnTypeFormattingEditProvider('braindown', {
       autoFormatTriggerCharacters: [']'],
-      /** @param {import('monaco-editor/esm/vs/editor/editor.api').editor.IModel} model */
       provideOnTypeFormattingEdits: (model, position, ch, options, token) => {
         const t = model.getValueInRange({
           startLineNumber: position.lineNumber,
