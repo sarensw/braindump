@@ -5,5 +5,10 @@ module.exports = {
     '@snowpack/plugin-postcss',
     '@snowpack/plugin-react-refresh',
     '@snowpack/plugin-typescript'
-  ]
+  ],
+  packageOptions: {
+    knownEntrypoints: [
+      'react-is'
+    ]
+  }
 }
