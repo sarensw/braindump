@@ -31,7 +31,7 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
       <div
         className='grid h-full'
         style={{
-          gridTemplateRows: '[search] 2.0rem [header] 2.2rem [main] minmax(0, 1fr)'
+          gridTemplateRows: '[header] 2.2rem [main] minmax(0, 1fr)'
         }}
       >
         <div
