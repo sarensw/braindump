@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef } from 'react'
+import React, { ReactElement, useRef, useEffect } from 'react'
 import * as monaco from 'monaco-editor'
 import { ThemedEditor } from './ThemedEditor'
 import { Monaco } from '@monaco-editor/react'
@@ -6,7 +6,6 @@ import log from '../log'
 import { BraindownLanguage } from '../braindown/braindownLanguage'
 import { run as extensionsRun } from '../extensions/extensions'
 import { handleKeyDownEvent } from '../hotkeys'
-import registerBraindownLanguage from '../braindown'
 import { setDirtyText } from '../store/storeFiles'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
@@ -22,21 +21,28 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
   const braindown = useRef<BraindownLanguage | null>(null)
   const settings = useAppSelector(state => state.settings)
 
+  useEffect(() => {
+    return () => {
+      if (braindown.current !== null) {
+        log.debug('Unmounting the braindown editor')
+        braindown.current.clear()
+      }
+    }
+  }, [])
+
   async function handleEditorDidMount (codeEditor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco): Promise<void> {
     log.debug('braindown editor did mount')
 
-    registerBraindownLanguage(monaco)
-
     // register the new language handler
-    braindown.current = new BraindownLanguage(codeEditor);
+    braindown.current = new BraindownLanguage()
+    braindown.current.initialize(codeEditor, monaco)
 
-    (codeEditor as any).onDidType(function (text: string) {
+    ;(codeEditor as any).onDidType(function (text: string) {
       extensionsRun(text, codeEditor)
       braindown.current?.handleInput(text)
     })
     codeEditor.onKeyDown((event) => {
       handleKeyDownEvent(event.browserEvent, 'monaco')
-      console.log(event.browserEvent)
     })
 
     // set the focus once

@@ -15,7 +15,6 @@ const keys = [
 function handleKeyDownEvent (event: KeyboardEvent, source: string): void {
   log.debug(`handle keydown event from ${source}`)
   let prefix: string = ''
-  console.log(event)
   if (event.ctrlKey) prefix += 'ctrl+'
   if (event.altKey) prefix += 'alt+'
   if (event.metaKey) prefix += 'cmd+'

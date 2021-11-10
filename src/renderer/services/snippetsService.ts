@@ -22,36 +22,35 @@ function getYamlDocument (snippets: Snippet[]): Document {
 }
 
 async function initializeSnippetsService (): Promise<void> {
+  log.debug('initializing snippets')
   await loadSnippets()
 }
 
 async function readSnippets (): Promise<string> {
-  log.debug('loading the snippets')
-  let snippetsRaw = await window.__preload.invoke({
+  log.debug('read snippets')
+  const snippetsRaw = await window.__preload.invoke({
     channel: 'file/read',
     payload: {
       path: PATH_FILE_SNIPPETS
     }
   })
-  log.debug(`snippets loaded: ${String(snippetsRaw)}`)
+  log.debug(`snippets read (length): ${String(snippetsRaw).length}`)
 
   if (snippetsRaw === null) {
     log.debug('no snippets file existing yet, creating an empty one')
 
-    const doc = getYamlDocument([SNIPPETS_DEFAULT])
-
-    snippetsRaw = doc.toString()
-    await writeSnippets(snippetsRaw)
+    await writeSnippets([SNIPPETS_DEFAULT])
   }
 
-  log.debug(snippetsRaw)
   return snippetsRaw
 }
 
 async function loadSnippets (): Promise<Snippet[]> {
+  log.debug('loading snippets')
   const snippetsRaw = await readSnippets()
   const snippets = YAML.parse(snippetsRaw) as Snippet[]
 
+  log.debug(`snippets loaded (text length ${snippetsRaw.length}, # ${snippets.length}`)
   store.dispatch(set(snippets))
   return snippets
 }
