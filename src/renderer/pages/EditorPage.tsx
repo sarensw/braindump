@@ -1,6 +1,5 @@
 import React, { ReactElement, useState } from 'react'
 import Page from './Page'
-import Search from '../components/Search'
 import Dumps from '../components/Dumps'
 import { useAppSelector } from '../hooks'
 import { readFile } from '../services/fileService'
@@ -35,8 +34,6 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
           gridTemplateRows: '[search] 2.0rem [header] 2.2rem [main] minmax(0, 1fr)'
         }}
       >
-        <Search />
-
         <div
           className='grid'
           style={{
