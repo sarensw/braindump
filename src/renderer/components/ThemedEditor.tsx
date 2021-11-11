@@ -11,12 +11,12 @@ interface ThemedEditorProps {
   language: string
   path: string
   initialText?: string
-  onTextChanged?: (text: string) => void
+  onTextChanged?: (text: string, changes: monaco.editor.IModelContentChange[]) => void
   onEditorDidMount?: (codeEditor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => Promise<void>
   showMinimap: boolean
 }
 
-export const ThemedEditor = ({ language, path, initialText = '', onTextChanged = (text) => {}, onEditorDidMount = async () => {}, showMinimap = false }: ThemedEditorProps): ReactElement => {
+export const ThemedEditor = ({ language, path, initialText = '', onTextChanged = () => {}, onEditorDidMount = async () => {}, showMinimap = false }: ThemedEditorProps): ReactElement => {
   const theme = useAppSelector(state => state.theme)
   const monaco = useMonaco()
   const editor = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
@@ -88,7 +88,7 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
   }
 
   const modelChanged = (value: string, ev: monaco.editor.IModelContentChangedEvent): void => {
-    onTextChanged(value)
+    onTextChanged(value, ev.changes)
   }
 
   return (

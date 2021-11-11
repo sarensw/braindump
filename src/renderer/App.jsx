@@ -14,6 +14,10 @@ const App = _ => {
     handleKeyDownEvent(event, 'window')
   })
 
+  const changeActivePage = (page) => {
+    dispatch(setPage(page))
+  }
+
   return (
     <>
       <div
@@ -34,13 +38,16 @@ const App = _ => {
           <div />
           <div className='text-center text-xs select-none self-center'>Braindump</div>
           <div className='flex flex-row justify-end gap-2 pr-2'>
-            <button className='cursor-pointer' onClick={() => dispatch(setPage('editor'))}>
+            <button className='cursor-pointer' onClick={() => changeActivePage('files')}>
+              <Icon icon='home' />
+            </button>
+            <button className='cursor-pointer' onClick={() => changeActivePage('editor')}>
               <Icon icon='notepad' />
             </button>
-            <button onClick={() => dispatch(setPage('snippets'))}>
+            <button onClick={() => changeActivePage('snippets')}>
               <Icon icon='analytics' />
             </button>
-            <button onClick={() => dispatch(setPage('settings'))}>
+            <button onClick={() => changeActivePage('settings')}>
               <Icon icon='cog' />
             </button>
           </div>

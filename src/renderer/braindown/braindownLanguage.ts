@@ -6,6 +6,9 @@ import { ListExtensionHandler } from './extensions/listExtensionHandler'
 import { Monaco } from '@monaco-editor/react'
 import { loadContactSuggestions, loadWordSuggestions } from './suggestions'
 import { loadCommandSuggestions } from './suggestions/commandSuggestions'
+import { store } from '../store'
+import { set as setPage } from '../store/storeApp'
+
 class BraindownLanguage {
   languageHandlers: BraindownLanguageExtension[] = []
   editor: me.editor.IStandaloneCodeEditor
@@ -181,6 +184,7 @@ class BraindownLanguage {
       }
     },
     '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
+
     this.editor.addCommand(me.KeyCode.Tab, () => {
       for (const handler of this.languageHandlers) {
         if (handler.willHandleTab()) {
@@ -189,6 +193,11 @@ class BraindownLanguage {
           break
         }
       }
+    },
+    '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
+
+    this.editor.addCommand(me.KeyCode.Escape, () => {
+      store.dispatch(setPage('files'))
     },
     '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
   }

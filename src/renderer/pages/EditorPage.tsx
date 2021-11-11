@@ -1,12 +1,16 @@
 import React, { ReactElement, useState } from 'react'
 import Page from './Page'
 import Dumps from '../components/Dumps'
+import { useDispatch } from 'react-redux'
+import { useHotkeys } from 'react-hotkeys-hook'
 import { useAppSelector } from '../hooks'
 import { readFile } from '../services/fileService'
 import useAsyncEffect from 'use-async-effect'
 import { BraindownEditor } from '../components/BraindownEditor'
+import { set } from '../store/storeApp'
 
 const EditorPage: React.FunctionComponent = (): ReactElement => {
+  const dispatch = useDispatch()
   const [editorProps, setEditorProps] = useState<{path: string, text: string}>({ path: '', text: '' })
   const colors = useAppSelector(state => state.theme.colors)
   const files = useAppSelector(state => state.files)
@@ -25,6 +29,11 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
       }
     }
   }, [files.current])
+
+  useHotkeys('esc', (event) => {
+    event.preventDefault()
+    dispatch(set('files'))
+  })
 
   return (
     <Page>

@@ -9,6 +9,7 @@ import { handleKeyDownEvent } from '../hotkeys'
 import { setDirtyText } from '../store/storeFiles'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
+import { setFileName } from '../services/fileService'
 
 interface BraindownEditorProps {
   path: string
@@ -49,7 +50,19 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
     if (codeEditor !== null) codeEditor.focus()
   }
 
-  function textChanged (text: string): void {
+  async function textChanged (text: string, changes: monaco.editor.IModelContentChange[]): Promise<void> {
+    // check if the first line of the text has changed, in this case
+    // the title/name of the file changed, so the file itself has to
+    // be updated
+    for (const change of changes) {
+      if (change.range.startLineNumber === 1) {
+        const name = text.split('\n', 1)[0]
+        await setFileName(path, name)
+        break
+      }
+    }
+
+    // text changed, flag the text dirty for being saved later
     dispatch(setDirtyText(text))
   }
 

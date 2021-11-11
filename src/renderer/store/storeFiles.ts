@@ -15,6 +15,11 @@ interface FilesState {
   dirty: boolean
 }
 
+interface FileNameUpdate {
+  path: string
+  name: string
+}
+
 const initialState: FilesState = {
   current: null,
   files: null,
@@ -55,6 +60,17 @@ export const filesSlice = createSlice({
 
       state.files = newFiles
     },
+    setName: (state, action: PayloadAction<FileNameUpdate>) => {
+      if (state.files === null) return
+      let name = action.payload.name
+      const regex = new RegExp(/#* *([<>.,;:'"\w ]*) *(\/{2,})?/g)
+      const match = regex.exec(name)
+      if (match !== null) {
+        name = match[1]
+      }
+      const i = state.files.findIndex(f => f.path === action.payload.path)
+      state.files[i].name = name
+    },
     setCurrentFile: (state, action: PayloadAction<string>) => {
       state.current = action.payload
     },
@@ -74,5 +90,5 @@ export const filesSlice = createSlice({
   }
 })
 
-export const { setFiles, addFile, closeFile, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText } = filesSlice.actions
+export const { setFiles, addFile, closeFile, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText } = filesSlice.actions
 export default filesSlice.reducer

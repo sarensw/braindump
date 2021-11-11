@@ -1,7 +1,7 @@
 import log from '../log'
 import { store } from '../store'
 import { File } from '../store/files/file'
-import { setFiles, closeFile as closeFileInStore, setCurrentFile, cleanDirtyText, setCount, addFile } from '../store/storeFiles'
+import { setFiles, closeFile as closeFileInStore, setCurrentFile, cleanDirtyText, setCount, addFile, setName } from '../store/storeFiles'
 import { randomString } from './utilitiesService'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -27,10 +27,10 @@ async function createNewFile (): Promise<void> {
 
   const file: File = {
     id: newFileId,
-    name: `dump ${counter}`,
+    name: `<dump ${counter}>`,
     path: newFileName,
     loaded: false,
-    text: '# Welcome to Braindump'
+    text: `<dump ${counter}> // <- change the title here`
   }
 
   window.__preload.send({
@@ -57,6 +57,28 @@ async function createNewFile (): Promise<void> {
     count: state.files.count
   }
 
+  window.__preload.send({
+    channel: 'file/write',
+    payload: {
+      path: PATH_FILE_FILES,
+      text: JSON.stringify(newFiles, null, 2)
+    }
+  })
+}
+
+async function setFileName (path: string, name: string): Promise<void> {
+  store.dispatch(setName({
+    path,
+    name
+  }))
+
+  const state = store.getState()
+  if (state.files.files === null) return
+  const newFiles = {
+    lastUsed: state.files.current,
+    files: state.files.files,
+    count: state.files.count
+  }
   window.__preload.send({
     channel: 'file/write',
     payload: {
@@ -192,4 +214,4 @@ async function closeFile (id: string): Promise<void> {
   })
 }
 
-export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile }
+export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setFileName }
