@@ -38,9 +38,15 @@ const SnippetsPage: React.FunctionComponent = (): ReactElement => {
 
   return (
     <Page>
-      <div className='flex flex-col h-full'>
+      <div
+        className='grid h-full'
+        style={{
+          gridTemplateRows: '[editor] minmax(0, 1fr) [save] 2.8rem',
+          gridTemplateColumns: 'minmax(0, 1fr)'
+        }}
+      >
         <ThemedEditor language='yaml' path={editorProps.path} initialText={editorProps.text} onTextChanged={onTextChanged} showMinimap={false} />
-        <div className='p-2 self-end'>
+        <div className='p-2 justify-self-end'>
           <Button onClick={save}>Save</Button>
         </div>
       </div>

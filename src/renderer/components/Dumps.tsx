@@ -17,6 +17,7 @@ const Dumps = (): ReactElement => {
   const files = useAppSelector(state => state.files.files)
   const currentFile = useAppSelector(state => state.files.current)
   const scrollContainer = useRef<HTMLUListElement>(null)
+  const colors = useAppSelector(state => state.theme.colors)
 
   const loadDump = async (file: File): Promise<void> => {
     log.debug(`loading dump ${file.name} from ${file.path} as per user request`)
@@ -47,13 +48,21 @@ const Dumps = (): ReactElement => {
 
   return (
     <>
-      <ul ref={scrollContainer} role='tablist' className='flex flex-nowrap overflow-x-scroll tablist' onWheel={onWheel}>
-        {files?.map((file: File, index: number) => {
-          return <Tab key={index} onClick={async () => await loadDump(file)} active={isCurrentTabActive(file)} tab={file} fid={file.id}>{file.name}</Tab>
-        })}
-        {/* <Tab onClick={showSettings}>settings</Tab> */}
-      </ul>
-      <AddDumpButton className='text-xl px-2' onClick={addDump}>+</AddDumpButton>
+      <div
+        className='grid max-w-full w-full'
+        style={{
+          backgroundColor: colors['editorGroupHeader.tabsBackground'],
+          gridTemplateColumns: 'minmax(0, 1fr) 26px'
+        }}
+      >
+        <ul ref={scrollContainer} role='tablist' className='flex flex-nowrap overflow-x-scroll tablist' onWheel={onWheel}>
+          {files?.map((file: File, index: number) => {
+            return <Tab key={index} onClick={async () => await loadDump(file)} active={isCurrentTabActive(file)} tab={file} fid={file.id}>{file.name}</Tab>
+          })}
+          {/* <Tab onClick={showSettings}>settings</Tab> */}
+        </ul>
+        <AddDumpButton className='text-xl px-2' onClick={addDump}>+</AddDumpButton>
+      </div>
     </>
   )
 }

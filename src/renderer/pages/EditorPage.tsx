@@ -12,7 +12,6 @@ import { set } from '../store/storeApp'
 const EditorPage: React.FunctionComponent = (): ReactElement => {
   const dispatch = useDispatch()
   const [editorProps, setEditorProps] = useState<{path: string, text: string}>({ path: '', text: '' })
-  const colors = useAppSelector(state => state.theme.colors)
   const files = useAppSelector(state => state.files)
 
   useAsyncEffect(async () => {
@@ -40,18 +39,11 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
       <div
         className='grid h-full'
         style={{
-          gridTemplateRows: '[header] 2.2rem [main] minmax(0, 1fr)'
+          gridTemplateRows: '[header] 2.2rem [main] minmax(0, 1fr)',
+          gridTemplateColumns: 'minmax(0, 1fr)'
         }}
       >
-        <div
-          className='grid'
-          style={{
-            backgroundColor: colors['editorGroupHeader.tabsBackground'],
-            gridTemplateColumns: '1fr 26px'
-          }}
-        >
-          <Dumps />
-        </div>
+        <Dumps />
 
         <BraindownEditor
           path={editorProps.path}
