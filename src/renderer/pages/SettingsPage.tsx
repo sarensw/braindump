@@ -3,14 +3,14 @@ import log from '../log'
 import Page from './Page'
 import settingsStructure from '../settings/settings.json'
 import { update as updateSetting } from '../store/storeSettings'
-import themes from '../themes'
-import { set as setTheme } from '../store/storeTheme'
+import { setTheme } from '../store/storeThemeNew'
 import Label from '../components/settings/Label'
 import Dropdown from '../components/settings/Dropdown'
 import { SettingsCategory } from '../components/settings/SettingsCategory'
 import { Settings } from '../../shared/types'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { saveSettings } from '../services/settingsService'
+import { Light } from '../themes/themeLoader'
 
 const SettingsPage: FunctionComponent = () => {
   const dispatch = useAppDispatch()
@@ -34,7 +34,7 @@ const SettingsPage: FunctionComponent = () => {
     await saveSettings()
     if (sid === 'app.theme') {
       dispatch(setTheme({
-        theme: themes[value],
+        theme: Light,
         id: value
       }))
     }

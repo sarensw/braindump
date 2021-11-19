@@ -1,14 +1,15 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { keys, handleKeyDownEvent } from './hotkeys'
 import PageContainer from './pages/PageContainer'
 import { set as setPage } from './store/storeApp'
 import Icon from './components/elements/Icon'
+import { useAppSelector } from './hooks'
 
 const App = _ => {
   const dispatch = useDispatch()
-  const colors = useSelector(state => state.theme.colors)
+  const colors = useAppSelector(state => state.themeNew.colors)
 
   useHotkeys(keys, (event) => {
     handleKeyDownEvent(event, 'window')
@@ -22,7 +23,7 @@ const App = _ => {
     <>
       <div
         className='w-screen h-screen bg-red-400 grid overflow-hidden' style={{
-          backgroundColor: colors['editor.background'],
+          backgroundColor: colors.editor.background,
           gridTemplateColumns: '[shell] minmax(0, 1fr)',
           gridTemplateRows: '[title] 1.8rem [container] minmax(0, 1fr)'
         }}
@@ -30,8 +31,8 @@ const App = _ => {
         <div
           className='grid grid-cols-3 content-center'
           style={{
-            backgroundColor: colors['titleBar.activeBackground'],
-            color: colors['titleBar.activeForeground'],
+            backgroundColor: colors.titleBar.activeBackground,
+            color: colors.titleBar.activeForeground,
             '-webkit-app-region': 'drag'
           }}
         >

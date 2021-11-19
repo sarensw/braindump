@@ -1,10 +1,10 @@
 import log from '../log'
 import { store } from '../store'
-import { set as setTheme } from '../store/storeTheme'
-import themes from '../themes'
+import { setTheme } from '../store/storeThemeNew'
 import { Settings } from '../../shared/types'
 import { loadFiles } from './fileService'
 import { loadSettings } from './settingsService'
+import { Light } from '../themes/themeLoader'
 
 /**
  * This is the startup method that is run when braindump starts up. It will
@@ -31,7 +31,7 @@ async function loadTheme (settings: Settings): Promise<void> {
   try {
     log.debug('loading the theme')
     log.debug(`trying to load ${settings['app.theme']}`)
-    const theme = themes[settings['app.theme']]
+    const theme = Light
     store.dispatch(setTheme({
       theme,
       id: settings['app.theme']

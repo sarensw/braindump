@@ -3,9 +3,9 @@ import * as monaco from 'monaco-editor'
 import Editor, { Monaco, useMonaco } from '@monaco-editor/react'
 import { useAppSelector } from '../hooks'
 import log from '../log'
-import { getMonarchTheme } from '../themes'
 import { Uri } from 'monaco-editor'
 import useAsyncEffect from 'use-async-effect'
+import { ITheme } from '../themes/ITheme'
 
 interface ThemedEditorProps {
   language: string
@@ -17,7 +17,7 @@ interface ThemedEditorProps {
 }
 
 export const ThemedEditor = ({ language, path, initialText = '', onTextChanged = () => {}, onEditorDidMount = async () => {}, showMinimap = false }: ThemedEditorProps): ReactElement => {
-  const theme = useAppSelector(state => state.theme)
+  const theme = useAppSelector(state => state.themeNew.colors)
   const monaco = useMonaco()
   const editor = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
@@ -37,16 +37,33 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
     await load(path, monaco)
   }, [path])
 
-  function changeTheme (theme, monaco: Monaco): void {
+  function changeTheme (theme: ITheme, monaco: Monaco): void {
     try {
-      const writableTheme = JSON.parse(JSON.stringify({
-        type: theme.type,
-        colors: theme.colors,
-        tokenColors: theme.tokenColors
-      }))
-      const th = getMonarchTheme(writableTheme)
-      monaco.editor.defineTheme(theme.id, th)
-      monaco.editor.setTheme(theme.id)
+      // const writableTheme = JSON.parse(JSON.stringify({
+      //   type: theme.type,
+      //   colors: theme.colors,
+      //   tokenColors: theme.tokenColors
+      // }))
+      // const th = getMonarchTheme(writableTheme)
+      const rules = new Array<monaco.editor.ITokenThemeRule>()
+      rules.push({ token: 'header', foreground: theme.editorTokens.header.foreground, fontStyle: theme.editorTokens.header.fontStyle })
+      rules.push({ token: 'email', foreground: theme.editorTokens.email.foreground, fontStyle: theme.editorTokens.email.fontStyle })
+      rules.push({ token: 'link', foreground: theme.editorTokens.link.foreground, fontStyle: theme.editorTokens.link.fontStyle })
+      rules.push({ token: 'user', foreground: theme.editorTokens.user.foreground, fontStyle: theme.editorTokens.user.fontStyle })
+      rules.push({ token: 'taskOpen', foreground: theme.editorTokens.taskOpen.foreground, fontStyle: theme.editorTokens.taskOpen.fontStyle })
+      rules.push({ token: 'taskDone', foreground: theme.editorTokens.taskDone.foreground, fontStyle: theme.editorTokens.taskDone.fontStyle })
+      rules.push({ token: 'keyword', foreground: theme.editorTokens.keyword.foreground, fontStyle: theme.editorTokens.keyword.fontStyle })
+      rules.push({ token: '', background: theme.editor.background })
+      const themeData: monaco.editor.IStandaloneThemeData = {
+        base: 'vs', // can also be vs-dark or hc-black
+        inherit: false, // can also be false to completely replace the builtin rules
+        colors: {
+          'editor.background': theme.editor.background ?? '#00ff00'
+        },
+        rules
+      }
+      monaco.editor.defineTheme('light', themeData)
+      monaco.editor.setTheme('light')
     } catch (err: any) {
       log.error(`Could not set the theme because ${String(err.message)}`)
     }

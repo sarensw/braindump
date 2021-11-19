@@ -1,0 +1,88 @@
+{
+  "background": "#E9ECEF",
+  "foreground": "black",
+
+  "editor": {
+    "background": "#E9ECEF"
+  },
+
+  "editorTokens": {
+    "header": {
+      "foreground": "#bc4c00",
+      "fontStyle": "bold"
+    },
+    "email": {
+      "foreground": "#0969da",
+      "fontStyle": "underline"
+    },
+    "link": {
+      "foreground": "#0969da",
+      "fontStyle": "underline"
+    },
+    "user": {
+      "foreground": "#0969da",
+      "fontStyle": "italic"
+    },
+    "taskOpen": {
+      "foreground": "#cf222e",
+      "fontStyle": "bold"
+    },
+    "taskDone": {
+      "foreground": "#9d9d9d",
+      "fontStyle": ""
+    },
+    "keyword": {
+      "foreground": "#8250df",
+      "fontStyle": ""
+    }
+  },
+
+  "button": {
+    "foreground": "black",
+    "background": "white",
+    "border": "black",
+    "hoverForeground": "black",
+    "hoverBackground": "lightgrey"
+  },
+
+  "dropdown": {
+    "foreground": "black",
+    "background": "white",
+    "border": "black"
+  },
+
+  "label": {
+    "foreground": "black"
+  },
+
+  "tabs": {
+    "background": "#E9ECEF"
+  },
+  "tab": {
+    "border": "black",
+    "activeBackground": "#E9ECEF",
+    "activeBorder": "black",
+    "activeBorderTop": "black",
+    "activeBorderBottom": "black",
+    "activeForeground": "black",
+    "inactiveBackground": "#E9ECEF",
+    "inactiveBorder": "white",
+    "inactiveBorderTop": "black",
+    "inactiveBorderBottom": "black",
+    "inactiveForeground": "black",
+    "hoverBackground": "lightgrey",
+    "hoverBorder": "black",
+    "hoverBorderTop": "black",
+    "hoverBorderBottom": "black",
+    "hoverForeground": "black"
+  },
+
+  "toolBar": {
+    "hoverBackground": "white"
+  },
+
+  "titleBar": {
+    "activeBackground": "#E9ECEF",
+    "activeForeground": "black"
+  }
+}

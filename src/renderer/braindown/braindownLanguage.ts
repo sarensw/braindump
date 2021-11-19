@@ -46,11 +46,12 @@ class BraindownLanguage {
     const provider = this.monaco.languages.setMonarchTokensProvider('braindown', {
       tokenizer: {
         root: [
-          [/^# .*/, 'entity.name.class'],
-          [/[\w\d.]+@[\w\d.]+/, 'entity.other.inherited-class'],
-          [/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/, 'entity.other.inherited-class'],
-          [/@[\w\d]+/, 'support.constant'],
-          [/(\[ \])|(\[x\])/, 'entity.name.tag'],
+          [/^# .*/, 'header'],
+          [/[\w\d.]+@[\w\d.]+/, 'email'],
+          [/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/, 'link'],
+          [/@[\w\d]+/, 'user'],
+          [/(\[x\])/, 'taskDone'],
+          [/(\[ \])/, 'taskOpen'],
           [/\/\/[\w\d-:_;>=+]+\S/, 'keyword'],
           [/\[[a-zA-Z 0-9:]+\]/, 'custom-date']
         ]

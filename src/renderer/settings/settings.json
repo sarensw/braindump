@@ -7,19 +7,15 @@
         "id": "app.theme",
         "type": "enum",
         "title": "Theme",
-        "default": "nordlight",
+        "default": "light",
         "values": [
           {
-            "id": "nordlight",
-            "label": "Nord Light"
+            "id": "light",
+            "label": "Braindump Light"
           },
           {
-            "id": "monokai",
-            "label": "Monokai"
-          },
-          {
-            "id": "solarizedlight",
-            "label": "Solarized Light"
+            "id": "dark",
+            "label": "Braindump Dark"
           }
         ]
       }
