@@ -71,5 +71,6 @@ export interface ITheme {
   titleBar: {
     activeBackground?: string
     activeForeground?: string
+    borderBottom?: string
   }
 }

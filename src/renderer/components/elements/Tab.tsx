@@ -17,15 +17,15 @@ const NewTab = styled.li<{ active: boolean }>`
   /* display: inline-flex; */
   flex: 0 0 auto;
   align-items: center;
-  padding: 0.4rem;
+  padding: 1rem;
   padding-left: 0.6rem;
   padding-right: 0.6rem;
   cursor: pointer;
   user-select: none;
   border-right-width: ${props => ifExists(props.theme.tab.border, 1, 0)}px;
   border-bottom-width: ${props => ifExists(props.theme.tab.activeBorder, 1, 0)}px;
-  border-top-width: ${props => ifExists(props.theme.tab.activeBorder, 2, 0)}px;
-  font-size: 0.8rem;
+  border-top-width: ${props => ifExists(props.theme.tab.activeBorder, 1, 0)}px;
+  font-size: 0.94rem;
   background-color: ${props => eitherOrActive(props, props.theme.tab.activeBackground, props.theme.tab.inactiveBackground)};
   color: ${props => eitherOrActive(props, props.theme.tab.activeForeground, props.theme.tab.inactiveForeground)};
   /* border-color: ${props => props.theme.tab.border}; */

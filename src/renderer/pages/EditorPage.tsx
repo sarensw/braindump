@@ -39,7 +39,7 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
       <div
         className='grid h-full'
         style={{
-          gridTemplateRows: '[header] 2.2rem [main] minmax(0, 1fr)',
+          gridTemplateRows: '[header] 2.4rem [main] minmax(0, 1fr)',
           gridTemplateColumns: 'minmax(0, 1fr)'
         }}
       >
