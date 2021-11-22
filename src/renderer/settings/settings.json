@@ -30,6 +30,18 @@
         "type": "boolean",
         "title": "Show Minimap",
         "default": false
+      },
+      {
+        "id": "editor.linenumbers.show",
+        "type": "boolean",
+        "title": "Show Line Numbers",
+        "default": true
+      },
+      {
+        "id": "editor.wordwrap",
+        "type": "boolean",
+        "title": "Word Wrap",
+        "default": true
       }
     ]
   }

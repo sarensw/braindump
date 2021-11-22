@@ -74,6 +74,8 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
       onTextChanged={textChanged}
       onEditorDidMount={handleEditorDidMount}
       showMinimap={settings['editor.minimap.show']}
+      wordWrap={settings['editor.wordwrap']}
+      lineNumbers={settings['editor.linenumbers.show']}
     />
   )
 }

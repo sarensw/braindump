@@ -1,9 +1,9 @@
 {
-  "background": "#E9ECEF",
-  "foreground": "black",
+  "background": "#ffffff",
+  "foreground": "#24292f",
 
   "editor": {
-    "background": "#E9ECEF"
+    "background": "#ffffff"
   },
 
   "editorTokens": {
@@ -56,21 +56,21 @@
   },
 
   "tabs": {
-    "background": "#E9ECEF"
+    "background": "#f6f8fa"
   },
   "tab": {
     "border": "black",
-    "activeBackground": "#E9ECEF",
-    "activeBorder": "black",
-    "activeBorderTop": "black",
-    "activeBorderBottom": "black",
-    "activeForeground": "black",
-    "inactiveBackground": "#E9ECEF",
+    "activeBackground": "#ffffff",
+    "activeBorder": "#ffffff",
+    "activeBorderTop": "#fb8f44",
+    "activeBorderBottom": "#ffffff",
+    "activeForeground": "#24292f",
+    "inactiveBackground": "#f6f8fa",
     "inactiveBorder": "white",
     "inactiveBorderTop": "black",
     "inactiveBorderBottom": "black",
-    "inactiveForeground": "black",
-    "hoverBackground": "lightgrey",
+    "inactiveForeground": "#57606a",
+    "hoverBackground": "#ffffff",
     "hoverBorder": "black",
     "hoverBorderTop": "black",
     "hoverBorderBottom": "black",
@@ -82,7 +82,8 @@
   },
 
   "titleBar": {
-    "activeBackground": "#E9ECEF",
-    "activeForeground": "black"
+    "activeBackground": "#f6f8fa",
+    "activeForeground": "black",
+    "borderBottom": "#d0d7de"
   }
 }

@@ -13,11 +13,16 @@ contextBridge.exposeInMainWorld('__preload', {
   send: args => {
     ipcRenderer.send(args.channel, args.payload)
   },
+  menu: template => {
+    ipcRenderer.send('menu/context', template)
+  },
   receive: (channel, func) => {
-    const validChannels = ['shortcut']
+    const validChannels = ['shortcut', 'context-menu-command']
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`
-      ipcRenderer.on(channel, (event, ...args) => func(...args))
+      ipcRenderer.on(channel, (event, ...args) => {
+        func(...args)
+      })
     }
   },
   removeEventListener: (channel) => {

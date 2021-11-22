@@ -11,12 +11,14 @@ import startupService from './services/startupService'
 import { initializeFileService } from './services/fileService'
 import registerShortcuts from './services/shortcutService'
 import { initializeSnippetsService } from './services/snippetsService'
+import { initializeContextMenus } from './services/contextMenuService'
 
 async function initialize () {
   await startupService.startup()
   initializeFileService()
   registerShortcuts()
   initializeSnippetsService()
+  initializeContextMenus()
 
   ReactDOM.render(
     <Provider store={store}>

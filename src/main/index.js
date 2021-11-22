@@ -6,6 +6,7 @@ import log from 'electron-log'
 import { SettingsFile } from './settings'
 import { FileSystem } from './fs'
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
+import { Menu } from 'electron/main'
 
 crashReporter.start({ uploadToServer: false })
 
@@ -129,4 +130,26 @@ ipcMain.handle('file/read', async (event, args) => {
 
 ipcMain.on('file/write', async (event, args) => {
   await fileSystem.write(args.path, args.text)
+})
+
+ipcMain.on('menu/context', (event, template) => {
+  log.debug(template)
+  const clickableTemplate = template.map(item => {
+    const clickableItem = {
+      ...item
+    }
+    if (clickableItem.submenu) {
+      clickableItem.submenu = clickableItem.submenu.map(item => {
+        return {
+          ...item,
+          click: () => { event.sender.send('context-menu-command', item.id) }
+        }
+      })
+    } else {
+      clickableItem.click = () => { event.sender.send('context-menu-command', item.id) }
+    }
+    return clickableItem
+  })
+  const menu = Menu.buildFromTemplate(clickableTemplate)
+  menu.popup(BrowserWindow.fromWebContents(event.sender))
 })

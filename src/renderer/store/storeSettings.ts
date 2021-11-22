@@ -16,7 +16,9 @@ function getDefaultValue<T> (id: string): T | null {
 
 const initialState: Settings = {
   'app.theme': getDefaultValue<string>('app.theme') ?? '',
-  'editor.minimap.show': getDefaultValue<boolean>('editor.minimap.show') ?? false
+  'editor.minimap.show': getDefaultValue<boolean>('editor.minimap.show') ?? false,
+  'editor.linenumbers.show': getDefaultValue<boolean>('editor.linenumber.show') ?? true,
+  'editor.wordwrap': getDefaultValue<boolean>('editor.wordwrap') ?? true
 }
 
 export const configSlice = createSlice({
@@ -24,13 +26,25 @@ export const configSlice = createSlice({
   initialState,
   reducers: {
     set: (state, action) => {
-      return action.payload
+      return {
+        ...initialState,
+        ...action.payload
+      }
     },
     update: (state: Settings, action) => {
       state[action.payload.id] = action.payload.value
+    },
+    toggle: (state: Settings, action) => {
+      if (typeof state[action.payload.id] === 'boolean') {
+        if (state[action.payload.id] === true) {
+          state[action.payload.id] = false
+        } else {
+          state[action.payload.id] = true
+        }
+      }
     }
   }
 })
 
-export const { set, update } = configSlice.actions
+export const { set, update, toggle } = configSlice.actions
 export default configSlice.reducer

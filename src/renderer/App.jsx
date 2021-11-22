@@ -6,6 +6,7 @@ import PageContainer from './pages/PageContainer'
 import { set as setPage } from './store/storeApp'
 import Icon from './components/elements/Icon'
 import { useAppSelector } from './hooks'
+import { getMenuTemplate } from './services/contextMenuService'
 
 const App = _ => {
   const dispatch = useDispatch()
@@ -19,13 +20,18 @@ const App = _ => {
     dispatch(setPage(page))
   }
 
+  const showSettings = () => {
+    const template = getMenuTemplate('appContext')
+    window.__preload.menu(template)
+  }
+
   return (
     <>
       <div
         className='w-screen h-screen bg-red-400 grid overflow-hidden' style={{
           backgroundColor: colors.editor.background,
           gridTemplateColumns: '[shell] minmax(0, 1fr)',
-          gridTemplateRows: '[title] 1.8rem [container] minmax(0, 1fr)'
+          gridTemplateRows: '[title] 28px [container] minmax(0, 1fr)'
         }}
       >
         <div
@@ -33,11 +39,13 @@ const App = _ => {
           style={{
             backgroundColor: colors.titleBar.activeBackground,
             color: colors.titleBar.activeForeground,
+            borderBottomColor: colors.titleBar.borderBottom,
+            borderBottomWidth: colors.titleBar.borderBottom ? '1px' : '0px',
             '-webkit-app-region': 'drag'
           }}
         >
           <div />
-          <div className='text-center text-xs select-none self-center'>Braindump</div>
+          <div className='text-center text-base select-none self-center'>Braindump</div>
           <div className='flex flex-row justify-end gap-2 pr-2'>
             <button className='cursor-pointer' onClick={() => changeActivePage('files')}>
               <Icon icon='home' />
@@ -48,7 +56,7 @@ const App = _ => {
             <button onClick={() => changeActivePage('snippets')}>
               <Icon icon='analytics' />
             </button>
-            <button onClick={() => changeActivePage('settings')}>
+            <button onClick={() => showSettings()}>
               <Icon icon='cog' />
             </button>
           </div>

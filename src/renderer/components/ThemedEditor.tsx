@@ -14,9 +14,11 @@ interface ThemedEditorProps {
   onTextChanged?: (text: string, changes: monaco.editor.IModelContentChange[]) => void
   onEditorDidMount?: (codeEditor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => Promise<void>
   showMinimap: boolean
+  wordWrap?: boolean
+  lineNumbers?: boolean
 }
 
-export const ThemedEditor = ({ language, path, initialText = '', onTextChanged = () => {}, onEditorDidMount = async () => {}, showMinimap = false }: ThemedEditorProps): ReactElement => {
+export const ThemedEditor = ({ language, path, initialText = '', onTextChanged = () => {}, onEditorDidMount = async () => {}, showMinimap = false, wordWrap = true, lineNumbers = true }: ThemedEditorProps): ReactElement => {
   const theme = useAppSelector(state => state.themeNew.colors)
   const monaco = useMonaco()
   const editor = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
@@ -112,10 +114,11 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
     <Editor
       options={{
         formatOnType: true,
-        wordWrap: 'on',
+        wordWrap: wordWrap ? 'on' : 'off',
         automaticLayout: true,
         autoIndent: 'full',
         showFoldingControls: 'always',
+        lineNumbers: lineNumbers ? 'on' : 'off',
         suggest: {
           preview: true
         },
