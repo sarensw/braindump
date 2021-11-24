@@ -1,37 +1,7 @@
 import { toggle } from '../store/storeSettings'
+import { set as setPage } from '../store/storeApp'
 import { store } from '../store'
 import { saveSettings } from './settingsService'
-
-// const templates = {
-//   appContext: [
-//     {
-//       id: 'menu-editor-minimap',
-//       label: 'Show Minimap',
-//       type: 'checkbox',
-//       checked: true,
-//       click: () => store.dispatch(toggle({ id: 'editor.minimap.show' }))
-//     },
-//     {
-//       id: 'menu-editor-wordwrap',
-//       label: 'Word Wrap',
-//       type: 'checkbox',
-//       checked: true,
-//       click: () => store.dispatch(toggle({ id: 'editor.wordwrap' }))
-//     },
-//     { type: 'separator' },
-//     {
-//       label: 'Theme',
-//       submenu: [
-//         {
-//           id: 'theme-braindump-light',
-//           label: 'Braindump Light',
-//           type: 'checkbox',
-//           checked: true
-//         }
-//       ]
-//     }
-//   ]
-// }
 
 function initializeContextMenus (): void {
   window.__preload.receive('context-menu-command', (commandId: string) => {
@@ -91,6 +61,15 @@ function getAppContextMenu (): any {
       checked: settings['editor.wordwrap'],
       click: async () => {
         store.dispatch(toggle({ id: 'editor.wordwrap' }))
+        await saveSettings()
+      }
+    },
+    { type: 'separator' },
+    {
+      id: 'menu-editor-snippets',
+      label: 'Configure Snippets',
+      click: async () => {
+        store.dispatch(setPage('snippets'))
         await saveSettings()
       }
     },

@@ -53,9 +53,6 @@ const App = _ => {
             <button className='cursor-pointer' onClick={() => changeActivePage('editor')}>
               <Icon icon='notepad' />
             </button>
-            <button onClick={() => changeActivePage('snippets')}>
-              <Icon icon='analytics' />
-            </button>
             <button onClick={() => showSettings()}>
               <Icon icon='cog' />
             </button>
