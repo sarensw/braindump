@@ -1,8 +1,9 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useState, useEffect } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
 import { set } from '../store/storeApp'
+import { setCurrentHeaders } from '../store/storeEditor'
 import { setCurrentFile } from '../store/storeFiles'
 import Page from './Page'
 
@@ -11,6 +12,10 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   const [selected, setSelected] = useState<string | null>(files.current)
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    dispatch(setCurrentHeaders(null))
+  }, [])
+
   useHotkeys(['up', 'down'].join(','), (event) => {
     if (files.files === null) return
     const currentIndex = files.files.findIndex(f => f.id === selected)
@@ -18,10 +23,12 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
       if (currentIndex === 0) return
       const newSelected = files.files[currentIndex - 1].id
       setSelected(newSelected)
+      dispatch(setCurrentFile(newSelected))
     } else {
       if (currentIndex === files.files.length - 1) return
       const newSelected = files.files[currentIndex + 1].id
       setSelected(newSelected)
+      dispatch(setCurrentFile(newSelected))
     }
   }, [selected])
 

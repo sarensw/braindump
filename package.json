@@ -44,6 +44,7 @@
   "dependencies": {
     "@monaco-editor/react": "^4.3.1",
     "@reduxjs/toolkit": "^1.6.2",
+    "@vscode/codicons": "0.0.26",
     "dateformat": "^5.0.2",
     "dexie": "^3.0.3",
     "electron-log": "^4.4.1",

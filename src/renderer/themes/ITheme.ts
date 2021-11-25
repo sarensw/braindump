@@ -38,11 +38,14 @@ export interface ITheme {
   }
   label: {
     foreground?: string
-    background?: string
-    border?: string
-    hoverForeground?: string
-    hoverBackground?: string
-    hoverBorder?: string
+  }
+  breadcrumb: {
+    background: string
+    homeBackground: string
+    homeForeground: string
+    pathBackground: string
+    pathForeground: string
+    pathTriangleForeground: string
   }
   tabs: {
     background?: string

@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react'
 
-const Icon = ({ icon, state = 'normal', height = '16' }): ReactElement => {
+const Icon = ({ icon, state = 'normal', height = '16', color = undefined }: { icon: string, state?: string, height?: string, color?: string | undefined }): ReactElement => {
   const getColor = (): string => {
+    if (color !== undefined) return color
     if (state === 'normal') return 'rgba(107, 114, 128)'
     if (state === 'focus') return 'rgba(55, 65, 81)'
     if (state === 'selected') return 'black'

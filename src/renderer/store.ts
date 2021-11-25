@@ -7,6 +7,7 @@ import storeSearch from './store/storeSearch'
 import storeApp from './store/storeApp'
 import storeSnippets from './store/storeSnippets'
 import storeThemeNew from './store/storeThemeNew'
+import storeEditor from './store/storeEditor'
 
 export const store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ export const store = configureStore({
     settings: storeSettings,
     themeNew: storeThemeNew,
     search: storeSearch,
-    snippets: storeSnippets
+    snippets: storeSnippets,
+    editor: storeEditor
   },
   devTools: true
 })

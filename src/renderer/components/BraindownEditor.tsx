@@ -7,6 +7,7 @@ import { BraindownLanguage } from '../braindown/braindownLanguage'
 import { run as extensionsRun } from '../extensions/extensions'
 import { handleKeyDownEvent } from '../hotkeys'
 import { setDirtyText } from '../store/storeFiles'
+import { setCurrentHeaders, setCursorPosition } from '../store/storeEditor'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
 import { setFileName } from '../services/fileService'
@@ -66,6 +67,25 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
     dispatch(setDirtyText(text))
   }
 
+  function handleCursorPositionChanged (event: monaco.editor.ICursorPositionChangedEvent, textModel: monaco.editor.ITextModel | null): void {
+    dispatch(setCursorPosition({ line: event.position.lineNumber, column: event.position.column }))
+
+    if (textModel !== null) {
+      let line = event.position.lineNumber
+      let headers: string[] | null = null
+      while (line > 0) {
+        const lineContent = textModel.getLineContent(line)
+        if (lineContent.match(/^# .*/) !== null) {
+          if (headers === null) headers = new Array<string>()
+          headers.push(lineContent)
+          break
+        }
+        line--
+      }
+      dispatch(setCurrentHeaders(headers))
+    }
+  }
+
   return (
     <ThemedEditor
       language='braindown'
@@ -73,6 +93,7 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
       initialText={initialText}
       onTextChanged={textChanged}
       onEditorDidMount={handleEditorDidMount}
+      onCursorPositionChanged={handleCursorPositionChanged}
       showMinimap={settings['editor.minimap.show']}
       wordWrap={settings['editor.wordwrap']}
       lineNumbers={settings['editor.linenumbers.show']}

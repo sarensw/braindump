@@ -7,6 +7,7 @@ import { set as setPage } from './store/storeApp'
 import Icon from './components/elements/Icon'
 import { useAppSelector } from './hooks'
 import { getMenuTemplate } from './services/contextMenuService'
+import Breadcrumb from './components/Breadcrumb'
 
 const App = _ => {
   const dispatch = useDispatch()
@@ -31,7 +32,7 @@ const App = _ => {
         className='w-screen h-screen bg-red-400 grid overflow-hidden' style={{
           backgroundColor: colors.editor.background,
           gridTemplateColumns: '[shell] minmax(0, 1fr)',
-          gridTemplateRows: '[title] 28px [container] minmax(0, 1fr)'
+          gridTemplateRows: '[title] 28px [breadcrumb] minmax(0, 1.4rem) [container] minmax(0, 1fr)'
         }}
       >
         <div
@@ -47,9 +48,6 @@ const App = _ => {
           <div />
           <div className='text-center text-base select-none self-center'>Braindump</div>
           <div className='flex flex-row justify-end gap-2 pr-2'>
-            <button className='cursor-pointer' onClick={() => changeActivePage('files')}>
-              <Icon icon='home' />
-            </button>
             <button className='cursor-pointer' onClick={() => changeActivePage('editor')}>
               <Icon icon='notepad' />
             </button>
@@ -58,6 +56,7 @@ const App = _ => {
             </button>
           </div>
         </div>
+        <Breadcrumb />
         <PageContainer />
       </div>
     </>

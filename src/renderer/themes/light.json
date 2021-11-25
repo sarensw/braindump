@@ -55,6 +55,15 @@
     "foreground": "black"
   },
 
+  "breadcrumb": {
+    "background": "#f6f8fa",
+    "homeBackground": "#fb8f44",
+    "homeForeground": "#fff",
+    "pathBackground": "transparent",
+    "pathForeground": "transparent",
+    "pathTriangleForeground": "#666"
+  },
+
   "tabs": {
     "background": "#f6f8fa"
   },

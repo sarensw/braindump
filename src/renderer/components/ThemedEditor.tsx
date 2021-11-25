@@ -13,12 +13,13 @@ interface ThemedEditorProps {
   initialText?: string
   onTextChanged?: (text: string, changes: monaco.editor.IModelContentChange[]) => void
   onEditorDidMount?: (codeEditor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => Promise<void>
+  onCursorPositionChanged?: (event: monaco.editor.ICursorPositionChangedEvent, textModel: monaco.editor.ITextModel | null) => void
   showMinimap: boolean
   wordWrap?: boolean
   lineNumbers?: boolean
 }
 
-export const ThemedEditor = ({ language, path, initialText = '', onTextChanged = () => {}, onEditorDidMount = async () => {}, showMinimap = false, wordWrap = true, lineNumbers = true }: ThemedEditorProps): ReactElement => {
+export const ThemedEditor = ({ language, path, initialText = '', onTextChanged = () => {}, onEditorDidMount = async () => {}, onCursorPositionChanged = () => {}, showMinimap = false, wordWrap = true, lineNumbers = true }: ThemedEditorProps): ReactElement => {
   const theme = useAppSelector(state => state.themeNew.colors)
   const monaco = useMonaco()
   const editor = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
@@ -101,6 +102,9 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
     log.debug('monaco mounted')
     editor.current = codeEditor
     changeTheme(theme, monaco)
+
+    // report changed cursor position
+    codeEditor.onDidChangeCursorPosition(event => onCursorPositionChanged(event, editor.current?.getModel() ?? null))
 
     // call parent component
     await onEditorDidMount(codeEditor, monaco)
