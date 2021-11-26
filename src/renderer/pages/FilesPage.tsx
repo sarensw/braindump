@@ -2,6 +2,7 @@ import React, { ReactElement, useState, useEffect } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
+import { setLastUsedFile } from '../services/fileService'
 import { set } from '../store/storeApp'
 import { setCurrentHeaders } from '../store/storeEditor'
 import { setCurrentFile } from '../store/storeFiles'
@@ -37,6 +38,7 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
     event.preventDefault()
     dispatch(set('editor'))
     dispatch(setCurrentFile(selected))
+    setLastUsedFile(selected).then(() => {}, () => {})
   }, [selected])
 
   return (

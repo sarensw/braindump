@@ -66,6 +66,25 @@ async function createNewFile (): Promise<void> {
   })
 }
 
+async function setLastUsedFile (id: string): Promise<void> {
+  store.dispatch(setCurrentFile(id))
+
+  const state = store.getState()
+  if (state.files.files === null) return
+  const newFiles = {
+    files: state.files.files,
+    lastUsed: state.files.current,
+    count: state.files.count
+  }
+  window.__preload.send({
+    channel: 'file/write',
+    payload: {
+      path: PATH_FILE_FILES,
+      text: JSON.stringify(newFiles, null, 2)
+    }
+  })
+}
+
 async function setFileName (path: string, name: string): Promise<void> {
   store.dispatch(setName({
     path,
@@ -214,4 +233,4 @@ async function closeFile (id: string): Promise<void> {
   })
 }
 
-export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setFileName }
+export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setFileName, setLastUsedFile }
