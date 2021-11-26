@@ -18,7 +18,7 @@ const Breadcrumb = (): ReactElement => {
 
   return (
     <div
-      className='flex flex-row border-b h-full items-center'
+      className='flex flex-row border-b h-full items-center whitespace-nowrap'
       style={{
         background: colors.breadcrumb.background ?? '#fff'
       }}

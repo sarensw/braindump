@@ -75,10 +75,10 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
       let headers: string[] | null = null
       while (line > 0) {
         const lineContent = textModel.getLineContent(line)
-        if (lineContent.match(/^# .*/) !== null) {
+        if (lineContent.match(/^#{1,6} .*/) !== null) {
           if (headers === null) headers = new Array<string>()
-          headers.push(lineContent)
-          break
+          headers.unshift(lineContent.substr(lineContent.indexOf(' ') + 1))
+          if (lineContent.match(/^# .*/) !== null) break
         }
         line--
       }

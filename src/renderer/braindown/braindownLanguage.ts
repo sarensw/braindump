@@ -46,7 +46,7 @@ class BraindownLanguage {
     const provider = this.monaco.languages.setMonarchTokensProvider('braindown', {
       tokenizer: {
         root: [
-          [/^# .*/, 'header'],
+          [/^#{1,6} .*/, 'header'],
           [/[\w\d.]+@[\w\d.]+/, 'email'],
           [/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/, 'link'],
           [/@[\w\d]+/, 'user'],
@@ -146,26 +146,43 @@ class BraindownLanguage {
     const provider = this.monaco.languages.registerFoldingRangeProvider('braindown', {
       provideFoldingRanges: (model, context, token) => {
         const ranges = new Array<any>()
-        let start = -1
+
+        // this array counts the lines for the header levels
+        // index 0 is level 0 which contains all lines without a header
+        // index 1 is level 1 which are all lines for the first header level... and so on
+        const start = [-1, -1, -1, -1, -1, -1, -1]
+
         const lines = model.getLinesContent()
         const linesCount = lines.length
         lines.forEach((line, i) => {
-          if (line.startsWith('#')) {
-            if (start >= 0) {
-              ranges.push({
-                start: start + 1,
-                end: i,
-                kind: this.monaco.languages.FoldingRangeKind.Region
-              })
+          if (line.match(/^#{1,6} .*/) !== null) {
+            // ## 2nd
+            const level = line.indexOf(' ')
+            // level = 2
+            for (let j = start.length - 1; j >= level; j--) {
+              // j = 6
+              if (start[j] >= 0) {
+                ranges.push({
+                  start: start[j] + 1,
+                  end: i,
+                  kind: this.monaco.languages.FoldingRangeKind.Region
+                })
+              }
             }
-            start = i
+            start[level] = i
           }
-          if (linesCount - 1 === i && start >= 0) {
-            ranges.push({
-              start: start + 1,
-              end: i + 1,
-              kind: this.monaco.languages.FoldingRangeKind.Region
-            })
+          console.log(start)
+
+          if (linesCount - 1 === i) {
+            for (let j = 0; j < start.length; j++) {
+              if (start[j] >= 0) {
+                ranges.push({
+                  start: start[j] + 1,
+                  end: i + 1,
+                  kind: this.monaco.languages.FoldingRangeKind.Region
+                })
+              }
+            }
           }
         })
         return ranges
