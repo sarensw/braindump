@@ -171,7 +171,6 @@ class BraindownLanguage {
             }
             start[level] = i
           }
-          console.log(start)
 
           if (linesCount - 1 === i) {
             for (let j = 0; j < start.length; j++) {
