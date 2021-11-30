@@ -69,6 +69,7 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
         lineNumber: position.line,
         column: position.column
       })
+      codeEditor.revealLineInCenterIfOutsideViewport(position.line)
 
       // set the focus to the editor
       codeEditor.focus()
