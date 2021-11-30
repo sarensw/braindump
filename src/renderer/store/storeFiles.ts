@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { SharedFile } from '../../shared/types'
+import type { Positionable } from '../common/cursorPosition'
 import { File } from './files/file'
 
 interface SerializableFile extends SharedFile {
   loaded: boolean
   text: string
+  position: Positionable
 }
 
 interface FilesState {
@@ -86,9 +88,15 @@ export const filesSlice = createSlice({
     },
     cleanDirtyText: (state) => {
       state.dirty = false
+    },
+    setLastCursorPosition: (state, action: PayloadAction<Positionable>) => {
+      const i = state.files?.findIndex(f => f.id === state.current)
+      if (i !== undefined && state.files !== null) {
+        state.files[i].position = action.payload
+      }
     }
   }
 })
 
-export const { setFiles, addFile, closeFile, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText } = filesSlice.actions
+export const { setFiles, addFile, closeFile, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition } = filesSlice.actions
 export default filesSlice.reducer

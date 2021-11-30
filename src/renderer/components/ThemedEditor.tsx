@@ -12,14 +12,15 @@ interface ThemedEditorProps {
   path: string
   initialText?: string
   onTextChanged?: (text: string, changes: monaco.editor.IModelContentChange[]) => void
-  onEditorDidMount?: (codeEditor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => Promise<void>
+  onEditorDidMount?: (codeEditor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => void
+  onLoaded?: (codeEditor: monaco.editor.IStandaloneCodeEditor) => void
   onCursorPositionChanged?: (event: monaco.editor.ICursorPositionChangedEvent, textModel: monaco.editor.ITextModel | null) => void
   showMinimap: boolean
   wordWrap?: boolean
   lineNumbers?: boolean
 }
 
-export const ThemedEditor = ({ language, path, initialText = '', onTextChanged = () => {}, onEditorDidMount = async () => {}, onCursorPositionChanged = () => {}, showMinimap = false, wordWrap = true, lineNumbers = true }: ThemedEditorProps): ReactElement => {
+export const ThemedEditor = ({ language, path, initialText = '', onTextChanged = () => {}, onEditorDidMount = () => {}, onLoaded = () => {}, onCursorPositionChanged = () => {}, showMinimap = false, wordWrap = true, lineNumbers = true }: ThemedEditorProps): ReactElement => {
   const theme = useAppSelector(state => state.themeNew.colors)
   const monaco = useMonaco()
   const editor = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
@@ -93,12 +94,14 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
         log.debug(`model for ${path} loaded already`)
         editor.current?.setModel(monaco.editor.getModels()[i])
       }
+
+      if (editor.current !== null) onLoaded(editor.current)
     } else {
       log.debug('monaco is not yet initialized')
     }
   }
 
-  async function handleEditorDidMount (codeEditor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco): Promise<void> {
+  function handleEditorDidMount (codeEditor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco): void {
     log.debug('monaco mounted')
     editor.current = codeEditor
     changeTheme(theme, monaco)
@@ -107,7 +110,7 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
     codeEditor.onDidChangeCursorPosition(event => onCursorPositionChanged(event, editor.current?.getModel() ?? null))
 
     // call parent component
-    await onEditorDidMount(codeEditor, monaco)
+    onEditorDidMount(codeEditor, monaco)
   }
 
   const modelChanged = (value: string, ev: monaco.editor.IModelContentChangedEvent): void => {

@@ -6,4 +6,8 @@ export class File implements SharedFile {
   path: string
   loaded: boolean
   text: string
+  position: {
+    line: number
+    column: number
+  }
 }

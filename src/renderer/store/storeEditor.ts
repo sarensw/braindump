@@ -1,12 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit'
-
-interface CursorPosition {
-  line: number
-  column: number
-}
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Positionable } from '../common/cursorPosition'
 
 interface EditorState {
-  currentCursorPosition: CursorPosition
+  currentCursorPosition: Positionable
   currentHeaders: string[] | null
 }
 
@@ -19,7 +15,7 @@ export const editorSlice = createSlice({
   name: 'search',
   initialState,
   reducers: {
-    setCursorPosition: (state, action) => {
+    setCursorPosition: (state, action: PayloadAction<Positionable>) => {
       state.currentCursorPosition = action.payload
     },
     setCurrentHeaders: (state, action) => {

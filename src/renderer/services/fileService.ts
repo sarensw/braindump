@@ -4,6 +4,7 @@ import { File } from '../store/files/file'
 import { setFiles, closeFile as closeFileInStore, setCurrentFile, cleanDirtyText, setCount, addFile, setName } from '../store/storeFiles'
 import { randomString } from './utilitiesService'
 import { v4 as uuidv4 } from 'uuid'
+import { CursorPosition } from '../common/cursorPosition'
 
 const id = randomString(4)
 const timerInterval = 2000
@@ -30,7 +31,11 @@ async function createNewFile (): Promise<void> {
     name: `<dump ${counter}>`,
     path: newFileName,
     loaded: false,
-    text: `<dump ${counter}> // <- change the title here`
+    text: `<dump ${counter}> // <- change the title here`,
+    position: {
+      line: 0,
+      column: 0
+    }
   }
 
   window.__preload.send({
@@ -233,4 +238,37 @@ async function closeFile (id: string): Promise<void> {
   })
 }
 
-export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setFileName, setLastUsedFile }
+function getCursorPosition (id: string | null): CursorPosition {
+  if (id === null) return new CursorPosition(0, 0)
+
+  log.debug(`get cursor position for file ${id}`)
+  const state = store.getState()
+  if (state !== undefined) {
+    const file = state.files.files?.find(f => f.id === id)
+
+    if (file?.position !== undefined) {
+      return file.position
+    }
+  }
+  return new CursorPosition(0, 0)
+}
+
+function persist (): void {
+  const state = store.getState()
+
+  const newFiles = {
+    files: state.files.files,
+    lastUsed: state.files.current,
+    count: state.files.count
+  }
+
+  window.__preload.send({
+    channel: 'file/write',
+    payload: {
+      path: PATH_FILE_FILES,
+      text: JSON.stringify(newFiles, null, 2)
+    }
+  })
+}
+
+export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setFileName, setLastUsedFile, getCursorPosition, persist }
