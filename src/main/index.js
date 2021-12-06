@@ -5,6 +5,7 @@ import path from 'path'
 import log from 'electron-log'
 import { SettingsFile } from './settings'
 import { FileSystem } from './fs'
+import { FileSystem as DemoFileSystem } from './demo/demoFileService'
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
 import { Menu } from 'electron/main'
 
@@ -26,19 +27,32 @@ log.debug(app.getPath('userData'))
 let mainWindow
 const settings = new SettingsFile()
 const fileSystem = new FileSystem()
+const demoFileSystem = new DemoFileSystem()
 
 function createMainWindow () {
-  const window = new BrowserWindow({
+  const windowOptions = {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false
     },
-    titleBarStyle: 'hidden'
+    titleBarStyle: 'hidden',
+    show: false
+  }
+  if (process.env.BRAINDUMP_DEMO_MODE === 'true') {
+    windowOptions.width = 800
+    windowOptions.height = 576
+    windowOptions.center = true
+  }
+  const window = new BrowserWindow(windowOptions)
+
+  window.on('ready-to-show', () => {
+    window.webContents.setZoomFactor(1.1)
+    window.show()
   })
 
-  if (process.env.MODE !== 'production') {
+  if (process.env.MODE !== 'production' && process.env.BRAINDUMP_DEMO_MODE !== 'true') {
     window.webContents.openDevTools()
   }
 
@@ -124,12 +138,21 @@ ipcMain.handle('saveSettings', async (event, someArgument) => {
 })
 
 ipcMain.handle('file/read', async (event, args) => {
-  const content = await fileSystem.read(args.path)
-  return content
+  if (process.env.BRAINDUMP_DEMO_MODE === 'true') {
+    const content = await demoFileSystem.read(args.path)
+    return content
+  } else {
+    const content = await fileSystem.read(args.path)
+    return content
+  }
 })
 
 ipcMain.on('file/write', async (event, args) => {
-  await fileSystem.write(args.path, args.text)
+  if (process.env.BRAINDUMP_DEMO_MODE === 'true') {
+    await demoFileSystem.write(args.path, args.text)
+  } else {
+    await fileSystem.write(args.path, args.text)
+  }
 })
 
 ipcMain.on('menu/context', (event, template) => {
