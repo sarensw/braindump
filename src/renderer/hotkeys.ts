@@ -1,10 +1,12 @@
 import log from './log'
+import * as monaco from 'monaco-editor'
 import { store } from './store'
 import { flushFile, closeFile, createNewFile, loadFiles } from './services/fileService'
 
 const keyHandlers = {
   'cmd+t': handleOpenNewTab,
-  'cmd+w': handleCloseActiveTab
+  'cmd+w': handleCloseActiveTab,
+  'ctrl+1': handleToggleTask
 }
 const keys = [
   'cmd+p',
@@ -12,7 +14,7 @@ const keys = [
   'cmd+w'
 ].join(',')
 
-function handleKeyDownEvent (event: KeyboardEvent, source: string): void {
+function handleKeyDownEvent (event: KeyboardEvent, source: string, codeEditor: monaco.editor.IStandaloneCodeEditor): void {
   log.debug(`handle keydown event from ${source}`)
   let prefix: string = ''
   if (event.ctrlKey) prefix += 'ctrl+'
@@ -20,14 +22,14 @@ function handleKeyDownEvent (event: KeyboardEvent, source: string): void {
   if (event.metaKey) prefix += 'cmd+'
   const hk = prefix + event.key
   log.debug(`hotkey found ${hk}`)
-  handleHotkeys(event, hk, source)
+  handleHotkeys(event, hk, source, codeEditor)
 }
 
-function handleHotkeys (event: KeyboardEvent, hotkey: string, source: string): void {
+function handleHotkeys (event: KeyboardEvent, hotkey: string, source: string, codeEditor: monaco.editor.IStandaloneCodeEditor): void {
   if (keyHandlers[hotkey] !== undefined) {
     event.preventDefault()
     log.debug(`Catched ${hotkey} from ${source}`)
-    keyHandlers[hotkey]()
+    keyHandlers[hotkey](codeEditor)
   }
 }
 
@@ -44,6 +46,56 @@ async function handleCloseActiveTab (): Promise<void> {
   const state = store.getState()
   if (state.files.current !== null) {
     await closeFile(state.files.current)
+  }
+}
+
+function handleToggleTask (codeEditor: monaco.editor.IStandaloneCodeEditor): void {
+  log.debug('toggle task')
+  const model = codeEditor.getModel()
+
+  const startLineNumber = codeEditor.getSelection()?.startLineNumber
+  const endLineNumber = codeEditor.getSelection()?.endLineNumber
+
+  if (startLineNumber === undefined || endLineNumber === undefined) return
+
+  // loop through all lines and toggle all found tasks
+  for (let lineNumber = startLineNumber; lineNumber <= endLineNumber; lineNumber++) {
+    const line = model?.getLineContent(lineNumber)
+
+    if (line === undefined) return
+
+    // check if that line has a task
+    if (line.includes('[ ]')) {
+      const pos = line.indexOf('[ ]')
+      model?.pushEditOperations(
+        [],
+        [{
+          range: {
+            startLineNumber: lineNumber,
+            startColumn: pos + 1,
+            endLineNumber: lineNumber,
+            endColumn: pos + 4
+          },
+          text: '[x]'
+        }],
+        () => null
+      )
+    } else if (line.includes('[x]')) {
+      const pos = line.indexOf('[x]')
+      model?.pushEditOperations(
+        [],
+        [{
+          range: {
+            startLineNumber: lineNumber,
+            startColumn: pos + 1,
+            endLineNumber: lineNumber,
+            endColumn: pos + 4
+          },
+          text: '[ ]'
+        }],
+        () => null
+      )
+    }
   }
 }
 

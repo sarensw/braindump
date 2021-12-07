@@ -52,7 +52,7 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
       braindown.current?.handleInput(text)
     })
     codeEditor.onKeyDown((event) => {
-      handleKeyDownEvent(event.browserEvent, 'monaco')
+      handleKeyDownEvent(event.browserEvent, 'monaco', codeEditor)
     })
   }
 
