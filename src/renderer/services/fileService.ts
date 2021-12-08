@@ -5,6 +5,7 @@ import { setFiles, closeFile as closeFileInStore, setCurrentFile, cleanDirtyText
 import { randomString } from './utilitiesService'
 import { v4 as uuidv4 } from 'uuid'
 import { CursorPosition } from '../common/cursorPosition'
+import dateFormat from 'dateformat'
 
 const id = randomString(4)
 const timerInterval = 2000
@@ -23,15 +24,17 @@ async function createNewFile (): Promise<void> {
   const counter = files.count + 1
 
   // create a new dump
-  const newFileName = `dump_${counter}_${Date.now()}`
+  const newFilePath = `dump_${counter}_${Date.now()}`
+  const currentDateTime = dateFormat(new Date(), 'yyyy-mm-dd_HH:MM:ss') as string
+  const newFileName = `${currentDateTime} (dump ${counter})`
   const newFileId = uuidv4()
 
   const file: File = {
     id: newFileId,
-    name: `<dump ${counter}>`,
-    path: newFileName,
+    name: newFileName,
+    path: newFilePath,
     loaded: false,
-    text: `<dump ${counter}> // <- change the title here`,
+    text: '',
     position: {
       line: 0,
       column: 0

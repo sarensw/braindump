@@ -10,7 +10,7 @@ import { setDirtyText, setLastCursorPosition } from '../store/storeFiles'
 import { setCurrentHeaders, setCursorPosition } from '../store/storeEditor'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
-import { getCursorPosition, persist, setFileName } from '../services/fileService'
+import { getCursorPosition, persist } from '../services/fileService'
 import { Positionable } from '../common/cursorPosition'
 
 interface BraindownEditorProps {
@@ -77,17 +77,6 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
   }
 
   async function textChanged (text: string, changes: monaco.editor.IModelContentChange[]): Promise<void> {
-    // check if the first line of the text has changed, in this case
-    // the title/name of the file changed, so the file itself has to
-    // be updated
-    for (const change of changes) {
-      if (change.range.startLineNumber === 1) {
-        const name = text.split('\n', 1)[0]
-        await setFileName(path, name)
-        break
-      }
-    }
-
     // text changed, flag the text dirty for being saved later
     dispatch(setDirtyText(text))
   }

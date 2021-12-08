@@ -64,12 +64,7 @@ export const filesSlice = createSlice({
     },
     setName: (state, action: PayloadAction<FileNameUpdate>) => {
       if (state.files === null) return
-      let name = action.payload.name
-      const regex = new RegExp(/#* *([<>.,;:'"\w ]*) *(\/{2,})?/g)
-      const match = regex.exec(name)
-      if (match !== null) {
-        name = match[1]
-      }
+      const name = action.payload.name
       const i = state.files.findIndex(f => f.path === action.payload.path)
       state.files[i].name = name
     },

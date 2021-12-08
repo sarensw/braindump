@@ -2,10 +2,12 @@ import log from './log'
 import * as monaco from 'monaco-editor'
 import { store } from './store'
 import { flushFile, closeFile, createNewFile, loadFiles } from './services/fileService'
+import { setFocusElement } from './store/storeApp'
 
 const keyHandlers = {
   'cmd+t': handleOpenNewTab,
   'cmd+w': handleCloseActiveTab,
+  'ctrl+n': handleChangeName,
   'ctrl+1': handleToggleTask
 }
 const keys = [
@@ -47,6 +49,10 @@ async function handleCloseActiveTab (): Promise<void> {
   if (state.files.current !== null) {
     await closeFile(state.files.current)
   }
+}
+
+function handleChangeName (): void {
+  store.dispatch(setFocusElement('fileName'))
 }
 
 function handleToggleTask (codeEditor: monaco.editor.IStandaloneCodeEditor): void {
