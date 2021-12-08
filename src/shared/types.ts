@@ -14,6 +14,7 @@ export interface Settings {
   'editor.minimap.show': boolean
   'editor.linenumbers.show': boolean
   'editor.wordwrap': boolean
+  'tabs.show': boolean
 }
 
 export interface Snippet {

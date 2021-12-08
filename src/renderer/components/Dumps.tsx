@@ -50,7 +50,8 @@ const Dumps = (): ReactElement => {
         className='grid max-w-full w-full'
         style={{
           backgroundColor: colors.tabs.background,
-          gridTemplateColumns: 'minmax(0, 1fr) 26px'
+          gridTemplateColumns: 'minmax(0, 1fr) 26px',
+          minHeight: '2.4rem'
         }}
       >
         <ul ref={scrollContainer} role='tablist' className='flex flex-nowrap  overflow-x-scroll tablist' onWheel={onWheel}>

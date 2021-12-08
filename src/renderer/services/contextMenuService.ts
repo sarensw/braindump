@@ -35,6 +35,17 @@ function getAppContextMenu (): any {
   const settings = store.getState().settings
   const menu = [
     {
+      id: 'menu-tabs',
+      label: 'Show Tabs',
+      type: 'checkbox',
+      checked: settings['tabs.show'],
+      click: async () => {
+        store.dispatch(toggle({ id: 'tabs.show' }))
+        await saveSettings()
+      }
+    },
+    { type: 'separator' },
+    {
       id: 'menu-editor-minimap',
       label: 'Show Minimap',
       type: 'checkbox',

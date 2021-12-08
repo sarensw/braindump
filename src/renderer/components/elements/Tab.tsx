@@ -17,7 +17,7 @@ const NewTab = styled.li<{ active: boolean }>`
   /* display: inline-flex; */
   flex: 0 0 auto;
   align-items: center;
-  padding: 1rem;
+  padding: 0.4rem;
   padding-left: 1rem;
   padding-right: 0.6rem;
   cursor: pointer;

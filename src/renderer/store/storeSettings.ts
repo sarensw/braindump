@@ -18,7 +18,8 @@ const initialState: Settings = {
   'app.theme': getDefaultValue<string>('app.theme') ?? '',
   'editor.minimap.show': getDefaultValue<boolean>('editor.minimap.show') ?? false,
   'editor.linenumbers.show': getDefaultValue<boolean>('editor.linenumber.show') ?? true,
-  'editor.wordwrap': getDefaultValue<boolean>('editor.wordwrap') ?? true
+  'editor.wordwrap': getDefaultValue<boolean>('editor.wordwrap') ?? true,
+  'tabs.show': getDefaultValue<boolean>('tabs.show') ?? true
 }
 
 export const configSlice = createSlice({

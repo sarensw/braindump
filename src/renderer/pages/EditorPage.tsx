@@ -16,6 +16,7 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
   const [name, setName] = useState('')
   const files = useAppSelector(state => state.files)
   const focusElement = useAppSelector(state => state.app.focusElement)
+  const settings = useAppSelector(state => state.settings)
 
   useAsyncEffect(async () => {
     if (files.current !== null) {
@@ -58,11 +59,14 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
       <div
         className='grid h-full'
         style={{
-          gridTemplateRows: '[header] 2.4rem [name] auto [main] minmax(0, 1fr)',
+          gridTemplateRows: '[header] auto [name] auto [main] minmax(0, 1fr)',
           gridTemplateColumns: 'minmax(0, 1fr)'
         }}
       >
-        <Dumps />
+        <div>
+          {settings['tabs.show'] &&
+            <Dumps />}
+        </div>
 
         <div className='flex flex-row p-4 text-xl font-mono'>
           <input ref={el => { refFileNameInput = el }} className='flex-grow' type='text' value={name} onChange={handleNameChange} />
