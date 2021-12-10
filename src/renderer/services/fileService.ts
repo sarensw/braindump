@@ -25,7 +25,7 @@ async function createNewFile (): Promise<void> {
 
   // create a new dump
   const newFilePath = `dump_${counter}_${Date.now()}`
-  const currentDateTime = dateFormat(new Date(), 'yyyy-mm-dd_HH:MM:ss') as string
+  const currentDateTime = dateFormat(new Date(), 'yyyy-mm-dd_HH:MM:ss')
   const newFileName = `${currentDateTime} (dump ${counter})`
   const newFileId = uuidv4()
 

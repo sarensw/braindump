@@ -18,6 +18,7 @@ export interface ITheme {
   foreground?: string
   editor: {
     background?: string
+    foreground?: string
   }
   editorTokens: IEditorTokens
   button: {
@@ -40,12 +41,8 @@ export interface ITheme {
     foreground?: string
   }
   breadcrumb: {
-    background: string
-    homeBackground: string
-    homeForeground: string
     pathBackground: string
     pathForeground: string
-    pathTriangleForeground: string
   }
   tabs: {
     background?: string

@@ -1,9 +1,10 @@
 {
-  "background": "#ffffff",
-  "foreground": "#24292f",
+  "background": "#fdfdfd",
+  "foreground": "#373530",
 
   "editor": {
-    "background": "#ffffff"
+    "background": "#fdfdfd",
+    "foreground": "#373530"
   },
 
   "editorTokens": {
@@ -56,25 +57,21 @@
   },
 
   "breadcrumb": {
-    "background": "#f6f8fa",
-    "homeBackground": "#fb8f44",
-    "homeForeground": "#fff",
     "pathBackground": "transparent",
-    "pathForeground": "transparent",
-    "pathTriangleForeground": "#666"
+    "pathForeground": "#797873"
   },
 
   "tabs": {
-    "background": "#f6f8fa"
+    "background": "#fdfdfd"
   },
   "tab": {
     "border": "black",
-    "activeBackground": "#ffffff",
+    "activeBackground": "#fdfdfd",
     "activeBorder": "#ffffff",
     "activeBorderTop": "#fb8f44",
     "activeBorderBottom": "#ffffff",
     "activeForeground": "#24292f",
-    "inactiveBackground": "#f6f8fa",
+    "inactiveBackground": "#fdfdfd",
     "inactiveBorder": "white",
     "inactiveBorderTop": "black",
     "inactiveBorderBottom": "black",
@@ -91,8 +88,7 @@
   },
 
   "titleBar": {
-    "activeBackground": "#f6f8fa",
-    "activeForeground": "black",
-    "borderBottom": "#d0d7de"
+    "activeBackground": "#fdfdfd",
+    "activeForeground": "#3d3f42"
   }
 }

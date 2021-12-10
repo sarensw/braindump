@@ -7,7 +7,7 @@ import { BraindownLanguage } from '../braindown/braindownLanguage'
 import { run as extensionsRun } from '../extensions/extensions'
 import { handleKeyDownEvent } from '../hotkeys'
 import { setDirtyText, setLastCursorPosition } from '../store/storeFiles'
-import { setCurrentHeaders, setCursorPosition } from '../store/storeEditor'
+import { setCurrentHeaders, setCursorPosition, setDecorationsSizes } from '../store/storeEditor'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
 import { getCursorPosition, persist } from '../services/fileService'
@@ -53,6 +53,20 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
     })
     codeEditor.onKeyDown((event) => {
       handleKeyDownEvent(event.browserEvent, 'monaco', codeEditor)
+    })
+
+    // get the initial layout and make sure that we get notified
+    // about layout updates
+    const layoutInfo = codeEditor.getLayoutInfo()
+    dispatch(setDecorationsSizes({
+      decorationsLeft: layoutInfo.decorationsLeft,
+      decorationsWidth: layoutInfo.decorationsWidth
+    }))
+    codeEditor.onDidLayoutChange((event) => {
+      dispatch(setDecorationsSizes({
+        decorationsLeft: event.decorationsLeft,
+        decorationsWidth: event.decorationsWidth
+      }))
     })
   }
 

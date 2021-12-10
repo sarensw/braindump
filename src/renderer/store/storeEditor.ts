@@ -4,11 +4,15 @@ import { Positionable } from '../common/cursorPosition'
 interface EditorState {
   currentCursorPosition: Positionable
   currentHeaders: string[] | null
+  decorationsLeft: number
+  decorationsWidth: number
 }
 
 const initialState: EditorState = {
   currentCursorPosition: { line: 0, column: 0 },
-  currentHeaders: null
+  currentHeaders: null,
+  decorationsLeft: 0,
+  decorationsWidth: 0
 }
 
 export const editorSlice = createSlice({
@@ -20,9 +24,13 @@ export const editorSlice = createSlice({
     },
     setCurrentHeaders: (state, action) => {
       state.currentHeaders = action.payload
+    },
+    setDecorationsSizes: (state, action) => {
+      state.decorationsLeft = action.payload.decorationsLeft
+      state.decorationsWidth = action.payload.decorationsWidth
     }
   }
 })
 
-export const { setCursorPosition, setCurrentHeaders } = editorSlice.actions
+export const { setCursorPosition, setCurrentHeaders, setDecorationsSizes } = editorSlice.actions
 export default editorSlice.reducer

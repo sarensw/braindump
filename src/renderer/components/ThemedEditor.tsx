@@ -35,7 +35,7 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
       log.debug('monaco loaded')
       changeTheme(theme, monaco)
     }
-  }, [theme])
+  }, [])
 
   useAsyncEffect(async () => {
     await load(path, monaco)
@@ -57,7 +57,7 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
       rules.push({ token: 'taskOpen', foreground: theme.editorTokens.taskOpen.foreground, fontStyle: theme.editorTokens.taskOpen.fontStyle })
       rules.push({ token: 'taskDone', foreground: theme.editorTokens.taskDone.foreground, fontStyle: theme.editorTokens.taskDone.fontStyle })
       rules.push({ token: 'keyword', foreground: theme.editorTokens.keyword.foreground, fontStyle: theme.editorTokens.keyword.fontStyle })
-      rules.push({ token: '', background: theme.editor.background })
+      rules.push({ token: '', foreground: theme.editor.foreground, background: theme.editor.background })
       const themeData: monaco.editor.IStandaloneThemeData = {
         base: 'vs', // can also be vs-dark or hc-black
         inherit: false, // can also be false to completely replace the builtin rules
