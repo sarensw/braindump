@@ -10,6 +10,7 @@ import Page from './Page'
 
 const FilesPage: React.FunctionComponent = (): ReactElement => {
   const files = useAppSelector(state => state.files)
+  const colors = useAppSelector(state => state.themeNew.colors)
   const [selected, setSelected] = useState<string | null>(files.current)
   const dispatch = useDispatch()
 
@@ -43,15 +44,21 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
 
   return (
     <Page>
-      <ul>
-        {files.files?.map((file, index) => {
-          if (file.id === selected) {
-            return <li key={index} className='bg-green-200'>{file.name}</li>
-          } else {
-            return <li key={index}>{file.name}</li>
-          }
-        })}
-      </ul>
+      <div
+        className='mt-2 font-mono'
+        style={{
+        }}
+      >
+        <ul>
+          {files.files?.map((file, index) => {
+            if (file.id === selected) {
+              return <li key={index} className='h-6 flex flex-row items-center' style={{ paddingLeft: '26px', background: colors.files.selectedForeground }}>{file.name}</li>
+            } else {
+              return <li key={index} className='h-6 flex flex-row items-center' style={{ paddingLeft: '26px' }}>{file.name}</li>
+            }
+          })}
+        </ul>
+      </div>
     </Page>
   )
 }

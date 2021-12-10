@@ -2,6 +2,10 @@
   "background": "#fdfdfd",
   "foreground": "#373530",
 
+  "files": {
+    "selectedForeground": "#a4dffd"
+  },
+
   "editor": {
     "background": "#fdfdfd",
     "foreground": "#373530"
