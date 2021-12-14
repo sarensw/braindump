@@ -41,8 +41,8 @@ function createMainWindow () {
     show: false
   }
   if (process.env.BRAINDUMP_DEMO_MODE === 'true') {
-    windowOptions.width = 800
-    windowOptions.height = 576
+    windowOptions.width = 640
+    windowOptions.height = 480
     windowOptions.center = true
   }
   const window = new BrowserWindow(windowOptions)

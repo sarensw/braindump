@@ -4,7 +4,7 @@ let files: any = {
   files: [
     {
       id: '9302cbcb-55e4-4222-aee0-56af0c23524f',
-      name: '2021',
+      name: 'First Note',
       path: '/Users/sarensw/Library/Application Support/Electron/dump_1',
       position: {
         line: 0,
@@ -16,7 +16,7 @@ let files: any = {
   count: 1
 }
 const contents: any = {
-  '/Users/sarensw/Library/Application Support/Electron/dump_1': '2021\n'
+  '/Users/sarensw/Library/Application Support/Electron/dump_1': 'Welcome to Braindump\n'
 }
 const snippets: any = [
   {
