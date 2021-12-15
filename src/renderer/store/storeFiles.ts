@@ -89,9 +89,35 @@ export const filesSlice = createSlice({
       if (i !== undefined && state.files !== null) {
         state.files[i].position = action.payload
       }
+    },
+    moveFileUp: (state) => {
+      if (state === null || state.files === null || state.files === undefined) return
+
+      const i = state.files.findIndex(f => f.id === state.current)
+      const file = state.files[i]
+
+      if (i <= 0) return
+
+      const result = state.files
+      result[i] = result[i - 1]
+      result[i - 1] = file
+      state.files = result
+    },
+    moveFileDown: (state) => {
+      if (state === null || state.files === null || state.files === undefined) return
+
+      const i = state.files.findIndex(f => f.id === state.current)
+      const file = state.files[i]
+
+      if (i >= state.files.length - 1) return
+
+      const result = state.files
+      result[i] = result[i + 1]
+      result[i + 1] = file
+      state.files = result
     }
   }
 })
 
-export const { setFiles, addFile, closeFile, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition } = filesSlice.actions
+export const { setFiles, addFile, closeFile, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition, moveFileUp, moveFileDown } = filesSlice.actions
 export default filesSlice.reducer

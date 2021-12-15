@@ -1,11 +1,12 @@
 import log from '../log'
 import { store } from '../store'
 import { File } from '../store/files/file'
-import { setFiles, closeFile as closeFileInStore, setCurrentFile, cleanDirtyText, setCount, addFile, setName } from '../store/storeFiles'
+import { setFiles, closeFile as closeFileInStore, setCurrentFile, cleanDirtyText, setCount, addFile, setName, moveFileUp, moveFileDown } from '../store/storeFiles'
 import { randomString } from './utilitiesService'
 import { v4 as uuidv4 } from 'uuid'
 import { CursorPosition } from '../common/cursorPosition'
 import dateFormat from 'dateformat'
+import { Direction } from '../common/direction'
 
 const id = randomString(4)
 const timerInterval = 2000
@@ -256,6 +257,21 @@ function getCursorPosition (id: string | null): CursorPosition {
   return new CursorPosition(0, 0)
 }
 
+function moveFile (direction: Direction): void {
+  switch (direction) {
+    case Direction.Up:
+      store.dispatch(moveFileUp())
+      break
+    case Direction.Down:
+      store.dispatch(moveFileDown())
+      break
+    case Direction.Left:
+    case Direction.Right:
+      break
+  }
+  persist()
+}
+
 function persist (): void {
   const state = store.getState()
 
@@ -274,4 +290,4 @@ function persist (): void {
   })
 }
 
-export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setFileName, setLastUsedFile, getCursorPosition, persist }
+export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setFileName, setLastUsedFile, getCursorPosition, moveFile, persist }

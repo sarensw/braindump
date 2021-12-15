@@ -1,8 +1,9 @@
 import React, { ReactElement, useState, useEffect } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch } from 'react-redux'
+import { Direction } from '../common/direction'
 import { useAppSelector } from '../hooks'
-import { setLastUsedFile } from '../services/fileService'
+import { moveFile, setLastUsedFile } from '../services/fileService'
 import { set } from '../store/storeApp'
 import { setCurrentHeaders } from '../store/storeEditor'
 import { setCurrentFile } from '../store/storeFiles'
@@ -33,6 +34,11 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
       dispatch(setCurrentFile(newSelected))
     }
   }, [selected])
+
+  useHotkeys(['command+up', 'command+down'].join(','), (event) => {
+    if (event.key === 'ArrowUp') moveFile(Direction.Up)
+    if (event.key === 'ArrowDown') moveFile(Direction.Down)
+  })
 
   useHotkeys('enter', (event) => {
     if (selected === null) return
