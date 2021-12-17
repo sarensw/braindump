@@ -95,6 +95,12 @@ function getAppContextMenu (): any {
           checked: true
         }
       ]
+    },
+    { type: 'separator' },
+    {
+      label: '###version###',
+      type: 'normal',
+      enabled: false
     }
   ]
   return menu

@@ -166,6 +166,11 @@ ipcMain.on('menu/context', (event, template) => {
     const clickableItem = {
       ...item
     }
+
+    if (clickableItem.label === '###version###') {
+      clickableItem.label = 'Braindump v' + app.getVersion()
+    }
+
     if (clickableItem.submenu) {
       clickableItem.submenu = clickableItem.submenu.map(item => {
         return {
