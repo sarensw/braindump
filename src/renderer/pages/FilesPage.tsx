@@ -2,6 +2,7 @@ import React, { ReactElement, useState, useEffect } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch } from 'react-redux'
 import { Direction } from '../common/direction'
+import { FilesHeader } from '../components/FilesHeader'
 import { useAppSelector } from '../hooks'
 import { moveFile, setLastUsedFile } from '../services/fileService'
 import { set } from '../store/storeApp'
@@ -48,10 +49,15 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
     setLastUsedFile(selected).then(() => {}, () => {})
   }, [selected])
 
+  /* useHotkeys(['a'].join(','), (event) => {
+    dispatch(setFilesSearch(event.key))
+  }) */
+
   return (
     <Page>
+      <FilesHeader />
       <div
-        className='mt-2 font-mono'
+        className='mt-2'
         style={{
         }}
       >

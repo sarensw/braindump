@@ -137,6 +137,11 @@ ipcMain.handle('saveSettings', async (event, someArgument) => {
   await settings.write(someArgument)
 })
 
+ipcMain.handle('file/size', async (event, args) => {
+  const size = await fileSystem.size(args.path)
+  return size
+})
+
 ipcMain.handle('file/read', async (event, args) => {
   if (process.env.BRAINDUMP_DEMO_MODE === 'true') {
     const content = await demoFileSystem.read(args.path)

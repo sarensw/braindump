@@ -62,7 +62,10 @@ const App = _ => {
             </button>
           </div>
         </div>
-        <PageContainer />
+
+        <div className='font-mono'>
+          <PageContainer />
+        </div>
       </div>
     </>
   )

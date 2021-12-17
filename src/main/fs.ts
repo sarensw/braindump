@@ -25,6 +25,21 @@ export class FileSystem {
   }
 
   /**
+   * Gets the size in bytes of the given file
+   * @param path path to the file to measure
+   * @returns number of bytes of the given file
+   */
+  public async size (path: string): Promise<number> {
+    try {
+      const stats = await fs.stat(path)
+      const size = stats.size
+      return size
+    } catch (err) {
+      return 0
+    }
+  }
+
+  /**
    * Loads the content of a given file
    * @param path path to the file to load
    */

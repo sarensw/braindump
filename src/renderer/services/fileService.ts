@@ -19,6 +19,25 @@ function initializeFileService (): void {
   log.debug(`started timer in an interval of ${timerInterval}ms`, id)
 }
 
+async function calculateOverallFileSizes (): Promise<number> {
+  const files = store.getState().files.files
+
+  if (files === undefined || files === null) return 0
+
+  let size = 0
+  for (const file of files) {
+    const fileSize: number = await window.__preload.invoke({
+      channel: 'file/size',
+      payload: {
+        path: file.path
+      }
+    })
+    size += fileSize
+  }
+
+  return size
+}
+
 async function createNewFile (): Promise<void> {
   let state = store.getState()
   const files = state.files
@@ -290,4 +309,4 @@ function persist (): void {
   })
 }
 
-export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setFileName, setLastUsedFile, getCursorPosition, moveFile, persist }
+export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setFileName, setLastUsedFile, getCursorPosition, moveFile, persist, calculateOverallFileSizes }

@@ -12,6 +12,8 @@ interface SerializableFile extends SharedFile {
 interface FilesState {
   current: string | null
   files: SerializableFile[] | null
+  filesSize: number
+  filesSearch: string
   count: number
   text: string
   dirty: boolean
@@ -25,6 +27,8 @@ interface FileNameUpdate {
 const initialState: FilesState = {
   current: null,
   files: null,
+  filesSize: 0,
+  filesSearch: '',
   count: -1,
   text: '',
   dirty: false
@@ -115,9 +119,12 @@ export const filesSlice = createSlice({
       result[i] = result[i + 1]
       result[i + 1] = file
       state.files = result
+    },
+    setFilesSearch: (state, action: PayloadAction<string>) => {
+      state.filesSearch = action.payload
     }
   }
 })
 
-export const { setFiles, addFile, closeFile, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition, moveFileUp, moveFileDown } = filesSlice.actions
+export const { setFiles, addFile, closeFile, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition, moveFileUp, moveFileDown, setFilesSearch } = filesSlice.actions
 export default filesSlice.reducer
