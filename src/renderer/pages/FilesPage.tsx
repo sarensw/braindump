@@ -11,9 +11,10 @@ import { setCurrentFile } from '../store/storeFiles'
 import Page from './Page'
 
 const FilesPage: React.FunctionComponent = (): ReactElement => {
-  const files = useAppSelector(state => state.files)
+  const files = useAppSelector(state => state.files.files)
+  const currentFile = useAppSelector(state => state.files.current)
   const colors = useAppSelector(state => state.themeNew.colors)
-  const [selected, setSelected] = useState<string | null>(files.current)
+  const [selected, setSelected] = useState<string | null>(currentFile)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -21,20 +22,20 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   }, [])
 
   useHotkeys(['up', 'down'].join(','), (event) => {
-    if (files.files === null) return
-    const currentIndex = files.files.findIndex(f => f.id === selected)
+    if (files === null) return
+    const currentIndex = files.findIndex(f => f.id === selected)
     if (event.key === 'ArrowUp') {
       if (currentIndex === 0) return
-      const newSelected = files.files[currentIndex - 1].id
+      const newSelected = files[currentIndex - 1].id
       setSelected(newSelected)
       dispatch(setCurrentFile(newSelected))
     } else {
-      if (currentIndex === files.files.length - 1) return
-      const newSelected = files.files[currentIndex + 1].id
+      if (currentIndex === files.length - 1) return
+      const newSelected = files[currentIndex + 1].id
       setSelected(newSelected)
       dispatch(setCurrentFile(newSelected))
     }
-  }, [selected])
+  }, [selected, files])
 
   useHotkeys(['command+up', 'command+down'].join(','), (event) => {
     if (event.key === 'ArrowUp') moveFile(Direction.Up)
@@ -53,6 +54,8 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
     dispatch(setFilesSearch(event.key))
   }) */
 
+  let previousCluster = ''
+
   return (
     <Page>
       <FilesHeader />
@@ -62,11 +65,25 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
         }}
       >
         <ul>
-          {files.files?.map((file, index) => {
+          {files?.map((file, index) => {
+            const cluster = file.cluster === undefined || file.cluster === null ? '' : file.cluster
+            const hideHeader = cluster === previousCluster
+            previousCluster = cluster
+            const itemPadding = cluster === '' ? '26px' : '46px'
             if (file.id === selected) {
-              return <li key={index} className='h-6 flex flex-row items-center' style={{ paddingLeft: '26px', background: colors.files.selectedForeground }}>{file.name}</li>
+              return (
+                <>
+                  {!hideHeader && <li key={`braindump_files_header_${index}`} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
+                  <li key={index} className='h-6 flex flex-row items-center' style={{ paddingLeft: itemPadding, background: colors.files.selectedForeground }}>{file.name}</li>
+                </>
+              )
             } else {
-              return <li key={index} className='h-6 flex flex-row items-center' style={{ paddingLeft: '26px' }}>{file.name}</li>
+              return (
+                <>
+                  {!hideHeader && <li key={`braindump_files_header_${index}`} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
+                  <li key={index} className='h-6 flex flex-row items-center' style={{ paddingLeft: itemPadding }}>{file.name}</li>
+                </>
+              )
             }
           })}
         </ul>

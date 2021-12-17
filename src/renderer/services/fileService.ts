@@ -1,7 +1,7 @@
 import log from '../log'
 import { store } from '../store'
 import { File } from '../store/files/file'
-import { setFiles, closeFile as closeFileInStore, setCurrentFile, cleanDirtyText, setCount, addFile, setName, moveFileUp, moveFileDown } from '../store/storeFiles'
+import { setFiles, closeFile as closeFileInStore, setCurrentFile, cleanDirtyText, setCount, addFile, setName, moveFileUp, moveFileDown, setCluster } from '../store/storeFiles'
 import { randomString } from './utilitiesService'
 import { v4 as uuidv4 } from 'uuid'
 import { CursorPosition } from '../common/cursorPosition'
@@ -51,6 +51,7 @@ async function createNewFile (): Promise<void> {
 
   const file: File = {
     id: newFileId,
+    cluster: '',
     name: newFileName,
     path: newFilePath,
     loaded: false,
@@ -111,6 +112,62 @@ async function setLastUsedFile (id: string): Promise<void> {
       text: JSON.stringify(newFiles, null, 2)
     }
   })
+}
+
+async function setClusterName (path: string, cluster: string): Promise<void> {
+  if (cluster === undefined) return
+
+  // update the store to make sure the correct cluster name is
+  // in the serialized file
+  store.dispatch(setCluster({
+    path,
+    cluster
+  }))
+
+  // get the store
+  const state = store.getState()
+  if (state.files.files === null) return
+
+  // detach, so we can do the operations first
+  const files = [...state.files.files]
+
+  // get the index and file for the given path
+  const currentIndex = files.findIndex(f => f.path === path)
+  const currentFile = files[currentIndex]
+
+  // in any way, delete the current file from the list to place it
+  // at the right position afterwards
+  files.splice(currentIndex, 1)
+
+  // if the cluster name is now empty, just move it to the top
+  // of the unclustered list
+  if (cluster === '') {
+    files.unshift(currentFile)
+  }
+
+  // find the new place
+  let addedToCluster = false
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
+    if (file.cluster === cluster) {
+      files.splice(i, 0, currentFile)
+      addedToCluster = true
+      break
+    }
+  }
+
+  // if there wasn't any cluster, then this would not be added
+  // again after it was removed -> add it to the end as a new cluster
+  // then
+  if (!addedToCluster) {
+    files.push(currentFile)
+  }
+
+  // distribute the changes to the store
+  store.dispatch(setFiles(files))
+
+  // persist this now
+  persist()
 }
 
 async function setFileName (path: string, name: string): Promise<void> {
@@ -309,4 +366,4 @@ function persist (): void {
   })
 }
 
-export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setFileName, setLastUsedFile, getCursorPosition, moveFile, persist, calculateOverallFileSizes }
+export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setClusterName, setFileName, setLastUsedFile, getCursorPosition, moveFile, persist, calculateOverallFileSizes }

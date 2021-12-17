@@ -16,6 +16,7 @@ export interface IEditorToken {
 export interface ITheme {
   background?: string
   foreground?: string
+  foregroundLight?: string
   files: {
     selectedForeground?: string
   }

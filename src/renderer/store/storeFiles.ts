@@ -24,6 +24,11 @@ interface FileNameUpdate {
   name: string
 }
 
+interface FileClusterUpdate {
+  path: string
+  cluster: string
+}
+
 const initialState: FilesState = {
   current: null,
   files: null,
@@ -66,6 +71,12 @@ export const filesSlice = createSlice({
 
       state.files = newFiles
     },
+    setCluster: (state, action: PayloadAction<FileClusterUpdate>) => {
+      if (state.files === null) return
+      const cluster = action.payload.cluster
+      const i = state.files.findIndex(f => f.path === action.payload.path)
+      state.files[i].cluster = cluster
+    },
     setName: (state, action: PayloadAction<FileNameUpdate>) => {
       if (state.files === null) return
       const name = action.payload.name
@@ -103,9 +114,17 @@ export const filesSlice = createSlice({
       if (i <= 0) return
 
       const result = state.files
-      result[i] = result[i - 1]
-      result[i - 1] = file
-      state.files = result
+
+      if (result[i - 1].cluster !== file.cluster) {
+        // when the previous file has a different cluster, just change the cluster,
+        // but not the order
+        state.files[i].cluster = result[i - 1].cluster
+      } else {
+        // the cluster of the previous file is the same, so just skip
+        result[i] = result[i - 1]
+        result[i - 1] = file
+        state.files = result
+      }
     },
     moveFileDown: (state) => {
       if (state === null || state.files === null || state.files === undefined) return
@@ -116,9 +135,14 @@ export const filesSlice = createSlice({
       if (i >= state.files.length - 1) return
 
       const result = state.files
-      result[i] = result[i + 1]
-      result[i + 1] = file
-      state.files = result
+
+      if (result[i + 1].cluster !== file.cluster) {
+        state.files[i].cluster = result[i + 1].cluster
+      } else {
+        result[i] = result[i + 1]
+        result[i + 1] = file
+        state.files = result
+      }
     },
     setFilesSearch: (state, action: PayloadAction<string>) => {
       state.filesSearch = action.payload
@@ -126,5 +150,5 @@ export const filesSlice = createSlice({
   }
 })
 
-export const { setFiles, addFile, closeFile, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition, moveFileUp, moveFileDown, setFilesSearch } = filesSlice.actions
+export const { setFiles, addFile, closeFile, setCluster, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition, moveFileUp, moveFileDown, setFilesSearch } = filesSlice.actions
 export default filesSlice.reducer

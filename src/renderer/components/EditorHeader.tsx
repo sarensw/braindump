@@ -1,13 +1,14 @@
 import React, { ReactElement, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
-import { setFileName } from '../services/fileService'
+import { setClusterName, setFileName } from '../services/fileService'
 import { setFocusElement } from '../store/storeApp'
 
 const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactElement => {
   const dispatch = useDispatch()
   let refFileNameInput: HTMLInputElement | null = null
   const [name, setName] = useState('')
+  const [cluster, setCluster] = useState('')
   const files = useAppSelector(state => state.files)
   const editor = useAppSelector(state => state.editor)
   const focusElement = useAppSelector(state => state.app.focusElement)
@@ -19,6 +20,7 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
 
       if (file !== undefined) {
         setName(file.name)
+        setCluster(file.cluster)
       }
     }
   }, [files.current])
@@ -32,6 +34,11 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
       dispatch(setFocusElement(''))
     }
   }, [focusElement])
+
+  const handleClusterChange = async (event): Promise<void> => {
+    setCluster(event.target.value)
+    await setClusterName(props.path, event.target.value)
+  }
 
   const handleNameChange = async (event): Promise<void> => {
     setName(event.target.value)
@@ -54,8 +61,30 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
         }}
       >
         <div className='flex flex-col flex-grow'>
-          {/* Note name */}
-          <input ref={el => { refFileNameInput = el }} className='flex-grow bg-transparent' type='text' value={name} onChange={handleNameChange} />
+          <div className='flex flex-row gap-2'>
+            {/* Note cluster */}
+            <input
+              ref={el => { refFileNameInput = el }}
+              className='flex-shrink bg-transparent min-w-min italic'
+              style={{
+                color: colors.foregroundLight
+              }}
+              type='text'
+              value={cluster}
+              placeholder='unclustered'
+              size={cluster === undefined || cluster.length === 0 ? 'unclustered'.length : cluster.length}
+              onChange={handleClusterChange}
+            />
+
+            {/* Note name */}
+            <input
+              ref={el => { refFileNameInput = el }}
+              className='flex-grow bg-transparent'
+              type='text'
+              value={name}
+              onChange={handleNameChange}
+            />
+          </div>
 
           {/* Path */}
           <div

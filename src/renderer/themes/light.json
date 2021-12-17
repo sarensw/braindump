@@ -1,6 +1,7 @@
 {
   "background": "#fdfdfd",
   "foreground": "#373530",
+  "foregroundLight": "#97938a",
 
   "files": {
     "selectedForeground": "#a4dffd"
