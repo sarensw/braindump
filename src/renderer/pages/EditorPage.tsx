@@ -7,7 +7,7 @@ import { useAppSelector } from '../hooks'
 import { readFile } from '../services/fileService'
 import useAsyncEffect from 'use-async-effect'
 import { BraindownEditor } from '../components/BraindownEditor'
-import { set } from '../store/storeApp'
+import { setActivePage, setFocusElement } from '../store/storeApp'
 import EditorHeader from '../components/EditorHeader'
 
 const EditorPage: React.FunctionComponent = (): ReactElement => {
@@ -27,13 +27,20 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
           path: file.path,
           text: fileRaw
         })
+
+        if (file.isNew) {
+          dispatch(setFocusElement('fileName'))
+        }
       }
     }
   }, [files.current])
 
   useHotkeys('esc', (event) => {
     event.preventDefault()
-    dispatch(set('files'))
+    dispatch(setActivePage('files'))
+  },
+  {
+    enableOnTags: ['INPUT']
   })
 
   return (

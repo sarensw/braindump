@@ -7,7 +7,8 @@ import { Monaco } from '@monaco-editor/react'
 import { loadContactSuggestions, loadWordSuggestions } from './suggestions'
 import { loadCommandSuggestions } from './suggestions/commandSuggestions'
 import { store } from '../store'
-import { set as setPage } from '../store/storeApp'
+import { setActivePage, setFocusElement } from '../store/storeApp'
+import { saveFile } from '../services/fileService'
 
 class BraindownLanguage {
   languageHandlers: BraindownLanguageExtension[] = []
@@ -214,7 +215,12 @@ class BraindownLanguage {
     '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
 
     this.editor.addCommand(me.KeyCode.Escape, () => {
-      store.dispatch(setPage('files'))
+      saveFile()
+      store.dispatch(setActivePage('files'))
+    },
+    '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
+    this.editor.addCommand(me.KeyMod.Shift | me.KeyCode.Tab, () => {
+      store.dispatch(setFocusElement('fileName'))
     },
     '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
   }

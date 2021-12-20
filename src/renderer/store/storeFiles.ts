@@ -6,6 +6,7 @@ import { File } from './files/file'
 interface SerializableFile extends SharedFile {
   loaded: boolean
   text: string
+  isNew: boolean
   position: Positionable
 }
 
@@ -47,7 +48,7 @@ export const filesSlice = createSlice({
       state.files = action.payload
     },
     addFile: (state, action: PayloadAction<File>) => {
-      state.files?.push(action.payload)
+      state.files?.splice(0, 0, action.payload)
     },
     closeFile: (state, action: PayloadAction<string>) => {
       const id = action.payload
@@ -97,7 +98,14 @@ export const filesSlice = createSlice({
       state.dirty = true
     },
     cleanDirtyText: (state) => {
+      if (state === null) return
+
       state.dirty = false
+
+      if (state.files === null || state.files === undefined) return
+
+      const i = state.files.findIndex(f => f.id === state.current)
+      state.files[i].isNew = false
     },
     setLastCursorPosition: (state, action: PayloadAction<Positionable>) => {
       const i = state.files?.findIndex(f => f.id === state.current)

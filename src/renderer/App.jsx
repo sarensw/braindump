@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { keys, handleKeyDownEvent } from './hotkeys'
 import PageContainer from './pages/PageContainer'
-import { set as setPage } from './store/storeApp'
+import { setActivePage } from './store/storeApp'
 import Icon from './components/elements/Icon'
 import { useAppSelector } from './hooks'
 import { getMenuTemplate } from './services/contextMenuService'
@@ -17,7 +17,7 @@ const App = _ => {
   })
 
   const changeActivePage = (page) => {
-    dispatch(setPage(page))
+    dispatch(setActivePage(page))
   }
 
   const showSettings = () => {

@@ -56,6 +56,7 @@ async function createNewFile (): Promise<void> {
     path: newFilePath,
     loaded: false,
     text: '',
+    isNew: true,
     position: {
       line: 0,
       column: 0
@@ -282,6 +283,8 @@ function saveFile (): void {
       })
 
       store.dispatch(cleanDirtyText())
+
+      persist()
     }
   }
 }

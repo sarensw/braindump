@@ -2,7 +2,7 @@ import log from './log'
 import * as monaco from 'monaco-editor'
 import { store } from './store'
 import { flushFile, closeFile, createNewFile, loadFiles } from './services/fileService'
-import { setFocusElement } from './store/storeApp'
+import { setActivePage, setFocusElement } from './store/storeApp'
 
 const keyHandlers = {
   'cmd+t': handleOpenNewTab,
@@ -39,6 +39,7 @@ async function handleOpenNewTab (): Promise<void> {
   log.debug('adding new dump via hotkey')
   flushFile()
   await createNewFile()
+  store.dispatch(setActivePage('editor'))
   await loadFiles()
 }
 

@@ -1,5 +1,5 @@
 import { toggle } from '../store/storeSettings'
-import { set as setPage } from '../store/storeApp'
+import { setActivePage } from '../store/storeApp'
 import { store } from '../store'
 import { saveSettings } from './settingsService'
 
@@ -80,7 +80,7 @@ function getAppContextMenu (): any {
       id: 'menu-editor-snippets',
       label: 'Configure Snippets',
       click: async () => {
-        store.dispatch(setPage('snippets'))
+        store.dispatch(setActivePage('snippets'))
         await saveSettings()
       }
     },

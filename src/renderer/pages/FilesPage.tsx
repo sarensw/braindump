@@ -5,7 +5,7 @@ import { Direction } from '../common/direction'
 import { FilesHeader } from '../components/FilesHeader'
 import { useAppSelector } from '../hooks'
 import { moveFile, setLastUsedFile } from '../services/fileService'
-import { set } from '../store/storeApp'
+import { setActivePage } from '../store/storeApp'
 import { setCurrentHeaders } from '../store/storeEditor'
 import { setCurrentFile } from '../store/storeFiles'
 import Page from './Page'
@@ -45,7 +45,7 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   useHotkeys('enter', (event) => {
     if (selected === null) return
     event.preventDefault()
-    dispatch(set('editor'))
+    dispatch(setActivePage('editor'))
     dispatch(setCurrentFile(selected))
     setLastUsedFile(selected).then(() => {}, () => {})
   }, [selected])

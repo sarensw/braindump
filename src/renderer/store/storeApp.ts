@@ -7,7 +7,7 @@ export const appSlice = createSlice({
     focusElement: ''
   },
   reducers: {
-    set: (state, action) => {
+    setActivePage: (state, action) => {
       state.page = action.payload
     },
     setFocusElement: (state, action) => {
@@ -16,5 +16,5 @@ export const appSlice = createSlice({
   }
 })
 
-export const { set, setFocusElement } = appSlice.actions
+export const { setActivePage, setFocusElement } = appSlice.actions
 export default appSlice.reducer
