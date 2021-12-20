@@ -1,8 +1,8 @@
-import React, { FunctionComponent, ReactElement, useState } from 'react'
-import useAsyncEffect from 'use-async-effect'
-import { prettyBites } from '../common/prettyBites'
+import React, { FunctionComponent, ReactElement } from 'react'
+// import useAsyncEffect from 'use-async-effect'
+// import { prettyBites } from '../common/prettyBites'
 import { useAppSelector } from '../hooks'
-import { calculateOverallFileSizes } from '../services/fileService'
+// import { calculateOverallFileSizes } from '../services/fileService'
 
 const FilesHeaderField: FunctionComponent<{content: string}> = ({ content }): ReactElement => {
   return (
@@ -14,13 +14,13 @@ const FilesHeaderField: FunctionComponent<{content: string}> = ({ content }): Re
 
 const FilesHeader: FunctionComponent = (): ReactElement => {
   const count = useAppSelector(state => state.files.files?.length)
-  const filesSearch = useAppSelector(state => state.files.filesSearch)
-  const [filesSize, setFilesSize] = useState('')
+  /* const filesSearch = useAppSelector(state => state.files.filesSearch)
+  const [filesSize, setFilesSize] = useState('') */
 
-  useAsyncEffect(async () => {
+  /* useAsyncEffect(async () => {
     const result = await calculateOverallFileSizes()
     setFilesSize(`Size: ${prettyBites(result)}`)
-  }, [])
+  }, []) */
 
   return (
     <>
@@ -31,8 +31,8 @@ const FilesHeader: FunctionComponent = (): ReactElement => {
         }}
       >
         <FilesHeaderField content={`Count: ${count ?? ''}`} />
-        <FilesHeaderField content={filesSize} />
-        {filesSearch.length > 0 && <FilesHeaderField content={filesSearch} />}
+        {/* <FilesHeaderField content={filesSize} />
+        {filesSearch.length > 0 && <FilesHeaderField content={filesSearch} />} */}
       </div>
     </>
   )
