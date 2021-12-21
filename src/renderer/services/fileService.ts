@@ -9,14 +9,20 @@ import dateFormat from 'dateformat'
 import { Direction } from '../common/direction'
 
 const id = randomString(4)
-const timerInterval = 2000
+const saveTimerInterval = 2000
+const backupTimerInterval = 1000 * 60 * 10 // 10 minute default backup interval
 
 const PATH_FILE_FILES: string = 'files.json'
+const PATH_FILE_SNIPPETS: string = 'snippets.yaml'
 
 function initializeFileService (): void {
   log.debug('initializing the dump service', id)
-  setInterval(saveFile, timerInterval)
-  log.debug(`started timer in an interval of ${timerInterval}ms`, id)
+
+  setInterval(saveFile, saveTimerInterval)
+  log.debug(`started timer in an interval of ${saveTimerInterval}ms`, id)
+
+  setInterval(backup, backupTimerInterval)
+  log.debug(`started timer in an interval of ${backupTimerInterval}ms`, id)
 }
 
 async function calculateOverallFileSizes (): Promise<number> {
@@ -369,4 +375,48 @@ function persist (): void {
   })
 }
 
-export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setClusterName, setFileName, setLastUsedFile, getCursorPosition, moveFile, persist, calculateOverallFileSizes }
+async function isPathValid (path: string): Promise<boolean> {
+  try {
+    const isValid = window.__preload.invoke({
+      channel: 'file/valid',
+      payload: {
+        path
+      }
+    })
+    return isValid
+  } catch (err) {
+    return false
+  }
+}
+
+function backup (): void {
+  const settings = store.getState().settings
+
+  if (!settings['backup.enabled']) return
+
+  const files = store.getState().files.files
+  const filePaths = files?.map(f => f.path)
+
+  if (filePaths === undefined) return
+
+  const backupFileName = `Braindump_backup_${dateFormat(Date.now(), 'yyyymmddHHMMss')}.zip`
+
+  log.debug(`Starting backup ${settings['backup.path']}/${backupFileName}`)
+  log.debug(`Backing up ${filePaths.length} files + ${PATH_FILE_FILES} + ${PATH_FILE_SNIPPETS}`)
+
+  if (filePaths !== undefined) {
+    window.__preload.send({
+      channel: 'file/compress',
+      payload: {
+        filePaths: [
+          PATH_FILE_FILES,
+          PATH_FILE_SNIPPETS,
+          ...filePaths
+        ],
+        targetPath: settings['backup.path'] + `/${backupFileName}`
+      }
+    })
+  }
+}
+
+export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setClusterName, setFileName, setLastUsedFile, getCursorPosition, moveFile, persist, calculateOverallFileSizes, isPathValid, backup }

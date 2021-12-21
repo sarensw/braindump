@@ -33,16 +33,30 @@ export interface ITheme {
     hoverBackground?: string
     hoverBorder?: string
   }
-  dropdown: {
-    foreground?: string
-    background?: string
-    border?: string
-    hoverForeground?: string
-    hoverBackground?: string
-    hoverBorder?: string
-  }
-  label: {
-    foreground?: string
+  settings: {
+    label: {
+      foreground?: string
+    }
+    description: {
+      foreground?: string
+      background?: string
+    }
+    text: {
+      foreground?: string
+      background?: string
+      border?: string
+      hoverForeground?: string
+      hoverBackground?: string
+      hoverBorder?: string
+    }
+    dropdown: {
+      foreground?: string
+      background?: string
+      border?: string
+      hoverForeground?: string
+      hoverBackground?: string
+      hoverBorder?: string
+    }
   }
   breadcrumb: {
     pathBackground: string

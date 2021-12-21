@@ -2,6 +2,7 @@ import { toggle } from '../store/storeSettings'
 import { setActivePage } from '../store/storeApp'
 import { store } from '../store'
 import { saveSettings } from './settingsService'
+import { backup } from './fileService'
 
 function initializeContextMenus (): void {
   window.__preload.receive('context-menu-command', (commandId: string) => {
@@ -82,6 +83,20 @@ function getAppContextMenu (): any {
       click: async () => {
         store.dispatch(setActivePage('snippets'))
         await saveSettings()
+      }
+    },
+    {
+      id: 'menu-general-backup',
+      label: 'Backup now',
+      click: () => {
+        backup()
+      }
+    },
+    {
+      id: 'menu-general-settings',
+      label: 'Preferences',
+      click: async () => {
+        store.dispatch(setActivePage('settings'))
       }
     },
     { type: 'separator' },

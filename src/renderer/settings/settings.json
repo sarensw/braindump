@@ -7,6 +7,7 @@
         "id": "app.theme",
         "type": "enum",
         "title": "Theme",
+        "description": "Specifies the color theme",
         "default": "light",
         "values": [
           {
@@ -22,6 +23,27 @@
     ]
   },
   {
+    "id": "settings.backup",
+    "category": "Backup",
+    "settings": [
+      {
+        "id": "backup.enabled",
+        "type": "boolean",
+        "title": "Enable",
+        "description": "Turns auto backup on/off. As soon as a valid path is provided, a backup of the current set of files will be created every 10 minutes.",
+        "default": ""
+      },
+      {
+        "id": "backup.path",
+        "type": "text",
+        "title": "Path/Directory",
+        "description": "Specifies the path for the backup files",
+        "default": "",
+        "validation": "path"
+      }
+    ]
+  },
+  {
     "id": "settings.editor",
     "category": "Editor",
     "settings": [
@@ -29,18 +51,21 @@
         "id": "editor.minimap.show",
         "type": "boolean",
         "title": "Show Minimap",
+        "description": "Turn the mini map in the editor on or off",
         "default": false
       },
       {
         "id": "editor.linenumbers.show",
         "type": "boolean",
         "title": "Show Line Numbers",
+        "description": "Turn the line numbers in the editor on or off",
         "default": true
       },
       {
         "id": "editor.wordwrap",
         "type": "boolean",
         "title": "Word Wrap",
+        "description": "Turn word wrapping in the editor on or off",
         "default": true
       }
     ]

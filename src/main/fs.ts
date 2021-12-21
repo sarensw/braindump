@@ -2,6 +2,7 @@ import * as electron from 'electron'
 import { join } from 'path'
 import * as fs from 'fs/promises'
 import log from 'electron-log'
+import AdmZip from 'adm-zip'
 
 export class FileSystem {
   private readonly userDataPath: string
@@ -76,5 +77,26 @@ export class FileSystem {
     }
 
     await fs.writeFile(fullPath, text)
+  }
+
+  /**
+   * Compresses all files given by the array of paths to one zip file
+   * @param filePaths list of paths to the files that shall be stored in the zip
+   * @param targetPath path including file name of the zip file to be created
+   */
+  async compress (filePaths: string[], targetPath: string): Promise<void> {
+    log.debug(`Request to compress the following files to ${targetPath}`)
+    log.debug(filePaths)
+
+    const zip = new AdmZip()
+    filePaths.forEach(filePath => {
+      if (filePath.startsWith('/')) {
+        zip.addLocalFile(filePath)
+      } else {
+        const fullFilePath = join(this.userDataPath, filePath)
+        zip.addLocalFile(fullFilePath)
+      }
+    })
+    zip.writeZip(targetPath)
   }
 }

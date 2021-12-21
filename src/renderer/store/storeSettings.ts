@@ -16,6 +16,8 @@ function getDefaultValue<T> (id: string): T | null {
 
 const initialState: Settings = {
   'app.theme': getDefaultValue<string>('app.theme') ?? '',
+  'backup.enabled': getDefaultValue<boolean>('backup.enabled') ?? false,
+  'backup.path': getDefaultValue<string>('backup.path') ?? '',
   'editor.minimap.show': getDefaultValue<boolean>('editor.minimap.show') ?? false,
   'editor.linenumbers.show': getDefaultValue<boolean>('editor.linenumber.show') ?? true,
   'editor.wordwrap': getDefaultValue<boolean>('editor.wordwrap') ?? true,

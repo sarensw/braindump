@@ -1,6 +1,6 @@
 {
   "name": "braindump",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Dump your brain",
   "private": "true",
   "scripts": {
@@ -21,6 +21,7 @@
     "@snowpack/plugin-postcss": "^1.4.3",
     "@snowpack/plugin-react-refresh": "^2.5.0",
     "@snowpack/plugin-typescript": "^1.2.1",
+    "@types/adm-zip": "^0.4.34",
     "@types/dateformat": "^5.0.0",
     "@types/json-stringify-safe": "^5.0.0",
     "@types/luxon": "^2.0.7",
@@ -46,6 +47,7 @@
     "@monaco-editor/react": "^4.3.1",
     "@reduxjs/toolkit": "^1.6.2",
     "@vscode/codicons": "0.0.26",
+    "adm-zip": "^0.5.9",
     "dateformat": "^5.0.2",
     "dexie": "^3.0.3",
     "electron-log": "^4.4.1",

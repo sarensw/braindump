@@ -6,17 +6,21 @@ const ifExists = (color: string | undefined, yes: any, no: any): any => {
 }
 
 const Dropdown = styled.select`
-  background-color: ${props => props.theme.dropdown.background};
-  color: ${props => props.theme.dropdown.foreground};
-  padding: 2px 22px 2px 22px;
-  border-width: ${props => ifExists(props.theme.dropdown.border, '1px', '0px')};
-  border-color: ${props => ifExists(props.theme.dropdown.border, props.theme.dropdown.border, 0)};
+  background-color: ${props => props.theme.settings.dropdown.background};
+  color: ${props => props.theme.settings.dropdown.foreground};
+  padding: 0.2rem 0rem;
+  border-width: ${props => ifExists(props.theme.settings.dropdown.border, '1px', '0px')};
+  border-color: ${props => ifExists(props.theme.settings.dropdown.border, props.theme.settings.dropdown.border, 0)};
+  min-width: 50%;
   &:hover {
-    background-color: ${props => props.theme.dropdown.hoverBackground};
-    color: ${props => props.theme.dropdown.hoverForeground};
-    border-width: ${props => ifExists(props.theme.dropdown.border, '1px', '0px')};
-    border-color: ${props => props.theme.dropdown.hoverBorder};
+    background-color: ${props => props.theme.settings.dropdown.hoverBackground};
+    color: ${props => props.theme.settings.dropdown.hoverForeground};
+    border-width: ${props => ifExists(props.theme.settings.dropdown.border, '1px', '0px')};
+    border-color: ${props => props.theme.settings.dropdown.hoverBorder};
   }
 `
 
-export default Dropdown
+const Option = styled.option`
+`
+
+export { Dropdown, Option }

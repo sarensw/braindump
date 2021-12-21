@@ -160,6 +160,15 @@ ipcMain.on('file/write', async (event, args) => {
   }
 })
 
+ipcMain.handle('file/valid', async (event, args) => {
+  const isValid = await fileSystem.exists(args.path)
+  return isValid
+})
+
+ipcMain.on('file/compress', async (event, args) => {
+  await fileSystem.compress(args.filePaths, args.targetPath)
+})
+
 ipcMain.on('menu/context', (event, template) => {
   log.debug(template)
   const clickableTemplate = template.map(item => {

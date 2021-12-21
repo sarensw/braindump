@@ -12,6 +12,8 @@ export interface Dump extends File {
 
 export interface Settings {
   'app.theme': string
+  'backup.enabled': boolean
+  'backup.path': string
   'editor.minimap.show': boolean
   'editor.linenumbers.show': boolean
   'editor.wordwrap': boolean

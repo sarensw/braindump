@@ -51,14 +51,26 @@
     "hoverBackground": "lightgrey"
   },
 
-  "dropdown": {
-    "foreground": "black",
-    "background": "white",
-    "border": "black"
-  },
+  "settings": {
+    "label": {
+      "foreground": "black"
+    },
 
-  "label": {
-    "foreground": "black"
+    "description": {
+      "foreground": "#797873"
+    },
+
+    "dropdown": {
+      "foreground": "black",
+      "background": "white",
+      "border": "#797873"
+    },
+
+    "text": {
+      "foreground": "black",
+      "background": "white",
+      "border": "#797873"
+    }
   },
 
   "breadcrumb": {
