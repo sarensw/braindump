@@ -1,17 +1,18 @@
 /** @type {import('snowpack').SnowpackUserConfig} */
 module.exports = {
-  // extends: 'electron-snowpack/config/snowpack.js',
   mount: {
     public: { url: '/', static: true },
     'src/renderer': { url: '/dist' }
   },
   buildOptions: {
-    "baseUrl": "./"
+    "baseUrl": "./",
+    out: "build/renderer"
   },
   plugins: [
     '@snowpack/plugin-postcss',
     '@snowpack/plugin-react-refresh',
-    '@snowpack/plugin-typescript'
+    '@snowpack/plugin-typescript',
+    '@snowpack/plugin-dotenv'
   ],
   packageOptions: {
     knownEntrypoints: [

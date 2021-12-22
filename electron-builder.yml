@@ -1,0 +1,21 @@
+appId: com.featureninjas.braindump
+copyright: Copyright @ 2021 FeatureNinjas
+productName: Braindump
+
+directories:
+  output: dist/
+
+files:
+  - package.json
+  - index.js
+  - build/
+  - node_modules/
+
+mac:
+  target: dmg
+  category: public.app-category.productivity
+  icon: scripts/build/logo.icns
+  # entitlements: scripts/build/entitlements.mac.plist,
+  # entitlementsInherit: scripts/build/entitlements.mac.plist,
+  # type: distribution,
+  # hardenedRuntime: true

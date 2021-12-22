@@ -1,6 +1,5 @@
 
 import { app, BrowserWindow, ipcMain, crashReporter, globalShortcut } from 'electron'
-// import { getAssetURL } from 'electron-snowpack'
 import path from 'path'
 import log from 'electron-log'
 import { SettingsFile } from './settings'
@@ -52,12 +51,16 @@ function createMainWindow () {
     window.show()
   })
 
-  if (process.env.MODE !== 'production' && process.env.BRAINDUMP_DEMO_MODE !== 'true') {
+  if (process.env.NODE_ENV === 'development' && process.env.BRAINDUMP_DEMO_MODE !== 'true') {
     window.webContents.openDevTools()
   }
 
   // window.loadURL(getAssetURL('index.html'))
-  window.loadURL('http://localhost:8080')
+  if (process.env.NODE_ENV === 'development') {
+    window.loadURL('http://localhost:8080')
+  } else {
+    window.loadFile(path.resolve(path.join(__dirname, '../renderer/index.html')));
+  }
 
   window.on('closed', () => {
     mainWindow = null
