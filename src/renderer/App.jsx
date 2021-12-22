@@ -42,7 +42,7 @@ const App = _ => {
             color: colors.titleBar.activeForeground,
             borderBottomColor: colors.titleBar.borderBottom,
             borderBottomWidth: colors.titleBar.borderBottom ? '1px' : '0px',
-            '-webkit-app-region': 'drag'
+            WebkitAppRegion: 'drag'
           }}
         >
           <div />
