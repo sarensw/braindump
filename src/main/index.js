@@ -1,6 +1,6 @@
 
 import { app, BrowserWindow, ipcMain, crashReporter, globalShortcut } from 'electron'
-import { getAssetURL } from 'electron-snowpack'
+// import { getAssetURL } from 'electron-snowpack'
 import path from 'path'
 import log from 'electron-log'
 import { SettingsFile } from './settings'
@@ -56,7 +56,8 @@ function createMainWindow () {
     window.webContents.openDevTools()
   }
 
-  window.loadURL(getAssetURL('index.html'))
+  // window.loadURL(getAssetURL('index.html'))
+  window.loadURL('http://localhost:8080')
 
   window.on('closed', () => {
     mainWindow = null

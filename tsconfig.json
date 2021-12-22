@@ -7,6 +7,16 @@
   "compilerOptions": {
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+
+    "outDir": "./dist",
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true
+  },
+  "exclude": [ "node_modules" ]
 }

@@ -3,7 +3,7 @@ import * as monaco from 'monaco-editor'
 import suggestionService from '../services/suggestionService'
 
 async function loadContactSuggestions (monaco: Monaco, start): Promise<monaco.languages.CompletionList> {
-  const suggestions = await suggestionService.get('contact', start)
+  const suggestions = await suggestionService.get('contact', 'start')
   const completionItems = suggestions.map(suggestion => ({
     label: suggestion.contact,
     filterText: suggestion.contact.substring(1),
@@ -19,7 +19,7 @@ async function loadContactSuggestions (monaco: Monaco, start): Promise<monaco.la
 }
 
 async function loadWordSuggestions (monaco: Monaco): Promise<monaco.languages.CompletionList> {
-  const suggestions = await suggestionService.get('word')
+  const suggestions = await suggestionService.get('word', '')
   const completionItems = suggestions.map(suggestion => ({
     label: suggestion.word,
     filterText: suggestion.word,
