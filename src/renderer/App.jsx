@@ -7,6 +7,7 @@ import { setActivePage } from './store/storeApp'
 import Icon from './components/elements/Icon'
 import { useAppSelector } from './hooks'
 import { getMenuTemplate } from './services/contextMenuService'
+import HotkeyPeek from './components/HotkeyPeek'
 
 const App = _ => {
   const dispatch = useDispatch()
@@ -42,7 +43,7 @@ const App = _ => {
             color: colors.titleBar.activeForeground,
             borderBottomColor: colors.titleBar.borderBottom,
             borderBottomWidth: colors.titleBar.borderBottom ? '1px' : '0px',
-            '-webkit-app-region': 'drag'
+            WebkitAppRegion: 'drag'
           }}
         >
           <div />
@@ -65,6 +66,10 @@ const App = _ => {
 
         <div className='font-mono'>
           <PageContainer />
+        </div>
+
+        <div className='font-mono'>
+          <HotkeyPeek />
         </div>
       </div>
     </>
