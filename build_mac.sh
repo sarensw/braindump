@@ -12,15 +12,8 @@ fi
 # print the env
 printenv
 
-# install dependencies
-#npm install
-
-# clean
-npm run clean
-
 # build
 npm run build
-npm run dist
 
 # print files
 find ./dist

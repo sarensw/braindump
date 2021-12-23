@@ -15,7 +15,9 @@ mac:
   target: dmg
   category: public.app-category.productivity
   icon: scripts/build/logo.icns
-  # entitlements: scripts/build/entitlements.mac.plist,
-  # entitlementsInherit: scripts/build/entitlements.mac.plist,
-  # type: distribution,
-  # hardenedRuntime: true
+  entitlements: scripts/build/entitlements.mac.plist
+  entitlementsInherit: scripts/build/entitlements.mac.plist
+  type: distribution
+  hardenedRuntime: true
+
+afterSign: scripts/build/notarize.js
