@@ -59,7 +59,7 @@ function createMainWindow () {
   if (process.env.NODE_ENV === 'development') {
     window.loadURL('http://localhost:8080')
   } else {
-    window.loadFile(path.resolve(path.join(__dirname, '../renderer/index.html')));
+    window.loadFile(path.resolve(path.join(__dirname, '../renderer/index.html')))
   }
 
   window.on('closed', () => {

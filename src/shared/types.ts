@@ -12,6 +12,7 @@ export interface Dump extends File {
 
 export interface Settings {
   'app.theme': string
+  'app.hotkeys.show': boolean
   'backup.enabled': boolean
   'backup.path': string
   'editor.minimap.show': boolean

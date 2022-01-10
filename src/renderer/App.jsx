@@ -7,10 +7,12 @@ import { setActivePage } from './store/storeApp'
 import Icon from './components/elements/Icon'
 import { useAppSelector } from './hooks'
 import { getMenuTemplate } from './services/contextMenuService'
+import HotkeyPeek from './components/HotkeyPeek'
 
 const App = _ => {
   const dispatch = useDispatch()
   const colors = useAppSelector(state => state.themeNew.colors)
+  const settings = useAppSelector(state => state.settings)
 
   useHotkeys(keys, (event) => {
     handleKeyDownEvent(event, 'window')
@@ -65,6 +67,10 @@ const App = _ => {
 
         <div className='font-mono'>
           <PageContainer />
+        </div>
+
+        <div className='font-mono max-w-full'>
+          {settings['app.hotkeys.show'] && <HotkeyPeek />}
         </div>
       </div>
     </>

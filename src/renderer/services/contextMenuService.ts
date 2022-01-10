@@ -76,6 +76,16 @@ function getAppContextMenu (): any {
         await saveSettings()
       }
     },
+    {
+      id: 'menu-editor-keyboard-shortcuts',
+      label: 'Show Keyboard Shortcuts',
+      type: 'checkbox',
+      checked: settings['app.hotkeys.show'],
+      click: async () => {
+        store.dispatch(toggle({ id: 'app.hotkeys.show' }))
+        await saveSettings()
+      }
+    },
     { type: 'separator' },
     {
       id: 'menu-editor-snippets',

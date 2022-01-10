@@ -16,6 +16,7 @@ function getDefaultValue<T> (id: string): T | null {
 
 const initialState: Settings = {
   'app.theme': getDefaultValue<string>('app.theme') ?? '',
+  'app.hotkeys.show': getDefaultValue<boolean>('app.hotkeys.show') ?? false,
   'backup.enabled': getDefaultValue<boolean>('backup.enabled') ?? false,
   'backup.path': getDefaultValue<string>('backup.path') ?? '',
   'editor.minimap.show': getDefaultValue<boolean>('editor.minimap.show') ?? false,

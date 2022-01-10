@@ -8,10 +8,12 @@ import storeApp from './store/storeApp'
 import storeSnippets from './store/storeSnippets'
 import storeThemeNew from './store/storeThemeNew'
 import storeEditor from './store/storeEditor'
+import storeHotkeys from './store/storeHotkeys'
 
 export const store = configureStore({
   reducer: {
     app: storeApp,
+    hotkeys: storeHotkeys,
     sample: storeSample,
     document: storeDocument,
     files: storeFiles,

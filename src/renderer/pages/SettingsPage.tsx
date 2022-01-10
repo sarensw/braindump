@@ -15,6 +15,8 @@ import Text from '../components/settings/Text'
 import { Description } from '../components/settings/Description'
 import { SettingElement } from '../components/settings/SettingElement'
 import { isPathValid } from '../services/fileService'
+import { goToLastPage } from '../store/storeApp'
+import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
 
 const SettingsPage: FunctionComponent = () => {
   const dispatch = useAppDispatch()
@@ -34,6 +36,22 @@ const SettingsPage: FunctionComponent = () => {
           temporaryTextValue[setting.id] = settings[setting.id]
         }
       }
+    }
+  }, [])
+
+  useEffect(() => {
+    const escHk = {
+      id: 'editor:esc',
+      key: 'esc',
+      description: 'last page',
+      action: (source, codeEditor): boolean => {
+        dispatch(goToLastPage(''))
+        return true
+      }
+    }
+    registerHotkey(escHk, 'editor', null)
+    return () => {
+      unregisterHotkey(escHk)
     }
   }, [])
 

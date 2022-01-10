@@ -1,14 +1,14 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import Page from './Page'
 import Dumps from '../components/Dumps'
 import { useDispatch } from 'react-redux'
-import { useHotkeys } from 'react-hotkeys-hook'
 import { useAppSelector } from '../hooks'
 import { readFile } from '../services/fileService'
 import useAsyncEffect from 'use-async-effect'
 import { BraindownEditor } from '../components/BraindownEditor'
 import { setActivePage, setFocusElement } from '../store/storeApp'
 import EditorHeader from '../components/EditorHeader'
+import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
 
 const EditorPage: React.FunctionComponent = (): ReactElement => {
   const dispatch = useDispatch()
@@ -35,13 +35,21 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
     }
   }, [files.current])
 
-  useHotkeys('esc', (event) => {
-    event.preventDefault()
-    dispatch(setActivePage('files'))
-  },
-  {
-    enableOnTags: ['INPUT']
-  })
+  useEffect(() => {
+    const escHk = {
+      id: 'editor:esc',
+      key: 'esc',
+      description: 'list notes',
+      action: (source, codeEditor): boolean => {
+        dispatch(setActivePage('files'))
+        return true
+      }
+    }
+    registerHotkey(escHk, 'editor', null)
+    return () => {
+      unregisterHotkey(escHk)
+    }
+  }, [])
 
   return (
     <Page>
