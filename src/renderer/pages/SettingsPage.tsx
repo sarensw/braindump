@@ -107,46 +107,48 @@ const SettingsPage: FunctionComponent = () => {
 
   return (
     <Page>
-      <div className='max-w-lg m-auto px-2'>
-        {categories.map((c, i) => {
-          return (
-            <div key={i} className='flex flex-col gap-3 mb-4'>
-              <div className='ftext-lg col-span-2 font-bold'>{c.category}</div>
-              {c.settings.map((s, i) => {
-                return (
-                  <div key={i} className='text-sm'>
-                    <Label className=''>{s.title}</Label>
-                    <Description className='mb-0.5'>{s.description}</Description>
+      <div className='h-full w-full overflow-y-auto'>
+        <div className='max-w-lg m-auto px-2 h-full'>
+          {categories.map((c, i) => {
+            return (
+              <div key={i} className='flex flex-col gap-3 mb-4'>
+                <div className='text-lg col-span-2 font-bold'>{c.category}</div>
+                {c.settings.map((s, i) => {
+                  return (
+                    <div key={i} className='text-sm'>
+                      <Label className=''>{s.title}</Label>
+                      <Description className='mb-0.5'>{s.description}</Description>
 
-                    {/* setting type enum */}
-                    {s.type === 'enum' &&
-                      <Dropdown onChange={async e => await onChangeSetting(c.id, s, (e.target as HTMLSelectElement).value)} value={settings[s.id]}>
-                        {s.values?.map((v, i) => {
-                          return <option key={v.id} value={v.id} label={v.label}>{v.label}</option>
-                        })}
-                      </Dropdown>}
+                      {/* setting type enum */}
+                      {s.type === 'enum' &&
+                        <Dropdown onChange={async e => await onChangeSetting(c.id, s, (e.target as HTMLSelectElement).value)} value={settings[s.id]}>
+                          {s.values?.map((v, i) => {
+                            return <option key={v.id} value={v.id} label={v.label}>{v.label}</option>
+                          })}
+                        </Dropdown>}
 
-                    {/* setting type boolean */}
-                    {s.type === 'boolean' &&
-                      <Dropdown onChange={async e => await onChangeSetting(c.id, s, (e.target as HTMLSelectElement).value)} value={settings[s.id] === true ? 'boolean.true' : 'boolean.false'}>
-                        <Option value='boolean.true' label='on'>true</Option>
-                        <Option value='boolean.false' label='off'>false</Option>
-                      </Dropdown>}
+                      {/* setting type boolean */}
+                      {s.type === 'boolean' &&
+                        <Dropdown onChange={async e => await onChangeSetting(c.id, s, (e.target as HTMLSelectElement).value)} value={settings[s.id] === true ? 'boolean.true' : 'boolean.false'}>
+                          <Option value='boolean.true' label='on'>true</Option>
+                          <Option value='boolean.false' label='off'>false</Option>
+                        </Dropdown>}
 
-                    {/* setting type text */}
-                    {s.type === 'text' &&
-                      <Text className='w-full' onChange={async e => await onChangeSetting(c.id, s, (e.target as HTMLInputElement).value)} value={temporaryTextValue[s.id]} />}
+                      {/* setting type text */}
+                      {s.type === 'text' &&
+                        <Text className='w-full' onChange={async e => await onChangeSetting(c.id, s, (e.target as HTMLInputElement).value)} value={temporaryTextValue[s.id]} />}
 
-                    {/* show a validation error */}
-                    {validationError[s.id] !== undefined &&
-                      <div className='text-xs text-red-500'>{validationError[s.id]}</div>}
+                      {/* show a validation error */}
+                      {validationError[s.id] !== undefined &&
+                        <div className='text-xs text-red-500'>{validationError[s.id]}</div>}
 
-                  </div>
-                )
-              })}
-            </div>
-          )
-        })}
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })}
+        </div>
       </div>
     </Page>
   )
