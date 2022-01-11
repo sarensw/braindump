@@ -19,6 +19,7 @@ export interface Settings {
   'editor.linenumbers.show': boolean
   'editor.wordwrap': boolean
   'tabs.show': boolean
+  'presentation.title.subTitle': string
 }
 
 export interface Snippet {

@@ -76,5 +76,18 @@
         "default": true
       }
     ]
+  },
+  {
+    "id": "settings.presentation",
+    "category": "Presentation",
+    "settings": [
+      {
+        "id": "presentation.title.subTitle",
+        "type": "textarea",
+        "title": "Sub Title",
+        "description": "Additional info shown below the title on the title slide",
+        "default": ""
+      }
+    ]
   }
 ]

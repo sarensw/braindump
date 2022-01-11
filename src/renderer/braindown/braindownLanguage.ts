@@ -9,6 +9,7 @@ import { loadCommandSuggestions } from './suggestions/commandSuggestions'
 import { store } from '../store'
 import { setActivePage, setFocusElement } from '../store/storeApp'
 import { saveFile } from '../services/fileService'
+import { setPresentationContent } from '../store/storePresentation'
 
 class BraindownLanguage {
   languageHandlers: BraindownLanguageExtension[] = []
@@ -34,6 +35,7 @@ class BraindownLanguage {
     this.registerOnTypeFormattingProviders()
     this.registerCompletionItemProviders()
     this.registerFoldingRangeProvider()
+    this.registerCodeLensProvider()
   }
 
   clear (): void {
@@ -186,6 +188,102 @@ class BraindownLanguage {
           }
         })
         return ranges
+      }
+    })
+    this.disposables.push(provider)
+  }
+
+  private registerCodeLensProvider (): void {
+    const commandId = this.editor.addCommand(0, (...args: any[]) => {
+      console.log('registerCodeLensProvider.commandId')
+      if (args.length === 1) return
+      const range = args[1]
+      console.log(range)
+      const content = this.editor.getModel()?.getValueInRange({
+        startLineNumber: range.start,
+        startColumn: 1,
+        endLineNumber: range.endLineNumber,
+        endColumn: range.endColumn
+      })
+      store.dispatch(setPresentationContent(content))
+      console.log(content)
+      store.dispatch(setActivePage('presentation'))
+    },
+    '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
+
+    const provider = this.monaco.languages.registerCodeLensProvider('braindown', {
+      provideCodeLenses: function (model, token) {
+        const ranges = new Array<any>()
+
+        let start = -1
+        let previousLineLength = 0
+
+        const lines = model.getLinesContent()
+        const linesCount = lines.length
+        lines.forEach((line, i) => {
+          if (line.match(/^#{1,1} .*/) !== null) {
+            if (start !== -1) {
+              ranges.push({
+                range: {
+                  startLineNumber: start + 1,
+                  startColumn: 1,
+                  endLineNumber: start + 2,
+                  endColumn: 1
+                },
+                id: 'editor:presentation:start:' + String(i + 1),
+                command: {
+                  id: commandId,
+                  title: 'ᐅ present',
+                  arguments: [
+                    {
+                      start: start + 1,
+                      endLineNumber: i,
+                      endColumn: previousLineLength + 1
+                    }
+                  ]
+                }
+              })
+            }
+
+            start = i
+          }
+          previousLineLength = line.length
+
+          if (linesCount - 1 === i) {
+            if (start >= 0) {
+              ranges.push({
+                range: {
+                  startLineNumber: start + 1,
+                  startColumn: 1,
+                  endLineNumber: start + 2,
+                  endColumn: 1
+                },
+                id: 'editor:presentation:start:' + String(i + 1),
+                command: {
+                  id: commandId,
+                  title: 'ᐅ present',
+                  arguments: [
+                    {
+                      start: start + 1,
+                      endLineNumber: i + 1,
+                      endColumn: line.length + 1
+                    }
+                  ]
+                }
+              })
+            }
+          }
+        })
+
+        return {
+          lenses: [
+            ...ranges
+          ],
+          dispose: () => {}
+        }
+      },
+      resolveCodeLens: function (model, codeLens, token) {
+        return codeLens
       }
     })
     this.disposables.push(provider)

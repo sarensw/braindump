@@ -17,6 +17,7 @@ import { SettingElement } from '../components/settings/SettingElement'
 import { isPathValid } from '../services/fileService'
 import { goToLastPage } from '../store/storeApp'
 import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
+import TextArea from '../components/settings/TextArea'
 
 const SettingsPage: FunctionComponent = () => {
   const dispatch = useAppDispatch()
@@ -41,7 +42,7 @@ const SettingsPage: FunctionComponent = () => {
 
   useEffect(() => {
     const escHk = {
-      id: 'editor:esc',
+      id: 'settings:esc',
       key: 'esc',
       description: 'last page',
       action: (source, codeEditor): boolean => {
@@ -137,6 +138,10 @@ const SettingsPage: FunctionComponent = () => {
                       {/* setting type text */}
                       {s.type === 'text' &&
                         <Text className='w-full' onChange={async e => await onChangeSetting(c.id, s, (e.target as HTMLInputElement).value)} value={temporaryTextValue[s.id]} />}
+
+                      {/* setting type textarea */}
+                      {s.type === 'textarea' &&
+                        <TextArea className='w-full' onChange={async e => await onChangeSetting(c.id, s, (e.target as HTMLTextAreaElement).value)} value={temporaryTextValue[s.id]} />}
 
                       {/* show a validation error */}
                       {validationError[s.id] !== undefined &&

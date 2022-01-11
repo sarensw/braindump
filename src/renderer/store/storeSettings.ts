@@ -22,7 +22,8 @@ const initialState: Settings = {
   'editor.minimap.show': getDefaultValue<boolean>('editor.minimap.show') ?? false,
   'editor.linenumbers.show': getDefaultValue<boolean>('editor.linenumber.show') ?? true,
   'editor.wordwrap': getDefaultValue<boolean>('editor.wordwrap') ?? true,
-  'tabs.show': getDefaultValue<boolean>('tabs.show') ?? true
+  'tabs.show': getDefaultValue<boolean>('tabs.show') ?? true,
+  'presentation.title.subTitle': getDefaultValue<string>('presentation.title.subTitle') ?? ''
 }
 
 export const configSlice = createSlice({
