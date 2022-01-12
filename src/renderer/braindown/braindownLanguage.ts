@@ -10,6 +10,7 @@ import { store } from '../store'
 import { setActivePage, setFocusElement } from '../store/storeApp'
 import { saveFile } from '../services/fileService'
 import { setPresentationContent } from '../store/storePresentation'
+import { CodeExtensionHandler } from './extensions/codeExtensionHandler'
 
 class BraindownLanguage {
   languageHandlers: BraindownLanguageExtension[] = []
@@ -20,6 +21,7 @@ class BraindownLanguage {
   initialize (editor: me.editor.IStandaloneCodeEditor, monaco: Monaco): void {
     this.languageHandlers.push(new ListExtensionHandler(editor))
     this.languageHandlers.push(new NewLineExtensionHandler(editor))
+    this.languageHandlers.push(new CodeExtensionHandler(editor))
 
     // register the language
     monaco.languages.register({ id: 'braindown' })
@@ -326,13 +328,25 @@ class BraindownLanguage {
   /**
    * Handles any input by the user based on the bd language specification
    * @param input The current input
-   * @param position Current position on the line
    */
   handleInput (input: string): void {
     for (const handler of this.languageHandlers) {
       if (handler.willHandleInput(input)) {
         log.debug(`${handler.constructor.name} will handle the input`)
         handler.handleInput(input)
+        break
+      }
+    }
+  }
+
+  /**
+   * Handles any deleted text from the editor based on the bd specification
+   */
+  handleDeletion (): void {
+    for (const handler of this.languageHandlers) {
+      if (handler.willHandleDeletion()) {
+        log.debug(`${handler.constructor.name} will handle the deletion`)
+        handler.handleDeletion()
         break
       }
     }

@@ -47,9 +47,16 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
     braindown.current = new BraindownLanguage()
     braindown.current.initialize(codeEditor, monaco)
 
-    ;(codeEditor as any).onDidType(function (text: string) {
-      extensionsRun(text, codeEditor)
-      braindown.current?.handleInput(text)
+    // ;(codeEditor as any).onDidType(function (text: string) {
+    //   extensionsRun(text, codeEditor)
+    //   braindown.current?.handleInput(text)
+    // })
+    codeEditor.onDidChangeModelContent((event) => {
+      for (const change of event.changes) {
+        extensionsRun(change.text, codeEditor)
+        if (change.text.length > 0) braindown.current?.handleInput(change.text)
+        if (change.text.length === 0) braindown.current?.handleDeletion()
+      }
     })
     codeEditor.onKeyDown((event) => {
       handleKeyDownEvent(event.browserEvent, 'monaco', codeEditor)

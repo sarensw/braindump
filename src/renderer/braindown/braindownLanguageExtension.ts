@@ -27,6 +27,19 @@ export abstract class BraindownLanguageExtension {
   }
 
   /**
+   * Returns true in case this extension will handle the deletion of a character
+   */
+  willHandleDeletion (): boolean {
+    return false
+  }
+
+  /**
+   * Will handle the text that was deleted in the editor. `willHandleDeletion` has to return true in order for this method to be called
+   */
+  handleDeletion (): void {
+  }
+
+  /**
    * Allows a handler to use the Enter key
    * @returns false, a handler has to override this method to all handling for the special key Enter
    */
