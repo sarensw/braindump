@@ -55,7 +55,8 @@ const PresentationPage: React.FunctionComponent = (): ReactElement => {
       <div
         className='h-full flex'
         style={{
-          padding: '6vw'
+          padding: '6vw',
+          userSelect: 'text'
         }}
       >
         {/* title slide */}
