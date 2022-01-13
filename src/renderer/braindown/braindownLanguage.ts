@@ -21,7 +21,7 @@ class BraindownLanguage {
   initialize (editor: me.editor.IStandaloneCodeEditor, monaco: Monaco): void {
     this.languageHandlers.push(new ListExtensionHandler(editor))
     this.languageHandlers.push(new NewLineExtensionHandler(editor))
-    this.languageHandlers.push(new CodeExtensionHandler(editor))
+    // this.languageHandlers.push(new CodeExtensionHandler(editor))
 
     // register the language
     monaco.languages.register({ id: 'braindown' })

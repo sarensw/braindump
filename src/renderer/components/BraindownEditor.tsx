@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
 import { getCursorPosition, persist } from '../services/fileService'
 import { Positionable } from '../common/cursorPosition'
+import { InlineCode } from '../braindown/inline/code'
 
 interface BraindownEditorProps {
   path: string
@@ -56,7 +57,17 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
         extensionsRun(change.text, codeEditor)
         if (change.text.length > 0) braindown.current?.handleInput(change.text)
         if (change.text.length === 0) braindown.current?.handleDeletion()
+
+        // inlinceCode.update(change)
       }
+    })
+    codeEditor.onDidChangeModel((event) => {
+      const model = codeEditor.getModel()
+
+      if (model === null) return
+
+      const code = new InlineCode(codeEditor, model)
+      code.initialize()
     })
     codeEditor.onKeyDown((event) => {
       handleKeyDownEvent(event.browserEvent, 'monaco', codeEditor)
