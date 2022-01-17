@@ -60,7 +60,7 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
       rules.push({ token: '', foreground: theme.editor.foreground, background: theme.editor.background })
       const themeData: monaco.editor.IStandaloneThemeData = {
         base: 'vs', // can also be vs-dark or hc-black
-        inherit: false, // can also be false to completely replace the builtin rules
+        inherit: true, // can also be false to completely replace the builtin rules
         colors: {
           'editor.background': theme.editor.background ?? '#00ff00'
         },

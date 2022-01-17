@@ -6,6 +6,9 @@ interface IExtendedViewZone {
   viewZone: monaco.editor.IViewZone
 }
 
+/**
+ * This is not used at all -> Reuse this code as a template for images, website previews...
+ */
 export class CodeExtensionHandler extends BraindownLanguageExtension {
   private readonly viewZones: IExtendedViewZone[] = []
 
@@ -14,6 +17,17 @@ export class CodeExtensionHandler extends BraindownLanguageExtension {
   }
 
   handleInput (input: string): void {
+    const line = this.getLine()
+    const position = this.editor.getPosition()
+
+    if (position === null) return
+
+    if (line.match(/'''(\w+) ?.*/) !== null) {
+      // empty by purpose
+    }
+  }
+
+  handleInput2 (input: string): void {
     const line = this.getLine()
     const position = this.editor.getPosition()
 

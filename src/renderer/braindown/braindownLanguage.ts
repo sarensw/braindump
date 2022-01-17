@@ -10,13 +10,13 @@ import { store } from '../store'
 import { setActivePage, setFocusElement } from '../store/storeApp'
 import { saveFile } from '../services/fileService'
 import { setPresentationContent } from '../store/storePresentation'
-import { CodeExtensionHandler } from './extensions/codeExtensionHandler'
 
 class BraindownLanguage {
   languageHandlers: BraindownLanguageExtension[] = []
   editor: me.editor.IStandaloneCodeEditor
   monaco: Monaco
   disposables: me.IDisposable[]
+  oldDecorations: string[]
 
   initialize (editor: me.editor.IStandaloneCodeEditor, monaco: Monaco): void {
     this.languageHandlers.push(new ListExtensionHandler(editor))
@@ -58,7 +58,26 @@ class BraindownLanguage {
           [/(\[x\])/, 'taskDone'],
           [/(\[ \])/, 'taskOpen'],
           [/\/\/[\w\d-:_;>=+]+\S/, 'keyword'],
-          [/\[[a-zA-Z 0-9:]+\]/, 'custom-date']
+          [/\[[a-zA-Z 0-9:]+\]/, 'custom-date'],
+          [/\[[a-zA-Z 0-9:]+\]/, 'custom-date'],
+
+          // github style code blocks (with backticks and language)
+          [/^\s*```\s*((?:\w|[/\-#])+)\s*$/, { token: 'string', next: '@codeblockgh', nextEmbedded: '$1' }],
+
+          // github style code blocks (with backticks but no language)
+          [/^\s*```\s*$/, { token: 'string', next: '@codeblock' }]
+        ],
+
+        codeblock: [
+          [/^\s*~~~\s*$/, { token: 'string', next: '@pop' }],
+          [/^\s*```\s*$/, { token: 'string', next: '@pop' }],
+          [/.*$/, 'variable.source']
+        ],
+
+        // github style code blocks
+        codeblockgh: [
+          [/```\s*$/, { token: 'variable.source', next: '@pop', nextEmbedded: '@pop' }],
+          [/[^`]+/, 'variable.source']
         ]
       }
     })
@@ -350,6 +369,75 @@ class BraindownLanguage {
         break
       }
     }
+  }
+
+  calculateDeltaDecorations (): void {
+    console.log('calculateDeltaDecorations')
+    const model = this.editor.getModel()
+
+    if (model === null) return
+
+    let codeSectionStart: number = -1
+    let codeSectionEnd: number = -1
+    let lines: string[] = []
+
+    const decorations: me.editor.IModelDeltaDecoration[] = []
+
+    let i: number = 0
+    for (const line of model.getLinesContent()) {
+      i++
+      if (line.match(/^```$/) !== null) {
+        codeSectionEnd = i
+
+        if (codeSectionStart >= 0) {
+          decorations.push({
+            range: new me.Range(codeSectionStart, 1, codeSectionStart, 1),
+            options: {
+              isWholeLine: true,
+              className: 'codeBlockFirstLine',
+              glyphMarginClassName: 'codeBlockFirstLine',
+              marginClassName: 'codeBlockFirstLine'
+            }
+          })
+          decorations.push({
+            range: new me.Range(codeSectionStart + 1, 1, codeSectionEnd - 1, 1),
+            options: {
+              isWholeLine: true,
+              className: 'codeBlock',
+              glyphMarginClassName: 'codeBlock',
+              marginClassName: 'codeBlock'
+            }
+          })
+          decorations.push({
+            range: new me.Range(codeSectionEnd, 1, codeSectionEnd, 1),
+            options: {
+              isWholeLine: true,
+              className: 'codeBlockLastLine',
+              glyphMarginClassName: 'codeBlockLastLine',
+              marginClassName: 'codeBlockLastLine'
+            }
+          })
+
+          lines = []
+          codeSectionStart = -1
+          codeSectionEnd = -1
+        }
+      }
+      if (codeSectionStart >= 0 && codeSectionEnd < 0) {
+        lines.push(line)
+      }
+      if (line.match(/```(\w+) ?.*/) !== null) {
+        // section start, only process when an and was found
+        codeSectionStart = i
+      }
+    }
+
+    console.log(decorations)
+    this.oldDecorations = model?.deltaDecorations(
+      this.oldDecorations,
+      decorations
+    )
+    console.log(this.oldDecorations)
   }
 }
 
