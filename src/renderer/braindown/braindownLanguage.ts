@@ -16,10 +16,12 @@ class BraindownLanguage {
   editor: me.editor.IStandaloneCodeEditor
   monaco: Monaco
   disposables: me.IDisposable[]
+  oldDecorations: string[]
 
   initialize (editor: me.editor.IStandaloneCodeEditor, monaco: Monaco): void {
     this.languageHandlers.push(new ListExtensionHandler(editor))
     this.languageHandlers.push(new NewLineExtensionHandler(editor))
+    // this.languageHandlers.push(new CodeExtensionHandler(editor))
 
     // register the language
     monaco.languages.register({ id: 'braindown' })
@@ -56,7 +58,26 @@ class BraindownLanguage {
           [/(\[x\])/, 'taskDone'],
           [/(\[ \])/, 'taskOpen'],
           [/\/\/[\w\d-:_;>=+]+\S/, 'keyword'],
-          [/\[[a-zA-Z 0-9:]+\]/, 'custom-date']
+          [/\[[a-zA-Z 0-9:]+\]/, 'custom-date'],
+          [/\[[a-zA-Z 0-9:]+\]/, 'custom-date'],
+
+          // github style code blocks (with backticks and language)
+          [/^\s*```\s*((?:\w|[/\-#])+)\s*$/, { token: 'string', next: '@codeblockgh', nextEmbedded: '$1' }],
+
+          // github style code blocks (with backticks but no language)
+          [/^\s*```\s*$/, { token: 'string', next: '@codeblock' }]
+        ],
+
+        codeblock: [
+          [/^\s*~~~\s*$/, { token: 'string', next: '@pop' }],
+          [/^\s*```\s*$/, { token: 'string', next: '@pop' }],
+          [/.*$/, 'variable.source']
+        ],
+
+        // github style code blocks
+        codeblockgh: [
+          [/```\s*$/, { token: 'variable.source', next: '@pop', nextEmbedded: '@pop' }],
+          [/[^`]+/, 'variable.source']
         ]
       }
     })
@@ -326,7 +347,6 @@ class BraindownLanguage {
   /**
    * Handles any input by the user based on the bd language specification
    * @param input The current input
-   * @param position Current position on the line
    */
   handleInput (input: string): void {
     for (const handler of this.languageHandlers) {
@@ -336,6 +356,88 @@ class BraindownLanguage {
         break
       }
     }
+  }
+
+  /**
+   * Handles any deleted text from the editor based on the bd specification
+   */
+  handleDeletion (): void {
+    for (const handler of this.languageHandlers) {
+      if (handler.willHandleDeletion()) {
+        log.debug(`${handler.constructor.name} will handle the deletion`)
+        handler.handleDeletion()
+        break
+      }
+    }
+  }
+
+  calculateDeltaDecorations (): void {
+    console.log('calculateDeltaDecorations')
+    const model = this.editor.getModel()
+
+    if (model === null) return
+
+    let codeSectionStart: number = -1
+    let codeSectionEnd: number = -1
+    let lines: string[] = []
+
+    const decorations: me.editor.IModelDeltaDecoration[] = []
+
+    let i: number = 0
+    for (const line of model.getLinesContent()) {
+      i++
+      if (line.match(/^```$/) !== null) {
+        codeSectionEnd = i
+
+        if (codeSectionStart >= 0) {
+          decorations.push({
+            range: new me.Range(codeSectionStart, 1, codeSectionStart, 1),
+            options: {
+              isWholeLine: true,
+              className: 'codeBlockFirstLine',
+              glyphMarginClassName: 'codeBlockFirstLine',
+              marginClassName: 'codeBlockFirstLine'
+            }
+          })
+          decorations.push({
+            range: new me.Range(codeSectionStart + 1, 1, codeSectionEnd - 1, 1),
+            options: {
+              isWholeLine: true,
+              className: 'codeBlock',
+              glyphMarginClassName: 'codeBlock',
+              marginClassName: 'codeBlock'
+            }
+          })
+          decorations.push({
+            range: new me.Range(codeSectionEnd, 1, codeSectionEnd, 1),
+            options: {
+              isWholeLine: true,
+              className: 'codeBlockLastLine',
+              glyphMarginClassName: 'codeBlockLastLine',
+              marginClassName: 'codeBlockLastLine'
+            }
+          })
+
+          lines = []
+          codeSectionStart = -1
+          codeSectionEnd = -1
+        }
+      }
+      if (codeSectionStart >= 0 && codeSectionEnd < 0) {
+        lines.push(line)
+      }
+      if (line.match(/```(\w+) ?.*/) !== null) {
+        // section start, only process when an and was found
+        codeSectionStart = i
+      }
+    }
+
+    console.log(decorations)
+    this.oldDecorations = model?.deltaDecorations(
+      this.oldDecorations,
+      decorations
+    )
+    console.log(this.oldDecorations)
   }
 }
 

@@ -18,3 +18,15 @@ body {
 .tablist::-webkit-scrollbar {
   display: none;
 }
+
+.codeBlock {
+	background: rgba(219, 219, 219, 0.25);
+}
+
+.codeBlockFirstLine {
+  border-bottom: 1px solid rgb(200, 200, 200);
+}
+
+.codeBlockLastLine {
+  border-top: 1px solid rgb(200, 200, 200);
+}
