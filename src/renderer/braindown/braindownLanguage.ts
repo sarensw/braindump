@@ -432,12 +432,10 @@ class BraindownLanguage {
       }
     }
 
-    console.log(decorations)
     this.oldDecorations = model?.deltaDecorations(
       this.oldDecorations,
       decorations
     )
-    console.log(this.oldDecorations)
   }
 }
 
