@@ -1,6 +1,6 @@
 {
   "name": "braindump",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Dump your brain",
   "private": "true",
   "scripts": {
