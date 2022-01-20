@@ -10,14 +10,14 @@ export class ListExtensionHandler extends BraindownLanguageExtension {
     if (lineBeforeInput === null) return
 
     if (this.testLineBeforeInput(/^$/, input.length)) {
-      this.replace(-1, '- ', '- '.length)
-      this.positionDelta(0, 1)
+      this.replace(-1, '- ', 0)
+      this.positionDelta(0, 0)
     } else if (this.testLineBeforeInput(/^[ ]*[-]{1} $/, input.length)) {
       this.replace(
         -lineBeforeInput.length - 1,
         ' '.repeat(lineBeforeInput.length) + '- ',
-        (' '.repeat(lineBeforeInput.length) + '- ').length)
-      this.positionDelta(0, 1)
+        0)
+      this.positionDelta(0, 0)
     }
   }
 
@@ -42,7 +42,7 @@ export class ListExtensionHandler extends BraindownLanguageExtension {
       this.replace(
         -3,
         '- ',
-        '- '.length)
+        0)
       this.positionDelta(0, 0)
     } else {
       const lineSuffix: string = this.getLineAfterInput()
@@ -51,7 +51,7 @@ export class ListExtensionHandler extends BraindownLanguageExtension {
       this.replace(
         0,
         ''.padStart(gap) + '- ' + lineSuffix,
-        (''.padStart(gap) + '- ').length)
+        0)
       this.positionColumn((''.padStart(gap) + '- ').length + 1)
     }
   }
