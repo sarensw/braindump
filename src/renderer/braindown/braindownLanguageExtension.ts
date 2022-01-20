@@ -221,24 +221,28 @@ export abstract class BraindownLanguageExtension {
   newLine (): void {
     const model = this.editor.getModel()
     const position = this.editor.getPosition()
+    const selection = this.editor.getSelection()
     const eol = model?.getEOL()
 
-    if (model !== null && position !== null && eol !== undefined) {
+    console.log(position)
+    console.log(selection)
+
+    if (model !== null && selection !== null && position !== null && eol !== undefined) {
       // add new line
       model.pushEditOperations(
-        [],
+        [selection],
         [{
           range: {
-            startLineNumber: position.lineNumber,
-            startColumn: position.column,
-            endLineNumber: position.lineNumber,
-            endColumn: position.column
+            startLineNumber: selection.startLineNumber,
+            startColumn: selection.startColumn,
+            endLineNumber: selection.endLineNumber,
+            endColumn: selection.endColumn
           },
           text: eol
         }],
-        () => null)
+        () => null
+      )
 
-      // set position to column 0 of next line. all other operations have to start there
       this.editor.setPosition(new monaco.Position(position.lineNumber + 1, 0))
     }
   }
