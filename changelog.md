@@ -1,6 +1,7 @@
 # v0.6
 - [feat] share note content via email
 - [feat] save note as file anywhere in the system
+- [feat] highlight of markdown block quotes
 
 # v0.5
 - [feat] presentation mode

@@ -426,9 +426,20 @@ class BraindownLanguage {
       if (codeSectionStart >= 0 && codeSectionEnd < 0) {
         lines.push(line)
       }
-      if (line.match(/```(\w+) ?.*/) !== null) {
+      if (line.match(/^```(\w+) ?.*/) !== null) {
         // section start, only process when an and was found
         codeSectionStart = i
+      }
+
+      if (line.match(/^>.*/) !== null) {
+        decorations.push({
+          range: new me.Range(i, 1, i, 20),
+          options: {
+            isWholeLine: true,
+            className: 'blockQuote',
+            marginClassName: 'blockQuoteMargin'
+          }
+        })
       }
     }
 

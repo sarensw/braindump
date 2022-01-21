@@ -30,3 +30,11 @@ body {
 .codeBlockLastLine {
   border-top: 1px solid rgb(200, 200, 200);
 }
+
+.blockQuote {
+  background: rgba(219, 219, 219, 0.25);
+}
+
+.blockQuoteMargin {
+  border-right: 1ch solid rgb(172, 172, 172);
+}
