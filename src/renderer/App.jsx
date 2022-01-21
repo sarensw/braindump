@@ -1,31 +1,17 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { keys, handleKeyDownEvent } from './hotkeys'
 import PageContainer from './pages/PageContainer'
-import { setActivePage } from './store/storeApp'
-import Icon from './components/elements/Icon'
 import { useAppSelector } from './hooks'
-import { getMenuTemplate } from './services/contextMenuService'
 import HotkeyPeek from './components/HotkeyPeek'
 
 const App = _ => {
-  const dispatch = useDispatch()
   const colors = useAppSelector(state => state.themeNew.colors)
   const settings = useAppSelector(state => state.settings)
 
   useHotkeys(keys, (event) => {
     handleKeyDownEvent(event, 'window')
   })
-
-  const changeActivePage = (page) => {
-    dispatch(setActivePage(page))
-  }
-
-  const showSettings = () => {
-    const template = getMenuTemplate('appContext')
-    window.__preload.menu(template)
-  }
 
   return (
     <>
@@ -54,14 +40,6 @@ const App = _ => {
               fontSize: '1em'
             }}
           >Braindump
-          </div>
-          <div className='flex flex-row justify-end gap-2 pr-2'>
-            <button className='cursor-pointer' onClick={() => changeActivePage('editor')}>
-              <Icon icon='notepad' />
-            </button>
-            <button onClick={() => showSettings()}>
-              <Icon icon='cog' />
-            </button>
           </div>
         </div>
 

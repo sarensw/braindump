@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
 import { setClusterName, setFileName } from '../services/fileService'
 import { setFocusElement } from '../store/storeApp'
+import { getMenuTemplate } from '../services/contextMenuService'
+import Icon from '../components/elements/Icon'
 
 const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactElement => {
   const dispatch = useDispatch()
@@ -51,6 +53,11 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
     return leftMargin
   }
 
+  const showSettings = (): void => {
+    const template = getMenuTemplate('appContext')
+    window.__preload.menu(template)
+  }
+
   return (
     <>
       <div
@@ -84,6 +91,10 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
               value={name}
               onChange={handleNameChange}
             />
+
+            <button onClick={() => showSettings()}>
+              <Icon icon='cog' />
+            </button>
           </div>
 
           {/* Path */}
