@@ -1,16 +1,20 @@
-# 0.5
+# v0.6
+- [feat] share note content via email
+- [feat] save note as file anywhere in the system
+
+# v0.5
 - [feat] presentation mode
 - [feat] hotkey peek
 - [fix] page overflow missing for notes list and settings
 
-# 0.4
+# v0.4
 - [feat] revive the settings page
 - [feat] added backup functionality
 
-# 0.3
+# v0.3
 - [feat] new settings page
 - [feat] cluster dumps
 - [feat] move dumps via keys
 
-# 0.2
+# v0.2
 - [feat] allow to scroll past the last line
