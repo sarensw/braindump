@@ -1,5 +1,5 @@
 
-import { app, BrowserWindow, ipcMain, crashReporter, globalShortcut } from 'electron'
+import { app, BrowserWindow, ipcMain, crashReporter, globalShortcut, shell } from 'electron'
 import path from 'path'
 import log from 'electron-log'
 import { SettingsFile } from './settings'
@@ -208,4 +208,11 @@ ipcMain.handle('share/saveas', async (event, args) => {
     defaultPath: args.defaultPath
   })
   return path
+})
+
+ipcMain.on('share/openExternal', async (event, args) => {
+  log.debug('intent to share via share/openExternal with the following args')
+  log.debug(args)
+
+  await shell.openExternal(args.url)
 })

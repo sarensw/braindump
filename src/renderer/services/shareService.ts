@@ -1,17 +1,25 @@
+import { SharedFile } from '../../shared/types'
 import log from '../log'
 import { store } from '../store'
 import { readFile } from './fileService'
 
-async function fileShareAs (): Promise<void> {
+function getFileToShare (): SharedFile | null {
   const shareFile = store.getState().files.shareFile
 
   if (shareFile === null) {
     log.error('Cannot share file because shareFile is null')
-    return
+    return null
   }
 
   log.debug('intent to share the following file')
   log.debug(shareFile)
+
+  return shareFile
+}
+
+async function fileShareAs (): Promise<void> {
+  const shareFile = getFileToShare()
+  if (shareFile === null) return
 
   // open the dialog to get the path
   const path = await window.__preload.invoke({
@@ -42,4 +50,21 @@ async function fileShareAs (): Promise<void> {
   log.debug(`shared file ${shareFile.name} to ${String(path)}`)
 }
 
-export { fileShareAs }
+async function shareViaEmail (): Promise<void> {
+  const shareFile = getFileToShare()
+  if (shareFile === null) return
+
+  // read the content of the file
+  const text = await readFile(shareFile?.path)
+  const encodedText = encodeURIComponent(text)
+  const encodedSubject = encodeURIComponent(shareFile.name)
+
+  await window.__preload.send({
+    channel: 'share/openExternal',
+    payload: {
+      url: `mailto:?subject=${encodedSubject}&body=${encodedText}`
+    }
+  })
+}
+
+export { fileShareAs, shareViaEmail }

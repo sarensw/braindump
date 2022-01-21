@@ -3,7 +3,7 @@ import { setActivePage } from '../store/storeApp'
 import { store } from '../store'
 import { saveSettings } from './settingsService'
 import { backup } from './fileService'
-import { fileShareAs } from './shareService'
+import { fileShareAs, shareViaEmail } from './shareService'
 
 function initializeContextMenus (): void {
   window.__preload.receive('context-menu-command', (commandId: string) => {
@@ -140,6 +140,14 @@ function getShareMenu (): any {
       label: 'Save As...',
       click: async () => {
         await fileShareAs()
+      }
+    },
+    { type: 'separator' },
+    {
+      id: 'menu-share-via-email',
+      label: 'via Email',
+      click: async () => {
+        await shareViaEmail()
       }
     }
   ]
