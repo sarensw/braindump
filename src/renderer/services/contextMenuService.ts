@@ -3,6 +3,7 @@ import { setActivePage } from '../store/storeApp'
 import { store } from '../store'
 import { saveSettings } from './settingsService'
 import { backup } from './fileService'
+import { fileShareAs } from './shareService'
 
 function initializeContextMenus (): void {
   window.__preload.receive('context-menu-command', (commandId: string) => {
@@ -28,7 +29,8 @@ function initializeContextMenus (): void {
 
 function getAllContextMenus (): any {
   return {
-    appContext: getAppContextMenu()
+    appContext: getAppContextMenu(),
+    share: getShareMenu()
   }
 }
 
@@ -131,10 +133,27 @@ function getAppContextMenu (): any {
   return menu
 }
 
+function getShareMenu (): any {
+  const menu = [
+    {
+      id: 'menu-share-saveas',
+      label: 'Save As...',
+      click: async () => {
+        await fileShareAs()
+      }
+    }
+  ]
+  return menu
+}
+
 function getMenuTemplate (templateId: string): any {
   console.log(templateId)
   if (templateId === 'appContext') {
     const template = JSON.parse(JSON.stringify(getAppContextMenu()))
+    return template
+  }
+  if (templateId === 'share') {
+    const template = JSON.parse(JSON.stringify(getShareMenu()))
     return template
   }
 

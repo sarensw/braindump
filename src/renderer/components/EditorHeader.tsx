@@ -5,6 +5,7 @@ import { setClusterName, setFileName } from '../services/fileService'
 import { setFocusElement } from '../store/storeApp'
 import { getMenuTemplate } from '../services/contextMenuService'
 import Icon from '../components/elements/Icon'
+import { setShareFile } from '../store/storeFiles'
 
 const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactElement => {
   const dispatch = useDispatch()
@@ -53,8 +54,18 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
     return leftMargin
   }
 
-  const showSettings = (): void => {
+  const showAppContextMenu = (): void => {
     const template = getMenuTemplate('appContext')
+    window.__preload.menu(template)
+  }
+
+  const showShareMenu = (): void => {
+    if (files.current === null) return
+    const file = files.files?.find(f => f.id === files.current)
+    if (file === undefined) return
+
+    dispatch(setShareFile(file))
+    const template = getMenuTemplate('share')
     window.__preload.menu(template)
   }
 
@@ -92,7 +103,10 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
               onChange={handleNameChange}
             />
 
-            <button onClick={() => showSettings()}>
+            <button onClick={() => showShareMenu()}>
+              <Icon icon='cog' />
+            </button>
+            <button onClick={() => showAppContextMenu()}>
               <Icon icon='cog' />
             </button>
           </div>

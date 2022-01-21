@@ -6,7 +6,7 @@ import { SettingsFile } from './settings'
 import { FileSystem } from './fs'
 import { FileSystem as DemoFileSystem } from './demo/demoFileService'
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
-import { Menu } from 'electron/main'
+import { dialog, Menu } from 'electron/main'
 
 crashReporter.start({ uploadToServer: false })
 
@@ -198,4 +198,14 @@ ipcMain.on('menu/context', (event, template) => {
   })
   const menu = Menu.buildFromTemplate(clickableTemplate)
   menu.popup(BrowserWindow.fromWebContents(event.sender))
+})
+
+ipcMain.handle('share/saveas', async (event, args) => {
+  log.debug('intent to share/saveas with the following args')
+  log.debug(args)
+
+  const path = await dialog.showSaveDialog(mainWindow, {
+    defaultPath: args.defaultPath
+  })
+  return path
 })

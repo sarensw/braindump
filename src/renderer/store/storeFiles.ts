@@ -18,6 +18,7 @@ interface FilesState {
   count: number
   text: string
   dirty: boolean
+  shareFile: SharedFile | null
 }
 
 interface FileNameUpdate {
@@ -37,7 +38,8 @@ const initialState: FilesState = {
   filesSearch: '',
   count: -1,
   text: '',
-  dirty: false
+  dirty: false,
+  shareFile: null
 }
 
 export const filesSlice = createSlice({
@@ -154,9 +156,12 @@ export const filesSlice = createSlice({
     },
     setFilesSearch: (state, action: PayloadAction<string>) => {
       state.filesSearch = action.payload
+    },
+    setShareFile: (state, action: PayloadAction<SharedFile>) => {
+      state.shareFile = action.payload
     }
   }
 })
 
-export const { setFiles, addFile, closeFile, setCluster, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition, moveFileUp, moveFileDown, setFilesSearch } = filesSlice.actions
+export const { setFiles, addFile, closeFile, setCluster, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition, moveFileUp, moveFileDown, setFilesSearch, setShareFile } = filesSlice.actions
 export default filesSlice.reducer
