@@ -15,7 +15,7 @@ exports.default = async function notarizing (context) {
   console.log(`appName  : ${appName}`)
 
   return await notarize({
-    appBundleId: 'com.featureninjas.braindump',
+    appBundleId: 'app.braindump.Braindump',
     appPath: `${appOutDir}/${appName}.app`,
     appleId: process.env.APPLEID,
     appleIdPassword: process.env.APPLEIDPASS
