@@ -2,6 +2,7 @@
 - [feat] share note content via email
 - [feat] save note as file anywhere in the system
 - [feat] highlight of markdown block quotes
+- [fix] braindump not starting the first time
 
 # v0.5
 - [feat] presentation mode

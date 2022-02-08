@@ -28,7 +28,7 @@ async function initializeSnippetsService (): Promise<void> {
 
 async function readSnippets (): Promise<string> {
   log.debug('read snippets')
-  const snippetsRaw = await window.__preload.invoke({
+  let snippetsRaw = await window.__preload.invoke({
     channel: 'file/read',
     payload: {
       path: PATH_FILE_SNIPPETS
@@ -40,6 +40,13 @@ async function readSnippets (): Promise<string> {
     log.debug('no snippets file existing yet, creating an empty one')
 
     await writeSnippets([SNIPPETS_DEFAULT])
+
+    snippetsRaw = await window.__preload.invoke({
+      channel: 'file/read',
+      payload: {
+        path: PATH_FILE_SNIPPETS
+      }
+    })
   }
 
   return snippetsRaw
@@ -48,6 +55,7 @@ async function readSnippets (): Promise<string> {
 async function loadSnippets (): Promise<Snippet[]> {
   log.debug('loading snippets')
   const snippetsRaw = await readSnippets()
+  log.debug(snippetsRaw)
   const snippets = YAML.parse(snippetsRaw) as Snippet[]
 
   log.debug(`snippets loaded (text length ${snippetsRaw.length}, # ${snippets.length}`)
