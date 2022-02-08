@@ -4,8 +4,10 @@ import { keys, handleKeyDownEvent } from './hotkeys'
 import PageContainer from './pages/PageContainer'
 import { useAppSelector } from './hooks'
 import HotkeyPeek from './components/HotkeyPeek'
+import WindowsButtons from './components/WindowsButtons'
 
 const App = _ => {
+  const app = useAppSelector(state => state.app)
   const colors = useAppSelector(state => state.themeNew.colors)
   const settings = useAppSelector(state => state.settings)
 
@@ -30,7 +32,8 @@ const App = _ => {
             color: colors.titleBar.activeForeground,
             borderBottomColor: colors.titleBar.borderBottom,
             borderBottomWidth: colors.titleBar.borderBottom ? '1px' : '0px',
-            WebkitAppRegion: 'drag'
+            WebkitAppRegion: 'drag',
+            height: '24px'
           }}
         >
           <div />
@@ -41,6 +44,7 @@ const App = _ => {
             }}
           >Braindump
           </div>
+          {app.platform === 'win32' && <WindowsButtons />}
         </div>
 
         <div className='font-mono'>

@@ -73,6 +73,13 @@ function createMainWindow () {
     })
   })
 
+  window.on('maximize', () => {
+    window.webContents.send('windows/maximized-changed')
+  })
+  window.on('unmaximize', () => {
+    window.webContents.send('windows/maximized-changed')
+  })
+
   return window
 }
 
@@ -105,6 +112,11 @@ app.whenReady().then(() => {
 app.on('will-quit', () => {
   // Unregister all shortcuts.
   globalShortcut.unregisterAll()
+})
+
+ipcMain.handle('app/platform', (event, args) => {
+  log.debug('app/platform')
+  return process.platform
 })
 
 ipcMain.on('showMainWindow', (event, args) => {
@@ -215,4 +227,23 @@ ipcMain.on('share/openExternal', async (event, args) => {
   log.debug(args)
 
   await shell.openExternal(args.url)
+})
+
+ipcMain.on('windows/controls', async (event, args) => {
+  log.debug('windows controls event')
+  log.debug(args)
+
+  if (args.action === 'minimize') {
+    mainWindow.minimize()
+  } else if (args.action === 'maximize') {
+    mainWindow.maximize()
+  } else if (args.action === 'unmaximize') {
+    mainWindow.unmaximize()
+  } else if (args.action === 'close') {
+    mainWindow.close()
+  }
+})
+
+ipcMain.handle('windows/isMaximized', (event, args) => {
+  return mainWindow.isMaximized()
 })

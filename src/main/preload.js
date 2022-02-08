@@ -17,7 +17,8 @@ contextBridge.exposeInMainWorld('__preload', {
     ipcRenderer.send('menu/context', template)
   },
   receive: (channel, func) => {
-    const validChannels = ['shortcut', 'context-menu-command']
+    console.log(`receive: ${channel}`)
+    const validChannels = ['shortcut', 'context-menu-command', 'windows/maximized-changed']
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`
       ipcRenderer.on(channel, (event, ...args) => {
