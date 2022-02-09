@@ -45,7 +45,7 @@ jobs:
       - name: Print Win
         if: startsWith(matrix.os, 'windows')
         run: |
-          tree "$env:GITHUB_WORKSPACE/dist" /f
+          tree "$env:GITHUB_WORKSPACE" /f
 
       - name: Upload Mac
         uses: actions/upload-artifact@v2
