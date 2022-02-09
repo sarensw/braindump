@@ -37,8 +37,8 @@ jobs:
         env:
           NODE_ENV: production
         run: |
-          chmod +x ${GITHUB_WORKSPACE}/build_win.bat
-          ${GITHUB_WORKSPACE}/build_win.bat
+          chmod +x "${GITHUB_WORKSPACE}/build_win.bat"
+          "${GITHUB_WORKSPACE}/build_win.bat"
 
       - uses: nyaa8/package-version@v1
 
