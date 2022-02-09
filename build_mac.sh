@@ -9,6 +9,9 @@ if [ -n "$1" ]; then
   export APPLEIDPASS=$5
 fi
 
+# set the node env
+export NODE_ENV=production
+
 # print the env
 printenv
 

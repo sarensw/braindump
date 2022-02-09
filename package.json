@@ -1,15 +1,15 @@
 {
   "name": "braindump",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Dump your brain",
   "private": "true",
   "scripts": {
     "build": "run-s -l build:esbuild build:snowpack build:electron",
     "build:dir": "run-s -l build:esbuild build:snowpack build:electron:dir",
-    "build:esbuild": "NODE_ENV=production npx esbuild src/main/index.js src/main/preload.js --outdir=build/main --bundle --platform=node --external:electron --format=cjs",
-    "build:electron": "NODE_ENV=production npx electron-builder build",
-    "build:electron:dir": "NODE_ENV=production npx electron-builder build --dir",
-    "build:snowpack": "NODE_ENV=production npx snowpack build",
+    "build:esbuild": "npx esbuild src/main/index.js src/main/preload.js --outdir=build/main --bundle --platform=node --external:electron --format=cjs",
+    "build:electron": "npx electron-builder build",
+    "build:electron:dir": "npx electron-builder build --dir",
+    "build:snowpack": "npx snowpack build",
 
     "dev": "concurrently -n snowpack,esbuild,electron --prefixColors green,yellow,blue \"npm:dev-snowpack\" \"npm:dev-esbuild\" \"npm:dev-electron\"",
     "dev-esbuild": "esbuild src/main/index.js src/main/preload.js --outdir=dist/main --bundle --platform=node --external:electron --watch --format=cjs",

@@ -20,4 +20,7 @@ mac:
   type: distribution
   hardenedRuntime: true
 
+win:
+  target: nsis
+
 afterSign: scripts/build/notarize.js

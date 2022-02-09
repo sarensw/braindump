@@ -6,6 +6,7 @@ exports.default = async function notarizing (context) {
 
   const { electronPlatformName, appOutDir } = context
   if (electronPlatformName !== 'darwin') {
+    console.log('Notarizing not needed for platform ' + electronPlatformName)
     return
   }
 

@@ -21,7 +21,7 @@ jobs:
 
       - run: npm install
 
-      - name: Build
+      - name: Build Mac
         if: startsWith(matrix.os, 'macos')
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
@@ -31,15 +31,24 @@ jobs:
         run: |
           chmod +x ${GITHUB_WORKSPACE}/build_mac.sh
           ${GITHUB_WORKSPACE}/build_mac.sh
+      
+      - name: Build Win
+        if: startsWith(matrix.os, 'windows')
+        env:
+          NODE_ENV: production
+        run: |
+          chmod +x ${GITHUB_WORKSPACE}/build_win.sh
+          ${GITHUB_WORKSPACE}/build_win.sh
 
       - uses: nyaa8/package-version@v1
 
-      - name: print win
+      - name: Print Win
         if: startsWith(matrix.os, 'windows')
         run: |
           tree ./dist /f
 
-      - uses: actions/upload-artifact@v2
+      - name: Upload Mac
+        uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'macos')
         with:
           name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
@@ -47,7 +56,8 @@ jobs:
             dist/Braindump-*
             !dist/*.blockmap
 
-      - uses: actions/upload-artifact@v2
+      - name: Upload Win
+        uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'windows')
         with:
           name: Braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
