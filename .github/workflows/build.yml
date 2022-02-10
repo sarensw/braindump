@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [windows-latest]
 
     steps:
       - name: Check out Git repository
@@ -36,16 +36,16 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         env:
           NODE_ENV: production
+        shell: powershell
         run: |
-          chmod +x "$env:GITHUB_WORKSPACE/build_win.ps1"
-          "$env:GITHUB_WORKSPACE/build_win.ps1"
+          & .\build_win.ps1
 
       - uses: nyaa8/package-version@v1
 
       - name: Print Win
         if: startsWith(matrix.os, 'windows')
         run: |
-          tree ./dist /f
+          tree "$env:GITHUB_WORKSPACE" /f
 
       - name: Upload Mac
         uses: actions/upload-artifact@v2

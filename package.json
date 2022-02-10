@@ -7,7 +7,7 @@
     "build": "run-s -l build:esbuild build:snowpack build:electron",
     "build:dir": "run-s -l build:esbuild build:snowpack build:electron:dir",
     "build:esbuild": "npx esbuild src/main/index.js src/main/preload.js --outdir=build/main --bundle --platform=node --external:electron --format=cjs",
-    "build:electron": "npx electron-builder build",
+    "build:electron": "npx electron-builder build --publish never",
     "build:electron:dir": "npx electron-builder build --dir",
     "build:snowpack": "npx snowpack build",
 
