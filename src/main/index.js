@@ -45,6 +45,7 @@ function createMainWindow () {
     windowOptions.center = true
   }
   const window = new BrowserWindow(windowOptions)
+  window.removeMenu()
 
   window.on('ready-to-show', () => {
     window.webContents.setZoomFactor(1.1)
