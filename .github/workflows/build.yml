@@ -64,6 +64,7 @@ jobs:
           name: braindump_${{ env.PACKAGE_VERSION }}_${{ github.run_number }}
           path: |
             dist/braindump-*
+            dist/braindump_*
             !dist/*.blockmap
 
       - name: Upload Mac
