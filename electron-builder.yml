@@ -26,10 +26,19 @@ win:
   icon: assets/logo/logo_256x256.png
 
 linux:
-  target: dir
+  target:
+    - tar.gz
+    - deb
+    - rpm
   maintainer: Stephan Arenswald
   vendor: FeatureNinjas OUe
   category: Development
-  icon: scripts/build/logo.icns
+  artifactName: braindump-${version}.${ext}
+
+deb:
+  artifactName: braindump_${version}_${arch}.${ext}
+
+rpm:
+  artifactName: braindump-${version}.${arch}.${ext}
 
 afterSign: scripts/build/notarize.js

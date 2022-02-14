@@ -3,7 +3,6 @@ build_local*.sh
 **/*.p12
 **/*.cer
 **/.DS_Store
-/build/
 /buildci/
 
 # Logs
