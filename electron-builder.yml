@@ -9,6 +9,7 @@ files:
   - package.json
   - index.js
   - buildci/
+  - build/
   - assets/
   - node_modules/
 
@@ -23,7 +24,7 @@ mac:
 
 win:
   target: nsis
-  icon: assets/logo/logo_256x256.png
+  icon: build/icon.ico
 
 linux:
   target:
