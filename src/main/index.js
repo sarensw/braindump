@@ -1,5 +1,5 @@
 
-import { app, BrowserWindow, ipcMain, crashReporter, globalShortcut, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, crashReporter, globalShortcut, shell, Tray } from 'electron'
 import path from 'path'
 import log from 'electron-log'
 import { SettingsFile } from './settings'
@@ -37,7 +37,9 @@ function createMainWindow () {
       enableRemoteModule: false
     },
     titleBarStyle: 'hidden',
-    show: false
+    show: false,
+    icon: path.join(__dirname, '../../assets/logo/logo_48x48.png')
+    // icon: path.join(__dirname, '../../assets/logo/logo_48x48.png')
   }
   if (process.env.BRAINDUMP_DEMO_MODE === 'true') {
     windowOptions.width = 640
@@ -45,6 +47,7 @@ function createMainWindow () {
     windowOptions.center = true
   }
   const window = new BrowserWindow(windowOptions)
+  window.removeMenu()
 
   window.on('ready-to-show', () => {
     window.webContents.setZoomFactor(1.1)
