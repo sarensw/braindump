@@ -4,6 +4,7 @@ build_local*.sh
 **/*.cer
 **/.DS_Store
 /build/
+/buildci/
 
 # Logs
 logs

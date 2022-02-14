@@ -8,7 +8,7 @@ directories:
 files:
   - package.json
   - index.js
-  - build/
+  - buildci/
   - assets/
   - node_modules/
 

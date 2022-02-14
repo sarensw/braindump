@@ -6,7 +6,7 @@ module.exports = {
   },
   buildOptions: {
     "baseUrl": "./",
-    out: "build/renderer"
+    out: "buildci/renderer"
   },
   plugins: [
     '@snowpack/plugin-postcss',
