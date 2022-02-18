@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { SharedFile } from '../../shared/types'
 import type { Positionable } from '../common/cursorPosition'
+import log from '../log'
 import { File } from './files/file'
 
 interface SerializableFile extends SharedFile {
@@ -8,6 +9,7 @@ interface SerializableFile extends SharedFile {
   text: string
   isNew: boolean
   position: Positionable
+  viewState: string
 }
 
 interface FilesState {
@@ -115,6 +117,15 @@ export const filesSlice = createSlice({
         state.files[i].position = action.payload
       }
     },
+    setViewState: (state, action: PayloadAction<string>) => {
+      const i = state.files?.findIndex(f => f.id === state.current)
+      if (i !== undefined && state.files !== null) {
+        state.files[i].viewState = action.payload
+
+        log.debug(`view state updated for file ${state.files[i].name}`)
+        log.debug(action.payload)
+      }
+    },
     moveFileUp: (state) => {
       if (state === null || state.files === null || state.files === undefined) return
 
@@ -163,5 +174,5 @@ export const filesSlice = createSlice({
   }
 })
 
-export const { setFiles, addFile, closeFile, setCluster, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition, moveFileUp, moveFileDown, setFilesSearch, setShareFile } = filesSlice.actions
+export const { setFiles, addFile, closeFile, setCluster, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition, setViewState, moveFileUp, moveFileDown, setFilesSearch, setShareFile } = filesSlice.actions
 export default filesSlice.reducer

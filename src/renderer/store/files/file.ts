@@ -8,6 +8,7 @@ export class File implements SharedFile {
   loaded: boolean
   text: string
   isNew: boolean
+  viewState: string
   position: {
     line: number
     column: number

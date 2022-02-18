@@ -14,6 +14,7 @@ import { initializeSnippetsService } from './services/snippetsService'
 import { initializeContextMenus } from './services/contextMenuService'
 import { initializeWindowsButtons } from './indexWindows'
 import { setPlatform } from './store/storeApp'
+import { initializeCleanup } from './cleanup'
 
 async function initialize (): Promise<void> {
   await loadPlatform()
@@ -22,6 +23,7 @@ async function initialize (): Promise<void> {
   registerShortcuts()
   await initializeSnippetsService()
   initializeContextMenus()
+  initializeCleanup()
 
   ReactDOM.render(
     <Provider store={store}>

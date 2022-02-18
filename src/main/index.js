@@ -1,5 +1,5 @@
 
-import { app, BrowserWindow, ipcMain, crashReporter, globalShortcut, shell, Tray } from 'electron'
+import { app, BrowserWindow, ipcMain, crashReporter, globalShortcut, shell } from 'electron'
 import path from 'path'
 import log from 'electron-log'
 import { SettingsFile } from './settings'
@@ -64,6 +64,11 @@ function createMainWindow () {
   } else {
     window.loadFile(path.resolve(path.join(__dirname, '../renderer/index.html')))
   }
+
+  window.on('close', () => {
+    // tell the renderer that the app will quit
+    mainWindow.webContents.send('window/close')
+  })
 
   window.on('closed', () => {
     mainWindow = null

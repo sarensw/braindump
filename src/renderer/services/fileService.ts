@@ -66,7 +66,8 @@ async function createNewFile (): Promise<void> {
     position: {
       line: 0,
       column: 0
-    }
+    },
+    viewState: ''
   }
 
   window.__preload.send({
@@ -103,6 +104,7 @@ async function createNewFile (): Promise<void> {
 }
 
 async function setLastUsedFile (id: string): Promise<void> {
+  log.debug(`about to set the last used file to ${id}`)
   store.dispatch(setCurrentFile(id))
 
   const state = store.getState()
@@ -278,6 +280,7 @@ function saveFile (): void {
   if (state !== undefined) {
     const id = state.files.current
     const file = state.files.files?.find(f => f.id === id)
+    log.debug(`about to save content for file ${String(file?.name)}`)
 
     if (state.files.dirty && file !== null) {
       window.__preload.send({
@@ -342,6 +345,21 @@ function getCursorPosition (id: string | null): CursorPosition {
   return new CursorPosition(0, 0)
 }
 
+function getViewState (id: string | null): string | null {
+  if (id === null) return null
+
+  log.debug(`get view state for file ${id}`)
+  const state = store.getState()
+  if (state !== undefined) {
+    const file = state.files.files?.find(f => f.id === id)
+
+    if (file?.viewState !== undefined && file?.viewState !== '') {
+      return file.viewState
+    }
+  }
+  return null
+}
+
 function moveFile (direction: Direction): void {
   switch (direction) {
     case Direction.Up:
@@ -358,6 +376,7 @@ function moveFile (direction: Direction): void {
 }
 
 function persist (): void {
+  log.debug('persisting files')
   const state = store.getState()
 
   const newFiles = {
@@ -419,4 +438,4 @@ function backup (): void {
   }
 }
 
-export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setClusterName, setFileName, setLastUsedFile, getCursorPosition, moveFile, persist, calculateOverallFileSizes, isPathValid, backup }
+export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setClusterName, setFileName, setLastUsedFile, getCursorPosition, getViewState, moveFile, persist, calculateOverallFileSizes, isPathValid, backup }

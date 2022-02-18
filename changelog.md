@@ -1,3 +1,6 @@
+# v0.6.1
+- [fix] opening a note does not place the cursor at the previous position
+
 # v0.6
 - [feat] share note content via email
 - [feat] save note as file anywhere in the system

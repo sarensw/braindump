@@ -6,11 +6,11 @@ import log from '../log'
 import { BraindownLanguage } from '../braindown/braindownLanguage'
 import { run as extensionsRun } from '../extensions/extensions'
 import { handleKeyDownEvent } from '../hotkeys'
-import { setDirtyText, setLastCursorPosition } from '../store/storeFiles'
+import { setDirtyText, setLastCursorPosition, setViewState } from '../store/storeFiles'
 import { setCurrentHeaders, setCursorPosition, setDecorationsSizes } from '../store/storeEditor'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
-import { getCursorPosition, persist } from '../services/fileService'
+import { getViewState, persist } from '../services/fileService'
 import { Positionable } from '../common/cursorPosition'
 
 interface BraindownEditorProps {
@@ -26,12 +26,23 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
   const current = useAppSelector(state => state.files.current)
 
   const persistDuringUnload = (e): void => {
+    log.debug('window is about to be unloaded, request to persist the current state')
+
+    // setting view state first
+    const viewState = braindown.current?.editor.saveViewState()
+    dispatch(setViewState(JSON.stringify(viewState)))
+
+    // persist the content of the file
     persist()
   }
 
   useEffect(() => {
     window.addEventListener('beforeunload', persistDuringUnload)
     return () => {
+      // store the view state
+      const viewState = braindown.current?.editor.saveViewState()
+      dispatch(setViewState(JSON.stringify(viewState)))
+
       if (braindown.current !== null) {
         log.debug('Unmounting the braindown editor')
         braindown.current.clear()
@@ -84,17 +95,13 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
   function handleLoaded (codeEditor: monaco.editor.IStandaloneCodeEditor): void {
     // set the focus once
     if (codeEditor !== null) {
-      const position = getCursorPosition(current)
+      const viewStateString = getViewState(current)
 
       log.debug('setting focus and cursor position')
-      log.debug(position)
-
-      // move the cursor to the correct line and column
-      codeEditor.setPosition({
-        lineNumber: position.line,
-        column: position.column
-      })
-      // codeEditor.revealLineInCenterIfOutsideViewport(position.line)
+      if (viewStateString !== null) {
+        const viewState = JSON.parse(viewStateString)
+        codeEditor.restoreViewState(viewState)
+      }
 
       // set the focus to the editor
       codeEditor.focus()

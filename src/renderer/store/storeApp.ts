@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import log from '../log'
 
 interface AppState {
   page: string
@@ -6,6 +7,7 @@ interface AppState {
   focusElement: string
   windowMaximized: boolean
   platform: string
+  status: string
 }
 
 const initialState: AppState = {
@@ -13,7 +15,8 @@ const initialState: AppState = {
   lastPage: 'editor',
   focusElement: '',
   windowMaximized: false,
-  platform: ''
+  platform: '',
+  status: 'running'
 }
 
 export const appSlice = createSlice({
@@ -37,9 +40,13 @@ export const appSlice = createSlice({
     },
     setPlatform: (state, action) => {
       state.platform = action.payload
+    },
+    setStatus: (state, action) => {
+      state.status = action.payload
+      log.debug(`app status changed to ${String(action.payload)}`)
     }
   }
 })
 
-export const { setActivePage, goToLastPage, setFocusElement, setWindowMaximized, setPlatform } = appSlice.actions
+export const { setActivePage, goToLastPage, setFocusElement, setWindowMaximized, setPlatform, setStatus } = appSlice.actions
 export default appSlice.reducer
