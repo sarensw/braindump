@@ -1,6 +1,8 @@
 # v0.6.1
+- [feat] allow mouse selection for notes
 - [fix] opening a note does not place the cursor at the previous position
 - [fix] no scrolling in files list via keyboard
+- [fix] overlap hotkeys with files list
 
 # v0.6
 - [feat] share note content via email

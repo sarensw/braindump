@@ -111,9 +111,31 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
     }
   }, [selected, files])
 
-  /* useHotkeys(['a'].join(','), (event) => {
-    dispatch(setFilesSearch(event.key))
-  }) */
+  const fileSelected = (id: string): void => {
+    if (files === null || selected === null) return
+    if (selected === id) {
+      // file already selected
+    } else {
+      // select that file
+      setSelected(id)
+      dispatch(setCurrentFile(id))
+    }
+  }
+
+  const fileSelectedToOpen = (id: string): void => {
+    if (files === null || selected === null) return
+    if (selected === id) {
+      // file already selected
+    } else {
+      // select that file
+      setSelected(id)
+      dispatch(setCurrentFile(id))
+    }
+    if (selected === null) return
+    dispatch(setActivePage('editor'))
+    dispatch(setCurrentFile(selected))
+    setLastUsedFile(selected).then(() => {}, () => {})
+  }
 
   let previousCluster = ''
 
@@ -143,14 +165,31 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
                   return (
                     <>
                       {!hideHeader && <li key={`braindump_files_header_${index}`} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
-                      <li key={index} ref={refs[file.id]} className='h-6 flex flex-row items-center' style={{ paddingLeft: itemPadding, background: colors.files.selectedForeground }}>{file.name}</li>
+                      <li
+                        key={index}
+                        ref={refs[file.id]}
+                        className='h-6 flex flex-row items-center'
+                        style={{
+                          paddingLeft: itemPadding,
+                          background: colors.files.selectedForeground
+                        }}
+                        onClick={() => fileSelected(file.id)}
+                        onDoubleClick={() => fileSelectedToOpen(file.id)}
+                      >{file.name}
+                      </li>
                     </>
                   )
                 } else {
                   return (
                     <>
                       {!hideHeader && <li key={`braindump_files_header_${index}`} ref={refs[file.id]} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
-                      <li key={index} className='h-6 flex flex-row items-center' style={{ paddingLeft: itemPadding }}>{file.name}</li>
+                      <li
+                        key={index}
+                        className='h-6 flex flex-row items-center'
+                        style={{ paddingLeft: itemPadding }}
+                        onClick={() => fileSelected(file.id)}
+                      >{file.name}
+                      </li>
                     </>
                   )
                 }
