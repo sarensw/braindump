@@ -17,9 +17,26 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   const [selected, setSelected] = useState<string | null>(currentFile)
   const dispatch = useDispatch()
 
+  const container = React.createRef<HTMLDivElement>()
+  const refs = files?.reduce((acc, value) => {
+    acc[value.id] = React.createRef()
+    return acc
+  }, {}) ?? []
+
   useEffect(() => {
     dispatch(setCurrentHeaders(null))
   }, [])
+
+  useEffect(() => {
+    if (refs === undefined || selected === null || container === null || container.current === null) return
+
+    const element = refs[selected].current
+    if (element.getBoundingClientRect().top < container.current.getBoundingClientRect().top) {
+      element.scrollIntoView()
+    } else if (element.getBoundingClientRect().bottom > container.current.getBoundingClientRect().bottom) {
+      element.scrollIntoView(false)
+    }
+  }, [selected])
 
   useEffect(() => {
     const up = {
@@ -103,7 +120,7 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   return (
     <Page>
       <FilesHeader />
-      <div className='w-full h-full overflow-y-auto'>
+      <div ref={container} className='w-full h-full overflow-y-auto'>
         <div
           className='mt-2'
           style={{
@@ -119,13 +136,13 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
                 return (
                   <>
                     {!hideHeader && <li key={`braindump_files_header_${index}`} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
-                    <li key={index} className='h-6 flex flex-row items-center' style={{ paddingLeft: itemPadding, background: colors.files.selectedForeground }}>{file.name}</li>
+                    <li key={index} ref={refs[file.id]} className='h-6 flex flex-row items-center' style={{ paddingLeft: itemPadding, background: colors.files.selectedForeground }}>{file.name}</li>
                   </>
                 )
               } else {
                 return (
                   <>
-                    {!hideHeader && <li key={`braindump_files_header_${index}`} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
+                    {!hideHeader && <li key={`braindump_files_header_${index}`} ref={refs[file.id]} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
                     <li key={index} className='h-6 flex flex-row items-center' style={{ paddingLeft: itemPadding }}>{file.name}</li>
                   </>
                 )

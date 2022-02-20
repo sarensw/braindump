@@ -1,5 +1,6 @@
 # v0.6.1
 - [fix] opening a note does not place the cursor at the previous position
+- [fix] no scrolling in files list via keyboard
 
 # v0.6
 - [feat] share note content via email
