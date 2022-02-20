@@ -119,36 +119,44 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
 
   return (
     <Page>
-      <FilesHeader />
-      <div ref={container} className='w-full h-full overflow-y-auto'>
-        <div
-          className='mt-2'
-          style={{
-          }}
-        >
-          <ul>
-            {files?.map((file, index) => {
-              const cluster = file.cluster === undefined || file.cluster === null ? '' : file.cluster
-              const hideHeader = cluster === previousCluster
-              previousCluster = cluster
-              const itemPadding = cluster === '' ? '26px' : '46px'
-              if (file.id === selected) {
-                return (
-                  <>
-                    {!hideHeader && <li key={`braindump_files_header_${index}`} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
-                    <li key={index} ref={refs[file.id]} className='h-6 flex flex-row items-center' style={{ paddingLeft: itemPadding, background: colors.files.selectedForeground }}>{file.name}</li>
-                  </>
-                )
-              } else {
-                return (
-                  <>
-                    {!hideHeader && <li key={`braindump_files_header_${index}`} ref={refs[file.id]} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
-                    <li key={index} className='h-6 flex flex-row items-center' style={{ paddingLeft: itemPadding }}>{file.name}</li>
-                  </>
-                )
-              }
-            })}
-          </ul>
+      <div
+        className='grid h-full'
+        style={{
+          gridTemplateColumns: '[shell] minmax(0, 1fr)',
+          gridTemplateRows: '[header] auto [files] minmax(0, 1fr)'
+        }}
+      >
+        <FilesHeader />
+        <div ref={container} className='overflow-y-auto'>
+          <div
+            className='mt-2'
+            style={{
+            }}
+          >
+            <ul>
+              {files?.map((file, index) => {
+                const cluster = file.cluster === undefined || file.cluster === null ? '' : file.cluster
+                const hideHeader = cluster === previousCluster
+                previousCluster = cluster
+                const itemPadding = cluster === '' ? '26px' : '46px'
+                if (file.id === selected) {
+                  return (
+                    <>
+                      {!hideHeader && <li key={`braindump_files_header_${index}`} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
+                      <li key={index} ref={refs[file.id]} className='h-6 flex flex-row items-center' style={{ paddingLeft: itemPadding, background: colors.files.selectedForeground }}>{file.name}</li>
+                    </>
+                  )
+                } else {
+                  return (
+                    <>
+                      {!hideHeader && <li key={`braindump_files_header_${index}`} ref={refs[file.id]} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
+                      <li key={index} className='h-6 flex flex-row items-center' style={{ paddingLeft: itemPadding }}>{file.name}</li>
+                    </>
+                  )
+                }
+              })}
+            </ul>
+          </div>
         </div>
       </div>
     </Page>

@@ -22,23 +22,22 @@ const App = _ => {
           color: colors.foreground,
           backgroundColor: colors.background,
           gridTemplateColumns: '[shell] minmax(0, 1fr)',
-          gridTemplateRows: '[title] auto [container] minmax(0, 1fr)'
+          gridTemplateRows: '[title] auto [container] minmax(0, 1fr) [hotkey] auto'
         }}
       >
         {app.platform === 'linux' && <div className='h-4' />}
-        {app.platform !== 'linux' && 
-        <div
-          className='grid grid-cols-3 content-center'
-          style={{
-            backgroundColor: colors.titleBar.activeBackground,
-            color: colors.titleBar.activeForeground,
-            borderBottomColor: colors.titleBar.borderBottom,
-            borderBottomWidth: colors.titleBar.borderBottom ? '1px' : '0px',
-            WebkitAppRegion: 'drag',
-            height: '24px'
-          }}
-        >
-          <div />
+        {app.platform !== 'linux' &&
+          <div
+            className='grid grid-cols-3 content-center'
+            style={{
+              backgroundColor: colors.titleBar.activeBackground,
+              color: colors.titleBar.activeForeground,
+              borderBottomColor: colors.titleBar.borderBottom,
+              borderBottomWidth: colors.titleBar.borderBottom ? '1px' : '0px',
+              WebkitAppRegion: 'drag',
+              height: '24px'
+            }}
+          ><div />
             <div
               className='text-center select-none self-center'
               style={{
@@ -46,8 +45,8 @@ const App = _ => {
               }}
             >Braindump
             </div>
-          {app.platform === 'win32' && <WindowsButtons />}
-        </div>}
+            {app.platform === 'win32' && <WindowsButtons />}
+          </div>}
 
         <div className='font-mono'>
           <PageContainer />
