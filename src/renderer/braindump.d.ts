@@ -6,13 +6,13 @@ interface HotkeyAction {
 
 interface Hotkey {
   id: string
-  key: string
+  key: string | string[]
   description: string
   action: HotkeyAction
 }
 
 interface SerializableHotkey {
   id: string
-  key: string
+  key: string | string[]
   description: string
 }

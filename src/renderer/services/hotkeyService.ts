@@ -7,11 +7,29 @@ import hotkeys from 'hotkeys-js'
 
 const registry: Hotkey[] = []
 
+function runActionForHotkey (key: string, source: string, codeEditor: monaco.editor.IStandaloneCodeEditor | null): void {
+  console.log('runActionForHotkey')
+  console.log(registry)
+  const hotkey = registry.find(hk => hk.key === key)
+  console.log(`hotkey found with key: ${String(hotkey?.key)}`)
+  if (hotkey === null) return
+  hotkey?.action(source, codeEditor)
+}
+
 function registerHotkey (hotkey: Hotkey, source: string, codeEditor: monaco.editor.IStandaloneCodeEditor | null): void {
-  hotkeys(hotkey.key, function (event, handler) {
-    event.preventDefault()
-    hotkey.action(source, codeEditor)
-  })
+  if (Array.isArray(hotkey.key)) {
+    for (const hk of hotkey.key) {
+      hotkeys(hk, function (event, handler) {
+        event.preventDefault()
+        hotkey.action(source, codeEditor)
+      })
+    }
+  } else {
+    hotkeys(hotkey.key, function (event, handler) {
+      event.preventDefault()
+      hotkey.action(source, codeEditor)
+    })
+  }
 
   registry.push(hotkey)
 
@@ -20,7 +38,13 @@ function registerHotkey (hotkey: Hotkey, source: string, codeEditor: monaco.edit
 }
 
 function unregisterHotkey (hotkey: Hotkey): void {
-  hotkeys.unbind(hotkey.key)
+  if (Array.isArray(hotkey.key)) {
+    for (const hk of hotkey.key) {
+      hotkeys.unbind(hk)
+    }
+  } else {
+    hotkeys.unbind(hotkey.key)
+  }
 
   const i = registry.findIndex(hk => hk.id === hotkey.id)
   registry.splice(i, 1)
@@ -29,4 +53,4 @@ function unregisterHotkey (hotkey: Hotkey): void {
   store.dispatch(removeHotkeys(hotkeysToBeRemoved))
 }
 
-export { registerHotkey, unregisterHotkey }
+export { registerHotkey, unregisterHotkey, runActionForHotkey }

@@ -1,3 +1,6 @@
+# v0.6.2
+- [feat] quick note change via hotkeys in the editor
+
 # v0.6.1
 - [feat] allow mouse selection for notes
 - [fix] opening a note does not place the cursor at the previous position

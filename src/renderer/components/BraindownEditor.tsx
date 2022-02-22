@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef, useEffect } from 'react'
+import React, { ReactElement, useRef, useEffect, useState } from 'react'
 import * as monaco from 'monaco-editor'
 import { ThemedEditor } from './ThemedEditor'
 import { Monaco } from '@monaco-editor/react'
@@ -24,17 +24,7 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
   const braindown = useRef<BraindownLanguage | null>(null)
   const settings = useAppSelector(state => state.settings)
   const current = useAppSelector(state => state.files.current)
-
-  const persistDuringUnload = (e): void => {
-    log.debug('window is about to be unloaded, request to persist the current state')
-
-    // setting view state first
-    const viewState = braindown.current?.editor.saveViewState()
-    dispatch(setViewState(JSON.stringify(viewState)))
-
-    // persist the content of the file
-    persist()
-  }
+  const [codeEditor, setCodeEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null)
 
   useEffect(() => {
     window.addEventListener('beforeunload', persistDuringUnload)
@@ -50,6 +40,23 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
       window.removeEventListener('beforeunload', persistDuringUnload)
     }
   }, [])
+
+  useEffect(() => {
+    log.debug('current file has changed from the outside in the braindown editor')
+    if (codeEditor === null) return
+    resetViewState(codeEditor)
+  }, [current])
+
+  const persistDuringUnload = (e): void => {
+    log.debug('window is about to be unloaded, request to persist the current state')
+
+    // setting view state first
+    const viewState = braindown.current?.editor.saveViewState()
+    dispatch(setViewState(JSON.stringify(viewState)))
+
+    // persist the content of the file
+    persist()
+  }
 
   function handleEditorDidMount (codeEditor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco): void {
     log.debug('braindown editor did mount')
@@ -92,20 +99,26 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
     })
   }
 
+  function resetViewState (codeEditor: monaco.editor.IStandaloneCodeEditor): void {
+    const viewStateString = getViewState(current)
+
+    log.debug('setting focus and cursor position')
+    if (viewStateString !== null) {
+      const viewState = JSON.parse(viewStateString)
+      codeEditor.restoreViewState(viewState)
+    }
+  }
+
   function handleLoaded (codeEditor: monaco.editor.IStandaloneCodeEditor): void {
     // set the focus once
     if (codeEditor !== null) {
-      const viewStateString = getViewState(current)
-
-      log.debug('setting focus and cursor position')
-      if (viewStateString !== null) {
-        const viewState = JSON.parse(viewStateString)
-        codeEditor.restoreViewState(viewState)
-      }
+      resetViewState(codeEditor)
 
       // set the focus to the editor
       codeEditor.focus()
     }
+
+    setCodeEditor(codeEditor)
   }
 
   async function textChanged (text: string, changes: monaco.editor.IModelContentChange[]): Promise<void> {

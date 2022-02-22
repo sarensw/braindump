@@ -14,11 +14,24 @@ const Key = styled.div`
 const HotkeyPeek: React.FunctionComponent = (): ReactElement => {
   const hotkeys = useAppSelector(state => state.hotkeys)
 
-  const getKeyName = (key: string): string => {
-    key = key.replace('command+', '⌘')
-    key = key.replace('up', '↓')
-    key = key.replace('down', '↑')
-    return key
+  const getKeyName = (key: string | string[]): JSX.Element[] => {
+    const keys = Array<JSX.Element>()
+    if (Array.isArray(key)) {
+      for (const hk of key) {
+        let k = hk
+        k = k.replace('command+', '⌘')
+        k = k.replace('up', '↓')
+        k = k.replace('down', '↑')
+        keys.push(<Key className='ml-1'>{k}</Key>)
+      }
+    } else {
+      let k = key
+      k = k.replace('command+', '⌘')
+      k = k.replace('up', '↓')
+      k = k.replace('down', '↑')
+      keys.push(<Key>{k}</Key>)
+    }
+    return keys
   }
 
   return (
@@ -27,7 +40,7 @@ const HotkeyPeek: React.FunctionComponent = (): ReactElement => {
         {hotkeys.map((hk, i) => {
           return (
             <div key={i} className='flex flex-row items-center w-48'>
-              <div className='w-16 flex pr-2 leading-4 justify-end'><Key>{getKeyName(hk.key)}</Key></div>
+              <div className='w-16 flex pr-2 leading-4 justify-end'>{getKeyName(hk.key)}</div>
               <div style={{ color: '#686868' }}>{hk.description}</div>
             </div>
           )

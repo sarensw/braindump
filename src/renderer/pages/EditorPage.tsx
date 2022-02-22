@@ -9,6 +9,7 @@ import { BraindownEditor } from '../components/BraindownEditor'
 import { setActivePage, setFocusElement } from '../store/storeApp'
 import EditorHeader from '../components/EditorHeader'
 import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
+import { setCurrentFile, setViewState } from '../store/storeFiles'
 
 const EditorPage: React.FunctionComponent = (): ReactElement => {
   const dispatch = useDispatch()
@@ -45,11 +46,57 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
         return true
       }
     }
+    const up = {
+      id: 'files:up',
+      key: 'command+k',
+      description: 'select prev',
+      action: (source, codeEditor): boolean => {
+        if (codeEditor !== null) {
+          // store the view state
+          const viewState = codeEditor.saveViewState()
+          dispatch(setViewState(JSON.stringify(viewState)))
+        }
+
+        // change the file
+        if (files.files === null) return true
+        const currentIndex = files.files?.findIndex(f => f.id === files.current)
+        if (currentIndex === 0) return true
+        const newSelected = files.files[currentIndex - 1].id
+        dispatch(setCurrentFile(newSelected))
+
+        return true
+      }
+    }
+    const down = {
+      id: 'files:down',
+      key: 'command+j',
+      description: 'select next',
+      action: (source, codeEditor): boolean => {
+        if (codeEditor !== null) {
+          // store the view state
+          const viewState = codeEditor.saveViewState()
+          dispatch(setViewState(JSON.stringify(viewState)))
+        }
+
+        // change the file
+        if (files === null || files.files === null || files.files === undefined) return true
+        const currentIndex = files.files?.findIndex(f => f.id === files.current)
+        if (currentIndex === files.files?.length - 1) return true
+        const newSelected = files.files[currentIndex + 1].id
+        dispatch(setCurrentFile(newSelected))
+
+        return true
+      }
+    }
+    registerHotkey(up, 'editor', null)
+    registerHotkey(down, 'editor', null)
     registerHotkey(escHk, 'editor', null)
     return () => {
+      unregisterHotkey(up)
+      unregisterHotkey(down)
       unregisterHotkey(escHk)
     }
-  }, [])
+  }, [files.current])
 
   return (
     <Page>

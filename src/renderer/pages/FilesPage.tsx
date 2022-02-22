@@ -41,7 +41,7 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   useEffect(() => {
     const up = {
       id: 'files:up',
-      key: 'up',
+      key: ['up', 'command+k'],
       description: 'select prev',
       action: (source, codeEditor): boolean => {
         if (files === null) return true
@@ -55,7 +55,7 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
     }
     const down = {
       id: 'files:down',
-      key: 'down',
+      key: ['down', 'command+j'],
       description: 'select next',
       action: (source, codeEditor): boolean => {
         if (files === null) return true
