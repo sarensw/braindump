@@ -25,6 +25,7 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
 
   useEffect(() => {
     dispatch(setCurrentHeaders(null))
+    setSelected(currentFile)
   }, [])
 
   useEffect(() => {

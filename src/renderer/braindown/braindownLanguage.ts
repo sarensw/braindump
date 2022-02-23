@@ -7,7 +7,7 @@ import { Monaco } from '@monaco-editor/react'
 import { loadContactSuggestions, loadWordSuggestions } from './suggestions'
 import { loadCommandSuggestions } from './suggestions/commandSuggestions'
 import { store } from '../store'
-import { setActivePage } from '../store/storeApp'
+import { setActivePage, setFocusElement } from '../store/storeApp'
 import { saveFile } from '../services/fileService'
 import { setPresentationContent } from '../store/storePresentation'
 import { runActionForHotkey } from '../services/hotkeyService'
@@ -339,10 +339,10 @@ class BraindownLanguage {
       store.dispatch(setActivePage('files'))
     },
     '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
-    // this.editor.addCommand(me.KeyMod.Shift | me.KeyCode.Tab, () => {
-    //   store.dispatch(setFocusElement('fileName'))
-    // },
-    // '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
+    this.editor.addCommand(me.KeyMod.CtrlCmd | me.KeyCode.KeyR, () => {
+      store.dispatch(setFocusElement('fileName'))
+    },
+    '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
     this.editor.addCommand(me.KeyMod.CtrlCmd | me.KeyCode.KeyK, () => {
       saveFile()
       runActionForHotkey('command+k', 'editor', this.editor)
