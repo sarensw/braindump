@@ -1,6 +1,7 @@
 # v0.6.2
 - [feat] quick note change via hotkeys in the editor
 - [feat] use cmd+R/ctrl+R to change the title of a note
+- [fix] menu buttons selectable via tab
 
 # v0.6.1
 - [feat] allow mouse selection for notes

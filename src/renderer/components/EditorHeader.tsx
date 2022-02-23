@@ -103,10 +103,10 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
               onChange={handleNameChange}
             />
 
-            <button onClick={() => showShareMenu()}>
+            <button tabIndex={-1} onClick={() => showShareMenu()}>
               <Icon icon='share' />
             </button>
-            <button onClick={() => showAppContextMenu()}>
+            <button tabIndex={-1} onClick={() => showAppContextMenu()}>
               <Icon icon='more' />
             </button>
           </div>
