@@ -5,6 +5,7 @@ import PageContainer from './pages/PageContainer'
 import { useAppSelector } from './hooks'
 import HotkeyPeek from './components/HotkeyPeek'
 import WindowsButtons from './components/WindowsButtons'
+import PopupContainer from './components/PopupContainer'
 
 const App = _ => {
   const app = useAppSelector(state => state.app)
@@ -55,6 +56,8 @@ const App = _ => {
         <div className='font-mono max-w-full'>
           {settings['app.hotkeys.show'] && <HotkeyPeek />}
         </div>
+
+        <PopupContainer />
       </div>
     </>
   )

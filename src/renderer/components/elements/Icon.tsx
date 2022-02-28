@@ -95,7 +95,7 @@ const Icon = ({ icon, state = 'normal', height = '16', color = undefined }: { ic
   } else if (icon === 'more') {
     return (
       <svg height={height + 'px'} viewBox='0 0 24 24'>
-        <g strokeLinecap='round' stroke-width='1' stroke={getColor()} fill='none' strokeLinejoin='round'>
+        <g strokeLinecap='round' strokeWidth='1' stroke={getColor()} fill='none' strokeLinejoin='round'>
           <path d='M13.7678,1.23223c0.976311,0.976311 0.976311,2.55922 0,3.53553c-0.976311,0.976311 -2.55922,0.976311 -3.53553,0c-0.976311,-0.976311 -0.976311,-2.55922 0,-3.53553c0.976311,-0.976311 2.55922,-0.976311 3.53553,-4.44089e-16' />
           <path d='M13.7678,10.2322c0.976311,0.976311 0.976311,2.55922 0,3.53553c-0.976311,0.976311 -2.55922,0.976311 -3.53553,0c-0.976311,-0.976311 -0.976311,-2.55922 0,-3.53553c0.976311,-0.976311 2.55922,-0.976311 3.53553,0' />
           <path d='M13.7678,19.2322c0.976311,0.976311 0.976311,2.55922 0,3.53553c-0.976311,0.976311 -2.55922,0.976311 -3.53553,0c-0.976311,-0.976311 -0.976311,-2.55922 0,-3.53553c0.976311,-0.976311 2.55922,-0.976311 3.53553,0' />
@@ -105,7 +105,7 @@ const Icon = ({ icon, state = 'normal', height = '16', color = undefined }: { ic
   } else if (icon === 'share') {
     return (
       <svg height={height + 'px'} viewBox='0 0 24 24'>
-        <g strokeLinecap='round' strokeWidth='1' stroke={getColor()} fill='none' stroke-linejoin='round'>
+        <g strokeLinecap='round' strokeWidth='1' stroke={getColor()} fill='none' strokeLinejoin='round'>
           <path d='M11.5,13.5v-13' />
           <path d='M7,5l4.5,-4.5l4.5,4.5' />
           <path d='M14.5,8.5h5v15h-16v-15h5' />

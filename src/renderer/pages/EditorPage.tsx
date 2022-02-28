@@ -6,7 +6,7 @@ import { useAppSelector } from '../hooks'
 import { readFile } from '../services/fileService'
 import useAsyncEffect from 'use-async-effect'
 import { BraindownEditor } from '../components/BraindownEditor'
-import { setActivePage, setFocusElement } from '../store/storeApp'
+import { setActivePage, setFocusElement, setVisiblePopup } from '../store/storeApp'
 import EditorHeader from '../components/EditorHeader'
 import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
 import { setCurrentFile, setViewState } from '../store/storeFiles'
@@ -57,6 +57,9 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
           dispatch(setViewState(JSON.stringify(viewState)))
         }
 
+        // show the popup
+        dispatch(setVisiblePopup('fileSelector'))
+
         // change the file
         if (files.files === null) return true
         const currentIndex = files.files?.findIndex(f => f.id === files.current)
@@ -64,6 +67,11 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
         const newSelected = files.files[currentIndex - 1].id
         dispatch(setCurrentFile(newSelected))
 
+        return true
+      },
+      release: (source, codeEditor): boolean => {
+        console.log('key released')
+        dispatch(setVisiblePopup(''))
         return true
       }
     }
@@ -78,6 +86,9 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
           dispatch(setViewState(JSON.stringify(viewState)))
         }
 
+        // show the popup
+        dispatch(setVisiblePopup('fileSelector'))
+
         // change the file
         if (files === null || files.files === null || files.files === undefined) return true
         const currentIndex = files.files?.findIndex(f => f.id === files.current)
@@ -85,6 +96,11 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
         const newSelected = files.files[currentIndex + 1].id
         dispatch(setCurrentFile(newSelected))
 
+        return true
+      },
+      release: (source, codeEditor): boolean => {
+        console.log('key released')
+        dispatch(setVisiblePopup(''))
         return true
       }
     }

@@ -8,6 +8,7 @@ interface AppState {
   windowMaximized: boolean
   platform: string
   status: string
+  visiblePopup: string
 }
 
 const initialState: AppState = {
@@ -16,7 +17,8 @@ const initialState: AppState = {
   focusElement: '',
   windowMaximized: false,
   platform: '',
-  status: 'running'
+  status: 'running',
+  visiblePopup: ''
 }
 
 export const appSlice = createSlice({
@@ -44,9 +46,18 @@ export const appSlice = createSlice({
     setStatus: (state, action) => {
       state.status = action.payload
       log.debug(`app status changed to ${String(action.payload)}`)
+    },
+    setVisiblePopup: (state, action) => {
+      if (state.visiblePopup !== action.payload) {
+        state.visiblePopup = action.payload
+
+        if (action.payload !== '') {
+          log.debug(`showing popup ${String(action.payload)}`)
+        }
+      }
     }
   }
 })
 
-export const { setActivePage, goToLastPage, setFocusElement, setWindowMaximized, setPlatform, setStatus } = appSlice.actions
+export const { setActivePage, goToLastPage, setFocusElement, setWindowMaximized, setPlatform, setStatus, setVisiblePopup } = appSlice.actions
 export default appSlice.reducer

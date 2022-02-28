@@ -9,6 +9,7 @@ interface Hotkey {
   key: string | string[]
   description: string
   action: HotkeyAction
+  release?: HotkeyAction
 }
 
 interface SerializableHotkey {

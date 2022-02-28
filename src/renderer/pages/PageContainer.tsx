@@ -10,7 +10,6 @@ import SnippetsPage from './SnippetsPage'
 const PageContainer: FunctionComponent = (): ReactElement => {
   const app = useAppSelector(state => state.app)
   const [page, setPage] = useState<FunctionComponent>(() => SettingsPage)
-  console.log(page)
 
   useEffect(() => {
     log.debug(`app page changed to ${app.page}`)
