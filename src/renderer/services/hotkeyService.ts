@@ -9,10 +9,6 @@ const registry: Hotkey[] = []
 let activeHotkey: Hotkey | null = null
 
 hotkeys('*', { keyup: true, keydown: false }, function (event, handler) {
-  console.log('#####')
-  console.log(event.key)
-  console.log(event.type)
-
   if (activeHotkey?.release !== undefined) {
     activeHotkey.release('', null)
   }
@@ -24,7 +20,8 @@ function runActionForHotkey (key: string, source: string, codeEditor: monaco.edi
   console.log(registry)
   const hotkey = registry.find(hk => hk.key === key)
   console.log(`hotkey found with key: ${String(hotkey?.key)}`)
-  if (hotkey === null) return
+  if (hotkey === undefined) return
+  activeHotkey = hotkey
   hotkey?.action(source, codeEditor)
 }
 
