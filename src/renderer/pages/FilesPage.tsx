@@ -42,13 +42,13 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   useEffect(() => {
     const up = {
       id: 'files:up',
-      key: ['up', 'command+k'],
+      key: ['down', 'command+k'],
       description: 'select prev',
       action: (source, codeEditor): boolean => {
         if (files === null) return true
         const currentIndex = files.findIndex(f => f.id === selected)
-        if (currentIndex === 0) return true
-        const newSelected = files[currentIndex - 1].id
+        if (currentIndex === files.length - 1) return true
+        const newSelected = files[currentIndex + 1].id
         setSelected(newSelected)
         dispatch(setCurrentFile(newSelected))
         return true
@@ -56,13 +56,13 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
     }
     const down = {
       id: 'files:down',
-      key: ['down', 'command+j'],
+      key: ['up', 'command+j'],
       description: 'select next',
       action: (source, codeEditor): boolean => {
         if (files === null) return true
         const currentIndex = files.findIndex(f => f.id === selected)
-        if (currentIndex === files.length - 1) return true
-        const newSelected = files[currentIndex + 1].id
+        if (currentIndex === 0) return true
+        const newSelected = files[currentIndex - 1].id
         setSelected(newSelected)
         dispatch(setCurrentFile(newSelected))
         return true

@@ -61,10 +61,10 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
         dispatch(setVisiblePopup('fileSelector'))
 
         // change the file
-        if (files.files === null) return true
+        if (files === null || files.files === null || files.files === undefined) return true
         const currentIndex = files.files?.findIndex(f => f.id === files.current)
-        if (currentIndex === 0) return true
-        const newSelected = files.files[currentIndex - 1].id
+        if (currentIndex === files.files?.length - 1) return true
+        const newSelected = files.files[currentIndex + 1].id
         dispatch(setCurrentFile(newSelected))
 
         return true
@@ -90,10 +90,10 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
         dispatch(setVisiblePopup('fileSelector'))
 
         // change the file
-        if (files === null || files.files === null || files.files === undefined) return true
+        if (files.files === null) return true
         const currentIndex = files.files?.findIndex(f => f.id === files.current)
-        if (currentIndex === files.files?.length - 1) return true
-        const newSelected = files.files[currentIndex + 1].id
+        if (currentIndex === 0) return true
+        const newSelected = files.files[currentIndex - 1].id
         dispatch(setCurrentFile(newSelected))
 
         return true
