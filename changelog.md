@@ -1,5 +1,6 @@
 # v0.6.3
 - [chore] add log messages to find root cause for known bug
+- [fix] no way to exit the snippets config
 
 # v0.6.2
 - [feat] quick note change via hotkeys in the editor

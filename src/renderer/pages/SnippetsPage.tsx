@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useState, useEffect } from 'react'
 import Page from './Page'
 import Button from '../components/elements/Button'
 import { ThemedEditor } from '../components/ThemedEditor'
@@ -7,13 +7,16 @@ import { readSnippets, writeSnippets, PATH_FILE_SNIPPETS, loadSnippets } from '.
 import useAsyncEffect from 'use-async-effect'
 import { Snippet } from '../../shared/types'
 import YAML from 'yaml'
+import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
+import { setActivePage } from '../store/storeApp'
+import { useDispatch } from 'react-redux'
 
 const SnippetsPage: React.FunctionComponent = (): ReactElement => {
+  const dispatch = useDispatch()
   const [editorProps, setEditorProps] = useState<{path: string, text: string}>({ path: '', text: '' })
 
   let currentText: string = editorProps.text
 
-  log.debug('rerender')
   useAsyncEffect(async () => {
     log.debug('loading snippets page')
 
@@ -23,6 +26,22 @@ const SnippetsPage: React.FunctionComponent = (): ReactElement => {
       path: PATH_FILE_SNIPPETS,
       text: currentText
     })
+  }, [])
+
+  useEffect(() => {
+    const escHk = {
+      id: 'editor:esc',
+      key: 'esc',
+      description: 'list notes',
+      action: (source, codeEditor): boolean => {
+        dispatch(setActivePage('files'))
+        return true
+      }
+    }
+    registerHotkey(escHk, 'editor', null)
+    return () => {
+      unregisterHotkey(escHk)
+    }
   }, [])
 
   const save = async (): Promise<void> => {
