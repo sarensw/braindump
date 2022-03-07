@@ -1,6 +1,6 @@
 {
   "name": "braindump",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "Dump your brain",
   "private": "true",
   "scripts": {
@@ -10,7 +10,6 @@
     "build:electron": "npx electron-builder build --publish never",
     "build:electron:dir": "npx electron-builder build --dir",
     "build:snowpack": "npx snowpack build",
-
     "dev": "concurrently -n snowpack,esbuild,electron --prefixColors green,yellow,blue \"npm:dev-snowpack\" \"npm:dev-esbuild\" \"npm:dev-electron\"",
     "dev-esbuild": "esbuild src/main/index.js src/main/preload.js --outdir=dist/main --bundle --platform=node --external:electron --watch --format=cjs",
     "dev-electron": "wait-on http://localhost:8080 && electron dist/main/index.js",
@@ -66,6 +65,7 @@
     "react-is": "^17.0.2",
     "react-redux": "^7.2.6",
     "shade-blend-color": "^1.0.0",
+    "stacktrace-js": "^2.0.2",
     "styled-components": "^5.3.3",
     "use-async-effect": "^2.2.3",
     "uuid": "^8.3.2",

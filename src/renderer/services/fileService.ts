@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { CursorPosition } from '../common/cursorPosition'
 import dateFormat from 'dateformat'
 import { Direction } from '../common/direction'
+import StackTrace from 'stacktrace-js'
 
 const id = randomString(4)
 const saveTimerInterval = 2000
@@ -23,6 +24,22 @@ function initializeFileService (): void {
 
   setInterval(backup, backupTimerInterval)
   log.debug(`started timer in an interval of ${backupTimerInterval}ms`, id)
+}
+
+function saveFilesFile (payload: any): void {
+  if (payload.files === null || payload.lastUsed === null || payload.count === -1) {
+    const st = StackTrace.getSync()
+    log.error('invalid files.json about to be created')
+    log.error(st)
+  }
+
+  window.__preload.send({
+    channel: 'file/write',
+    payload: {
+      path: PATH_FILE_FILES,
+      text: JSON.stringify(payload, null, 2)
+    }
+  })
 }
 
 async function calculateOverallFileSizes (): Promise<number> {
@@ -94,13 +111,7 @@ async function createNewFile (): Promise<void> {
     count: state.files.count
   }
 
-  window.__preload.send({
-    channel: 'file/write',
-    payload: {
-      path: PATH_FILE_FILES,
-      text: JSON.stringify(newFiles, null, 2)
-    }
-  })
+  saveFilesFile(newFiles)
 }
 
 async function setLastUsedFile (id: string): Promise<void> {
@@ -114,13 +125,7 @@ async function setLastUsedFile (id: string): Promise<void> {
     lastUsed: state.files.current,
     count: state.files.count
   }
-  window.__preload.send({
-    channel: 'file/write',
-    payload: {
-      path: PATH_FILE_FILES,
-      text: JSON.stringify(newFiles, null, 2)
-    }
-  })
+  saveFilesFile(newFiles)
 }
 
 async function setClusterName (path: string, cluster: string): Promise<void> {
@@ -192,13 +197,7 @@ async function setFileName (path: string, name: string): Promise<void> {
     files: state.files.files,
     count: state.files.count
   }
-  window.__preload.send({
-    channel: 'file/write',
-    payload: {
-      path: PATH_FILE_FILES,
-      text: JSON.stringify(newFiles, null, 2)
-    }
-  })
+  saveFilesFile(newFiles)
 }
 
 async function readFile (path: string): Promise<string> {
@@ -244,13 +243,7 @@ async function loadFiles (): Promise<void> {
       count: 1
     }
 
-    window.__preload.send({
-      channel: 'file/write',
-      payload: {
-        path: PATH_FILE_FILES,
-        text: JSON.stringify(files, null, 2)
-      }
-    })
+    saveFilesFile(files)
 
     store.dispatch(setFiles(files.files as File[]))
     log.debug(`Loaded ${files.files.length} files`)
@@ -321,13 +314,7 @@ async function closeFile (id: string): Promise<void> {
     count: state.files.count
   }
 
-  window.__preload.send({
-    channel: 'file/write',
-    payload: {
-      path: PATH_FILE_FILES,
-      text: JSON.stringify(newFiles, null, 2)
-    }
-  })
+  saveFilesFile(newFiles)
 }
 
 function getCursorPosition (id: string | null): CursorPosition {
@@ -385,13 +372,7 @@ function persist (): void {
     count: state.files.count
   }
 
-  window.__preload.send({
-    channel: 'file/write',
-    payload: {
-      path: PATH_FILE_FILES,
-      text: JSON.stringify(newFiles, null, 2)
-    }
-  })
+  saveFilesFile(newFiles)
 }
 
 async function isPathValid (path: string): Promise<boolean> {

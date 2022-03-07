@@ -1,3 +1,6 @@
+# v0.6.3
+- [chore] add log messages to find root cause for known bug
+
 # v0.6.2
 - [feat] quick note change via hotkeys in the editor
 - [feat] use cmd+R/ctrl+R to change the title of a note
