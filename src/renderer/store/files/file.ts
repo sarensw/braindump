@@ -1,4 +1,4 @@
-import { SharedFile } from '../../../shared/types'
+import { SharedFile } from '../../braindump'
 
 export class File implements SharedFile {
   id: string

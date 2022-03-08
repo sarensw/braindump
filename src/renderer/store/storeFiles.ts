@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { SharedFile } from '../../shared/types'
+import { SharedFile } from '../braindump'
 import type { Positionable } from '../common/cursorPosition'
 import log from '../log'
 import { File } from './files/file'

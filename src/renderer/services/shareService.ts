@@ -1,4 +1,4 @@
-import { SharedFile } from '../../shared/types'
+import { SharedFile } from '../braindump'
 import log from '../log'
 import { store } from '../store'
 import { readFile } from './fileService'

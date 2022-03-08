@@ -35,3 +35,10 @@ interface Snippet {
   description: string
   body: string
 }
+
+export interface SharedFile {
+  id: string
+  cluster: string
+  name: string
+  path: string
+}
