@@ -1,10 +1,10 @@
 import log from '../log'
 import { store } from '../store'
 import { setTheme } from '../store/storeThemeNew'
-import { Settings } from '../../shared/types'
 import { loadFiles } from './fileService'
 import { loadSettings } from './settingsService'
 import { Light } from '../themes/themeLoader'
+import { Settings } from '../braindump'
 
 /**
  * This is the startup method that is run when braindump starts up. It will

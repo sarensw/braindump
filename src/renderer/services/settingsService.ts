@@ -1,9 +1,9 @@
 import log from '../log'
-import { Settings } from '../../shared/types'
 import { store } from '../store'
 import { set as setSettings } from '../store/storeSettings'
 import SettingsStructure from '../settings/settings.json'
 import { readFile, saveFileContent } from './fileService'
+import { Settings } from '../braindump'
 
 const PATH_FILE_SETTINGS: string = 'settings.json'
 

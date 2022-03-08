@@ -7,7 +7,6 @@ import { setTheme } from '../store/storeThemeNew'
 import Label from '../components/settings/Label'
 import { Dropdown, Option } from '../components/settings/Dropdown'
 import { SettingsCategory } from '../components/settings/SettingsCategory'
-import { Settings } from '../../shared/types'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { saveSettings } from '../services/settingsService'
 import { Light } from '../themes/themeLoader'
@@ -18,6 +17,7 @@ import { isPathValid } from '../services/fileService'
 import { goToLastPage } from '../store/storeApp'
 import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
 import TextArea from '../components/settings/TextArea'
+import { Settings } from '../braindump'
 
 const SettingsPage: FunctionComponent = () => {
   const dispatch = useAppDispatch()

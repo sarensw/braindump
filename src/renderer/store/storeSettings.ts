@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Settings } from '../../shared/types'
+import { Settings } from '../braindump'
 import SettingsStructure from '../settings/settings.json'
 
 function getDefaultValue<T> (id: string): T | null {
