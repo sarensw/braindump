@@ -6,10 +6,6 @@ export interface SharedFile {
   path: string
 }
 
-export interface Dump extends File {
-  title: string
-}
-
 export interface Snippet {
   name: string
   description: string
