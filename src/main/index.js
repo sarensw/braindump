@@ -2,7 +2,6 @@
 import { app, BrowserWindow, ipcMain, crashReporter, globalShortcut, shell } from 'electron'
 import path from 'path'
 import log from 'electron-log'
-import { SettingsFile } from './settings'
 import { FileSystem } from './fs'
 import { FileSystem as DemoFileSystem } from './demo/demoFileService'
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
@@ -24,7 +23,6 @@ log.debug(app.getPath('module'))
 log.debug(app.getPath('userData'))
 
 let mainWindow
-const settings = new SettingsFile()
 const fileSystem = new FileSystem()
 const demoFileSystem = new DemoFileSystem()
 
@@ -149,16 +147,6 @@ ipcMain.on('log', (event, args) => {
   if (args.type === 'info') log.info(`[ui] ${msg}`)
   if (args.type === 'warn') log.warn(`[ui] ${msg}`)
   if (args.type === 'error') log.error(`[ui] ${msg}`)
-})
-
-ipcMain.handle('loadSettings', async (event, someArgument) => {
-  log.debug('ipcMain.loadSettings')
-  const result = await settings.read()
-  return result
-})
-
-ipcMain.handle('saveSettings', async (event, someArgument) => {
-  await settings.write(someArgument)
 })
 
 ipcMain.handle('file/size', async (event, args) => {

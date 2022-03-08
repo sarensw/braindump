@@ -267,6 +267,16 @@ async function loadFiles (): Promise<void> {
   }
 }
 
+function saveFileContent (path: string, text: string): void {
+  window.__preload.send({
+    channel: 'file/write',
+    payload: {
+      path,
+      text
+    }
+  })
+}
+
 function saveFile (): void {
   const state = store.getState()
 
@@ -275,14 +285,8 @@ function saveFile (): void {
     const file = state.files.files?.find(f => f.id === id)
     log.debug(`about to save content for file ${String(file?.name)}`)
 
-    if (state.files.dirty && file !== null) {
-      window.__preload.send({
-        channel: 'file/write',
-        payload: {
-          path: file?.path,
-          text: state.files.text
-        }
-      })
+    if (state.files.dirty && file !== undefined && file?.path !== undefined) {
+      saveFileContent(file?.path, state.files.text)
 
       store.dispatch(cleanDirtyText())
 
@@ -419,4 +423,4 @@ function backup (): void {
   }
 }
 
-export { initializeFileService, loadFiles, saveFile, flushFile, createNewFile, closeFile, readFile, setClusterName, setFileName, setLastUsedFile, getCursorPosition, getViewState, moveFile, persist, calculateOverallFileSizes, isPathValid, backup }
+export { initializeFileService, loadFiles, saveFileContent, saveFile, flushFile, createNewFile, closeFile, readFile, setClusterName, setFileName, setLastUsedFile, getCursorPosition, getViewState, moveFile, persist, calculateOverallFileSizes, isPathValid, backup }

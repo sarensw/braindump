@@ -3,12 +3,14 @@ import { Settings } from '../../shared/types'
 import { store } from '../store'
 import { set as setSettings } from '../store/storeSettings'
 import SettingsStructure from '../settings/settings.json'
+import { readFile, saveFileContent } from './fileService'
+
+const PATH_FILE_SETTINGS: string = 'settings.json'
 
 async function loadSettings (): Promise<Settings> {
   log.debug('loading the settings')
-  let settings = await window.__preload.invoke({
-    channel: 'loadSettings'
-  })
+  let settingsRaw = await readFile(PATH_FILE_SETTINGS)
+  let settings = JSON.parse(settingsRaw)
 
   // creaete settings based on defaults when there are no settings available yet
   if (settings === null) {
@@ -21,10 +23,8 @@ async function loadSettings (): Promise<Settings> {
     }
 
     // save the default settings
-    window.__preload.invoke({
-      channel: 'saveSettings',
-      payload: settings
-    })
+    settingsRaw = JSON.stringify(settings, null, 2)
+    saveFileContent(PATH_FILE_SETTINGS, settingsRaw)
   } else {
     log.debug('settings loaded')
   }
@@ -35,11 +35,10 @@ async function loadSettings (): Promise<Settings> {
 }
 
 async function saveSettings (): Promise<void> {
+  const settings = store.getState().settings
+  const settingsRaw = JSON.stringify(settings, null, 2)
   log.debug('save settings')
-  window.__preload.invoke({
-    channel: 'saveSettings',
-    payload: store.getState().settings
-  })
+  saveFileContent(PATH_FILE_SETTINGS, settingsRaw)
 }
 
 export { loadSettings, saveSettings }
