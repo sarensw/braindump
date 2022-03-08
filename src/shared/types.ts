@@ -5,9 +5,3 @@ export interface SharedFile {
   name: string
   path: string
 }
-
-export interface Snippet {
-  name: string
-  description: string
-  body: string
-}

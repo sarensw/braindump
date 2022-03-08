@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Snippet } from '../../shared/types'
+import { Snippet } from '../braindump'
 
 const initialState: Snippet[] = []
 

@@ -29,3 +29,9 @@ interface Settings {
   'tabs.show': boolean
   'presentation.title.subTitle': string
 }
+
+interface Snippet {
+  name: string
+  description: string
+  body: string
+}

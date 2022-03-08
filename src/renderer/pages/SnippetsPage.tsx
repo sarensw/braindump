@@ -5,11 +5,11 @@ import { ThemedEditor } from '../components/ThemedEditor'
 import log from '../log'
 import { readSnippets, writeSnippets, PATH_FILE_SNIPPETS, loadSnippets } from '../services/snippetsService'
 import useAsyncEffect from 'use-async-effect'
-import { Snippet } from '../../shared/types'
 import YAML from 'yaml'
 import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
 import { setActivePage } from '../store/storeApp'
 import { useDispatch } from 'react-redux'
+import { Snippet } from '../braindump'
 
 const SnippetsPage: React.FunctionComponent = (): ReactElement => {
   const dispatch = useDispatch()

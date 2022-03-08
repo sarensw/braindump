@@ -1,10 +1,10 @@
-import { Snippet } from '../../shared/types'
 import log from '../log'
 import { store } from '../store'
 import { set } from '../store/storeSnippets'
 import YAML from 'yaml'
 
 import type { Document } from 'yaml'
+import { Snippet } from '../braindump'
 
 const PATH_FILE_SNIPPETS: string = 'snippets.yaml'
 const SNIPPETS_DEFAULT: Snippet = {
