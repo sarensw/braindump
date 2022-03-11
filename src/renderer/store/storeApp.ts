@@ -9,6 +9,7 @@ interface AppState {
   platform: string
   status: string
   visiblePopup: string
+  isPro: boolean
 }
 
 const initialState: AppState = {
@@ -18,7 +19,8 @@ const initialState: AppState = {
   windowMaximized: false,
   platform: '',
   status: 'running',
-  visiblePopup: ''
+  visiblePopup: '',
+  isPro: false
 }
 
 export const appSlice = createSlice({
@@ -55,9 +57,12 @@ export const appSlice = createSlice({
           log.debug(`showing popup ${String(action.payload)}`)
         }
       }
+    },
+    setIsPro: (state, action) => {
+      state.isPro = action.payload
     }
   }
 })
 
-export const { setActivePage, goToLastPage, setFocusElement, setWindowMaximized, setPlatform, setStatus, setVisiblePopup } = appSlice.actions
+export const { setActivePage, goToLastPage, setFocusElement, setWindowMaximized, setPlatform, setStatus, setVisiblePopup, setIsPro } = appSlice.actions
 export default appSlice.reducer

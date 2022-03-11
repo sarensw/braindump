@@ -28,6 +28,7 @@ interface Settings {
   'editor.wordwrap': boolean
   'tabs.show': boolean
   'presentation.title.subTitle': string
+  'pro.licenseKey': string
 }
 
 interface Snippet {

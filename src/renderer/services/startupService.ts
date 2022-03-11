@@ -5,6 +5,7 @@ import { loadFiles } from './fileService'
 import { loadSettings } from './settingsService'
 import { Light } from '../themes/themeLoader'
 import { Settings } from '../braindump'
+import { loadLicense } from './licenseService'
 
 /**
  * This is the startup method that is run when braindump starts up. It will
@@ -21,6 +22,10 @@ async function startup (): Promise<void> {
   // load the theme
   await loadTheme(settings)
   log.debug('theme loaded')
+
+  // load the license
+  await loadLicense()
+  log.debug('license loaded')
 
   // load the files
   await loadFiles()

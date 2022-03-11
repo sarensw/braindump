@@ -283,7 +283,6 @@ function saveFile (): void {
   if (state !== undefined) {
     const id = state.files.current
     const file = state.files.files?.find(f => f.id === id)
-    log.debug(`about to save content for file ${String(file?.name)}`)
 
     if (state.files.dirty && file !== undefined && file?.path !== undefined) {
       saveFileContent(file?.path, state.files.text)
@@ -369,6 +368,12 @@ function moveFile (direction: Direction): void {
 function persist (): void {
   log.debug('persisting files')
   const state = store.getState()
+
+  log.debug({
+    files: state.files.files,
+    lastUsed: state.files.current,
+    count: state.files.count
+  })
 
   const newFiles = {
     files: state.files.files,

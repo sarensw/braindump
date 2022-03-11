@@ -2,6 +2,7 @@
   {
     "id": "settings.general",
     "category": "General",
+    "show": true,
     "settings": [
       {
         "id": "app.theme",
@@ -32,6 +33,7 @@
   {
     "id": "settings.backup",
     "category": "Backup",
+    "show": true,
     "settings": [
       {
         "id": "backup.enabled",
@@ -53,6 +55,7 @@
   {
     "id": "settings.editor",
     "category": "Editor",
+    "show": true,
     "settings": [
       {
         "id": "editor.minimap.show",
@@ -80,6 +83,7 @@
   {
     "id": "settings.presentation",
     "category": "Presentation",
+    "show": true,
     "settings": [
       {
         "id": "presentation.title.subTitle",
@@ -87,6 +91,23 @@
         "title": "Sub Title",
         "description": "Additional info shown below the title on the title slide",
         "default": ""
+      }
+    ]
+  },
+  {
+    "id": "settings.pro",
+    "category": "Pro",
+    "show": false,
+    "settings": [
+      {
+        "id": "pro.licenseKey",
+        "type": "text",
+        "default": ""
+      },
+      {
+        "id": "pro.licenseStatus",
+        "type": "boolean",
+        "default": false
       }
     ]
   }

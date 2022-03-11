@@ -18,6 +18,7 @@ import { goToLastPage } from '../store/storeApp'
 import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
 import TextArea from '../components/settings/TextArea'
 import { Settings } from '../braindump'
+import { LicenseConfiguration } from '../components/settings/LicenseConfiguration'
 
 const SettingsPage: FunctionComponent = () => {
   const dispatch = useAppDispatch()
@@ -109,10 +110,18 @@ const SettingsPage: FunctionComponent = () => {
   return (
     <Page>
       <div className='h-full w-full overflow-y-auto'>
-        <div className='max-w-lg m-auto px-2 h-full'>
+        <div className='max-w-xl m-auto px-2 h-full'>
+          {/* license settings */}
+          <LicenseConfiguration />
+
+          {/* all settings */}
           {categories.map((c, i) => {
+            /* only show categories that are meant to be shown here */
+            if (!c.show) return (<></>)
+
+            /* category has to be shown */
             return (
-              <div key={i} className='flex flex-col gap-3 mb-4'>
+              <div key={i} className='flex flex-col gap-3 mb-4 p-2'>
                 <div className='text-lg col-span-2 font-bold'>{c.category}</div>
                 {c.settings.map((s, i) => {
                   return (

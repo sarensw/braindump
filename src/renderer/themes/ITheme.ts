@@ -91,4 +91,8 @@ export interface ITheme {
     activeForeground?: string
     borderBottom?: string
   }
+  pro: {
+    background?: string
+    border?: string
+  }
 }

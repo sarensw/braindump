@@ -107,5 +107,10 @@
   "titleBar": {
     "activeBackground": "#fdfdfd",
     "activeForeground": "#3d3f42"
+  },
+
+  "pro": {
+    "background": "#fbe396",
+    "border": "#000"
   }
 }

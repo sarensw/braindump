@@ -23,7 +23,8 @@ const initialState: Settings = {
   'editor.linenumbers.show': getDefaultValue<boolean>('editor.linenumber.show') ?? true,
   'editor.wordwrap': getDefaultValue<boolean>('editor.wordwrap') ?? true,
   'tabs.show': false,
-  'presentation.title.subTitle': getDefaultValue<string>('presentation.title.subTitle') ?? ''
+  'presentation.title.subTitle': getDefaultValue<string>('presentation.title.subTitle') ?? '',
+  'pro.licenseKey': getDefaultValue<string>('pro.licenseKey') ?? ''
 }
 
 export const configSlice = createSlice({
