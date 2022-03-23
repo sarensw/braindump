@@ -6,6 +6,7 @@ import log from '../log'
 import { Uri } from 'monaco-editor'
 import useAsyncEffect from 'use-async-effect'
 import { ITheme } from '../themes/ITheme'
+import { updateBlockQuote, updateInlineCodeTheme } from '../services/themeService'
 
 interface ThemedEditorProps {
   language: string
@@ -21,6 +22,7 @@ interface ThemedEditorProps {
 }
 
 export const ThemedEditor = ({ language, path, initialText = '', onTextChanged = () => {}, onEditorDidMount = () => {}, onLoaded = () => {}, onCursorPositionChanged = () => {}, showMinimap = false, wordWrap = true, lineNumbers = true }: ThemedEditorProps): ReactElement => {
+  const themeId = useAppSelector(state => state.themeNew.id)
   const theme = useAppSelector(state => state.themeNew.colors)
   const monaco = useMonaco()
   const editor = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
@@ -36,6 +38,14 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
       changeTheme(theme, monaco)
     }
   }, [])
+
+  useEffect(() => {
+    log.debug('theme changed')
+    if (monaco !== undefined && monaco !== null) {
+      log.debug('monaco loaded')
+      changeTheme(theme, monaco)
+    }
+  }, [themeId])
 
   useAsyncEffect(async () => {
     await load(path, monaco)
@@ -59,15 +69,25 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
       rules.push({ token: 'keyword', foreground: theme.editorTokens.keyword.foreground, fontStyle: theme.editorTokens.keyword.fontStyle })
       rules.push({ token: '', foreground: theme.editor.foreground, background: theme.editor.background })
       const themeData: monaco.editor.IStandaloneThemeData = {
-        base: 'vs', // can also be vs-dark or hc-black
+        base: theme.type === 'light' ? 'vs' : 'vs-dark', // can also be vs-dark or hc-black
         inherit: true, // can also be false to completely replace the builtin rules
         colors: {
-          'editor.background': theme.editor.background ?? '#00ff00'
+          'editor.background': theme.editor.background ?? '#fdfdfd',
+          'editorCursor.foreground': theme.editor.cursorForeground ?? '#e1e1e1',
+          'editor.lineHighlightBackground': theme.editor.lineHighlightBackground ?? '#292c30',
+          'editorLineNumber.foreground': theme.editor.lineNumberForeground ?? '#8c939c',
+          'editorLineNumber.activeForeground': theme.editor.lineNumberActiveForeground ?? '#e1e1e1',
+          'editor.selectionBackground': theme.editor.selectionBackground ?? '#444b53',
+          'editor.selectionHighlightBackground': theme.editor.selectionHighlightBackground ?? '#444b53',
+          'editorIndentGuide.background': theme.editor.indentGuideBackground ?? '#444b53'
         },
         rules
       }
       monaco.editor.defineTheme('light', themeData)
       monaco.editor.setTheme('light')
+
+      updateInlineCodeTheme(theme)
+      updateBlockQuote(theme)
     } catch (err: any) {
       log.error(`Could not set the theme because ${String(err.message)}`)
     }

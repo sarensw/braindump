@@ -94,12 +94,13 @@ class InlineCode {
 
   createOverlayWidget (lines: string[]): HTMLElement {
     const overlayDom = document.createElement('div')
-    overlayDom.classList.add('w-full', 'bg-red-400')
+    overlayDom.classList.add('w-full', 'bg-red-600')
     overlayDom.style.display = 'flex'
     overlayDom.style.left = '100px'
     const code = document.createElement('code')
-    code.classList.add('h-full', 'w-full', 'bg-yellow-400', 'block')
+    code.classList.add('h-full', 'w-full', 'bg-yellow-600', 'block')
     code.contentEditable = 'true'
+    code.style.backgroundColor = '#353c45'
     code.innerHTML = lines.join('\r\n')
     code.style.whiteSpace = 'pre-wrap'
     overlayDom.appendChild(code)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { keys, handleKeyDownEvent } from './hotkeys'
 import PageContainer from './pages/PageContainer'
@@ -6,14 +6,23 @@ import { useAppSelector } from './hooks'
 import HotkeyPeek from './components/HotkeyPeek'
 import WindowsButtons from './components/WindowsButtons'
 import PopupContainer from './components/PopupContainer'
-
-const App = _ => {
+import log from './log'
+// lic 6FB42E21-E09C4924-937ACF0A-80C86FA0
+const App: FunctionComponent = _ => {
   const app = useAppSelector(state => state.app)
   const colors = useAppSelector(state => state.themeNew.colors)
   const settings = useAppSelector(state => state.settings)
 
+  useEffect(() => {
+    log.debug('loading app')
+
+    return () => {
+      log.debug('unloading app')
+    }
+  }, [])
+
   useHotkeys(keys, (event) => {
-    handleKeyDownEvent(event, 'window')
+    handleKeyDownEvent(event, 'window', null)
   })
 
   return (
@@ -34,7 +43,7 @@ const App = _ => {
               backgroundColor: colors.titleBar.activeBackground,
               color: colors.titleBar.activeForeground,
               borderBottomColor: colors.titleBar.borderBottom,
-              borderBottomWidth: colors.titleBar.borderBottom ? '1px' : '0px',
+              borderBottomWidth: colors.titleBar.borderBottom === null ? '1px' : '0px',
               WebkitAppRegion: 'drag',
               height: '24px'
             }}

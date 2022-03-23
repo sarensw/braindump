@@ -13,7 +13,6 @@ const PageContainer: FunctionComponent = (): ReactElement => {
 
   useEffect(() => {
     log.debug(`app page changed to ${app.page}`)
-    console.trace()
     if (app.page === 'files') setPage(() => FilesPage)
     else if (app.page === 'editor') setPage(() => EditorPage)
     else if (app.page === 'snippets') setPage(() => SnippetsPage)

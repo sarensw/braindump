@@ -42,12 +42,13 @@ export class CodeExtensionHandler extends BraindownLanguageExtension {
       }
 
       const overlayDom = document.createElement('div')
-      overlayDom.classList.add('h-full', 'w-full', 'bg-red-400')
+      overlayDom.classList.add('h-full', 'w-full', 'bg-red-600')
       overlayDom.style.display = 'flex'
       const code = document.createElement('code')
-      code.classList.add('h-full', 'w-full', 'bg-yellow-400', 'block')
+      code.classList.add('h-full', 'w-full', 'bg-yellow-600', 'block')
       code.contentEditable = 'true'
       code.innerHTML = 'console.log("Hello World!)"'
+      code.style.backgroundColor = '#353c45'
       overlayDom.appendChild(code)
 
       const overlayWidget = {

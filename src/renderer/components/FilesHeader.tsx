@@ -5,8 +5,17 @@ import { useAppSelector } from '../hooks'
 // import { calculateOverallFileSizes } from '../services/fileService'
 
 const FilesHeaderField: FunctionComponent<{content: string}> = ({ content }): ReactElement => {
+  const colors = useAppSelector(state => state.themeNew.colors)
+
   return (
-    <div className='text-sm border border-blue-400 bg-blue-200 p-0.5 px-1.5 rounded'>
+    <div
+      className='text-sm border p-0.5 px-1.5 rounded'
+      style={{
+        borderColor: colors.foreground ?? '#06bee1',
+        backgroundColor: colors.background ?? '#e1e1e1',
+        color: colors.files.foreground
+      }}
+    >
       {content}
     </div>
   )

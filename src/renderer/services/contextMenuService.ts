@@ -4,6 +4,7 @@ import { store } from '../store'
 import { saveSettings } from './settingsService'
 import { backup } from './fileService'
 import { fileShareAs, shareViaEmail } from './shareService'
+import { loadTheme } from '../themes/themeLoader'
 
 function initializeContextMenus (): void {
   window.__preload.receive('context-menu-command', (commandId: string) => {
@@ -36,6 +37,7 @@ function getAllContextMenus (): any {
 
 function getAppContextMenu (): any {
   const settings = store.getState().settings
+  const theme = store.getState().themeNew
   const menu = [
     {
       id: 'menu-tabs',
@@ -117,9 +119,21 @@ function getAppContextMenu (): any {
       submenu: [
         {
           id: 'theme-braindump-light',
-          label: 'Braindump Light',
+          label: 'Light',
           type: 'checkbox',
-          checked: true
+          checked: theme.id === 'light',
+          click: async () => {
+            loadTheme('light')
+          }
+        },
+        {
+          id: 'theme-braindump-dark',
+          label: 'Dark',
+          type: 'checkbox',
+          checked: theme.id === 'dark',
+          click: async () => {
+            loadTheme('dark')
+          }
         }
       ]
     },

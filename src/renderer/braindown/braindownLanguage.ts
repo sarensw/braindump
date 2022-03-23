@@ -63,22 +63,22 @@ class BraindownLanguage {
           [/\[[a-zA-Z 0-9:]+\]/, 'custom-date'],
 
           // github style code blocks (with backticks and language)
-          [/^\s*```\s*((?:\w|[/\-#])+)\s*$/, { token: 'string', next: '@codeblockgh', nextEmbedded: '$1' }],
+          [/^\s*```\s*((?:\w|[/\-#])+)\s*$/, { token: 'keyword', next: '@codeblockgh', nextEmbedded: '$1' }],
 
           // github style code blocks (with backticks but no language)
-          [/^\s*```\s*$/, { token: 'string', next: '@codeblock' }]
+          [/^\s*```\s*$/, { token: 'keyword', next: '@codeblock' }]
         ],
 
         codeblock: [
-          [/^\s*~~~\s*$/, { token: 'string', next: '@pop' }],
-          [/^\s*```\s*$/, { token: 'string', next: '@pop' }],
-          [/.*$/, 'variable.source']
+          [/^\s*~~~\s*$/, { token: 'keyword', next: '@pop' }],
+          [/^\s*```\s*$/, { token: 'keyword', next: '@pop' }],
+          [/.*$/, 'keyword']
         ],
 
         // github style code blocks
         codeblockgh: [
-          [/```\s*$/, { token: 'variable.source', next: '@pop', nextEmbedded: '@pop' }],
-          [/[^`]+/, 'variable.source']
+          [/```\s*$/, { token: 'keyword', next: '@pop', nextEmbedded: '@pop' }],
+          [/[^`]+/, 'keyword']
         ]
       }
     })

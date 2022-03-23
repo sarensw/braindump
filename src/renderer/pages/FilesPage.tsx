@@ -150,7 +150,10 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
         }}
       >
         <FilesHeader />
-        <div ref={container} className='overflow-y-auto'>
+        <div
+          ref={container}
+          className='overflow-y-auto styled-scrollbars'
+        >
           <div
             className='mt-2'
             style={{
@@ -164,34 +167,59 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
                 const itemPadding = cluster === '' ? '26px' : '46px'
                 if (file.id === selected) {
                   return (
-                    <>
-                      {!hideHeader && <li key={`braindump_files_header_${index}`} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
+                    <React.Fragment key={index}>
+                      {!hideHeader &&
+                        <li
+                          key={`braindump_files_header_${index}`}
+                          className='h-6 flex flex-row items-center font-bold'
+                          style={{
+                            paddingLeft: '26px',
+                            color: colors.files.headerForeground,
+                            backgroundColor: colors.files.headerBackground
+                          }}
+                        >{file.cluster}
+                        </li>}
                       <li
                         key={index}
                         ref={refs[file.id]}
                         className='h-6 flex flex-row items-center'
                         style={{
                           paddingLeft: itemPadding,
-                          background: colors.files.selectedForeground
+                          background: colors.files.selectedBackground,
+                          color: colors.files.selectedForeground
                         }}
                         onClick={() => fileSelected(file.id)}
                         onDoubleClick={() => fileSelectedToOpen(file.id)}
                       >{file.name}
                       </li>
-                    </>
+                    </React.Fragment>
                   )
                 } else {
                   return (
-                    <>
-                      {!hideHeader && <li key={`braindump_files_header_${index}`} ref={refs[file.id]} className='h-6 flex flex-row items-center font-bold' style={{ paddingLeft: '26px', color: colors.editorTokens.header.foreground }}>{file.cluster}</li>}
+                    <React.Fragment key={index}>
+                      {!hideHeader &&
+                        <li
+                          key={`braindump_files_header_${index}`}
+                          ref={refs[file.id]}
+                          className='h-6 flex flex-row items-center font-bold'
+                          style={{
+                            paddingLeft: '26px',
+                            color: colors.files.headerForeground,
+                            backgroundColor: colors.files.headerBackground
+                          }}
+                        >{file.cluster}
+                        </li>}
                       <li
                         key={index}
                         className='h-6 flex flex-row items-center'
-                        style={{ paddingLeft: itemPadding }}
+                        style={{
+                          paddingLeft: itemPadding,
+                          color: colors.files.foreground
+                        }}
                         onClick={() => fileSelected(file.id)}
                       >{file.name}
                       </li>
-                    </>
+                    </React.Fragment>
                   )
                 }
               })}

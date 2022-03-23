@@ -3,8 +3,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 
-import { store } from './store.js'
+import { store } from './store'
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
 import CustomThemeProvider from './themes/CustomThemeProvider'
 
 import startupService from './services/startupService'
@@ -15,6 +17,7 @@ import { initializeContextMenus } from './services/contextMenuService'
 import { initializeWindowsButtons } from './indexWindows'
 import { setPlatform } from './store/storeApp'
 import { initializeCleanup } from './cleanup'
+import log from './log'
 
 async function initialize (): Promise<void> {
   await loadPlatform()
@@ -25,13 +28,17 @@ async function initialize (): Promise<void> {
   initializeContextMenus()
   initializeCleanup()
 
+  const persistor = persistStore(store)
+
   ReactDOM.render(
     <Provider store={store}>
-      <CustomThemeProvider>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      </CustomThemeProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <CustomThemeProvider>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </CustomThemeProvider>
+      </PersistGate>
     </Provider>,
     document.getElementById('root')
   )
@@ -47,6 +54,7 @@ async function loadPlatform (): Promise<void> {
   }
 }
 
+log.debug('initialize app')
 void initialize()
 
 // HMR

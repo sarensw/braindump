@@ -6,6 +6,15 @@ export interface IEditorTokens {
   taskOpen: IEditorToken
   taskDone: IEditorToken
   keyword: IEditorToken
+  inlineCode: {
+    background?: string
+    borderBottom?: string
+    borderTop?: string
+  }
+  blockQuote: {
+    background?: string
+    marginBackground?: string
+  }
 }
 
 export interface IEditorToken {
@@ -14,15 +23,32 @@ export interface IEditorToken {
 }
 
 export interface ITheme {
+  type: string
   background?: string
   foreground?: string
   foregroundLight?: string
+  scrollbar: {
+    size?: string
+    thumbBackground?: string
+    borderLeft?: string
+  }
   files: {
+    foreground?: string
     selectedForeground?: string
+    selectedBackground?: string
+    headerForeground?: string
+    headerBackground?: string
   }
   editor: {
     background?: string
     foreground?: string
+    cursorForeground?: string
+    lineHighlightBackground?: string
+    lineNumberForeground?: string
+    lineNumberActiveForeground?: string
+    selectionBackground?: string
+    selectionHighlightBackground?: string
+    indentGuideBackground?: string
   }
   editorTokens: IEditorTokens
   button: {

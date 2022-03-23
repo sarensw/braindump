@@ -3,13 +3,12 @@ import log from '../log'
 import Page from './Page'
 import settingsStructure from '../settings/settings.json'
 import { update as updateSetting } from '../store/storeSettings'
-import { setTheme } from '../store/storeThemeNew'
+import { changeTheme } from '../store/storeThemeNew'
 import Label from '../components/settings/Label'
 import { Dropdown, Option } from '../components/settings/Dropdown'
 import { SettingsCategory } from '../components/settings/SettingsCategory'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { saveSettings } from '../services/settingsService'
-import { Light } from '../themes/themeLoader'
 import Text from '../components/settings/Text'
 import { Description } from '../components/settings/Description'
 import { SettingElement } from '../components/settings/SettingElement'
@@ -67,8 +66,7 @@ const SettingsPage: FunctionComponent = () => {
     await saveSettings()
 
     if (s.id === 'app.theme') {
-      dispatch(setTheme({
-        theme: Light,
+      dispatch(changeTheme({
         id: value
       }))
     }
@@ -109,7 +107,7 @@ const SettingsPage: FunctionComponent = () => {
 
   return (
     <Page>
-      <div className='h-full w-full overflow-y-auto'>
+      <div className='h-full w-full overflow-y-auto styled-scrollbars'>
         <div className='max-w-xl m-auto px-2 h-full'>
           {/* license settings */}
           <LicenseConfiguration />

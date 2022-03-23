@@ -34,7 +34,8 @@ const LicenseConfiguration: React.FunctionComponent = (): ReactElement => {
         style={{
           backgroundColor: isPro ? 'transparent' : colors.pro.background,
           borderColor: colors.pro.border,
-          border: isPro ? '' : '1px solid'
+          borderWidth: isPro ? '' : '1px',
+          borderStyle: 'solid'
         }}
       >
         <div className='flex flex-row gap-2'>

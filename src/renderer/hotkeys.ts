@@ -16,7 +16,7 @@ const keys = [
   'cmd+w'
 ].join(',')
 
-function handleKeyDownEvent (event: KeyboardEvent, source: string, codeEditor: monaco.editor.IStandaloneCodeEditor): void {
+function handleKeyDownEvent (event: KeyboardEvent, source: string, codeEditor: monaco.editor.IStandaloneCodeEditor | null): void {
   log.debug(`handle keydown event from ${source}`)
   let prefix: string = ''
   if (event.ctrlKey) prefix += 'ctrl+'
@@ -27,7 +27,7 @@ function handleKeyDownEvent (event: KeyboardEvent, source: string, codeEditor: m
   handleHotkeys(event, hk, source, codeEditor)
 }
 
-function handleHotkeys (event: KeyboardEvent, hotkey: string, source: string, codeEditor: monaco.editor.IStandaloneCodeEditor): void {
+function handleHotkeys (event: KeyboardEvent, hotkey: string, source: string, codeEditor: monaco.editor.IStandaloneCodeEditor | null): void {
   if (keyHandlers[hotkey] !== undefined) {
     event.preventDefault()
     log.debug(`Catched ${hotkey} from ${source}`)
