@@ -1,5 +1,6 @@
 # v0.7
 - [feat] new dark theme
+- [support] added 'Buy Me A Coffee' link to support the development
 
 # v0.6.2
 - [feat] quick note change via hotkeys in the editor
