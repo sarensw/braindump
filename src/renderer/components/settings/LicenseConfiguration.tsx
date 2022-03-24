@@ -40,7 +40,7 @@ const LicenseConfiguration: React.FunctionComponent = (): ReactElement => {
       >
         <div className='flex flex-row gap-2'>
           <div className='text-lg col-span-2 font-bold'>Pro</div>
-          {isPro && <div className='text-sm bg-green-300 border border-green-600 self-center p-0.5 px-1 rounded-lg'>Active</div>}
+          {isPro && <div className='text-sm bg-green-300 border border-green-600 text-black self-center p-0.5 px-1 rounded-lg'>Active</div>}
         </div>
         <div className='text-sm'>
           <Label className=''>License Key</Label>

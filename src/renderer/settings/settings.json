@@ -13,11 +13,11 @@
         "values": [
           {
             "id": "light",
-            "label": "Braindump Light"
+            "label": "Light"
           },
           {
             "id": "dark",
-            "label": "Braindump Dark"
+            "label": "Dark"
           }
         ]
       },
