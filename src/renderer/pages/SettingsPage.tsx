@@ -16,8 +16,8 @@ import { goToLastPage } from '../store/storeApp'
 import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
 import TextArea from '../components/settings/TextArea'
 import { Settings } from '../braindump'
-import { LicenseConfiguration } from '../components/settings/LicenseConfiguration'
 import { changeTheme } from '../services/themeService'
+import { BuyMeCoffee } from '../components/settings/BuyMeCoffee'
 
 const SettingsPage: FunctionComponent = () => {
   const dispatch = useAppDispatch()
@@ -109,7 +109,12 @@ const SettingsPage: FunctionComponent = () => {
       <div className='h-full w-full overflow-y-auto styled-scrollbars'>
         <div className='max-w-xl m-auto px-2 h-full'>
           {/* license settings */}
-          <LicenseConfiguration />
+          {/* <LicenseConfiguration /> */}
+
+          {/* BuyMeCoffee link */}
+          <div className='p-2'>
+            <BuyMeCoffee width='120px' />
+          </div>
 
           {/* all settings */}
           {categories.map((c, i) => {
