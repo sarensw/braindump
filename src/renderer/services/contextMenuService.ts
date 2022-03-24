@@ -4,7 +4,7 @@ import { store } from '../store'
 import { saveSettings } from './settingsService'
 import { backup } from './fileService'
 import { fileShareAs, shareViaEmail } from './shareService'
-import { loadTheme } from '../themes/themeLoader'
+import { changeTheme } from './themeService'
 
 function initializeContextMenus (): void {
   window.__preload.receive('context-menu-command', (commandId: string) => {
@@ -123,7 +123,7 @@ function getAppContextMenu (): any {
           type: 'checkbox',
           checked: theme.id === 'light',
           click: async () => {
-            loadTheme('light')
+            await changeTheme('light')
           }
         },
         {
@@ -132,7 +132,7 @@ function getAppContextMenu (): any {
           type: 'checkbox',
           checked: theme.id === 'dark',
           click: async () => {
-            loadTheme('dark')
+            await changeTheme('dark')
           }
         }
       ]

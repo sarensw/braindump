@@ -1,9 +1,7 @@
 import { ITheme } from './ITheme'
-import { store } from '../store'
-import Light from './light'
-import Dark from './dark'
+import Light from './themes/light'
+import Dark from './themes/dark'
 import log from '../log'
-import { setTheme } from '../store/storeThemeNew'
 
 function loadTheme (id: string): ITheme {
   log.debug(`about to set theme ${id}`)
@@ -19,43 +17,7 @@ function loadTheme (id: string): ITheme {
 
   if (theme === null) theme = Light as ITheme
 
-  log.debug({
-    id,
-    theme
-  })
-
-  updateScrollbarStyle(theme)
-
-  store.dispatch(setTheme({
-    id,
-    theme
-  }))
-
   return theme
-}
-
-function updateScrollbarStyle (theme: ITheme): void {
-  const innerHtml = `
-      .styled-scrollbars::-webkit-scrollbar {
-        width: ${theme.scrollbar.size ?? '14px'};
-        height: ${theme.scrollbar.size ?? '14px'};
-      }
-      .styled-scrollbars::-webkit-scrollbar-thumb { /* Foreground */
-        background: ${theme.scrollbar.thumbBackground ?? '#79797966'};
-      }
-      .styled-scrollbars::-webkit-scrollbar-track { /* Background */
-        border-left: 1px solid ${theme.scrollbar.borderLeft ?? '#333333'};
-      }
-    `
-
-  const style = window.document.createElement('style')
-  style.id = 'scrollBarStyleCss'
-  style.innerHTML = innerHtml
-  if (document.getElementById('scrollBarStyleCss') !== null) {
-    const element = document.getElementById('scrollBarStyleCss')
-    element?.remove()
-  }
-  document.getElementsByTagName('head')[0].appendChild(style)
 }
 
 export { loadTheme, Light, Dark }
