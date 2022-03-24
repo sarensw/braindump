@@ -3,7 +3,6 @@ import log from '../log'
 import Page from './Page'
 import settingsStructure from '../settings/settings.json'
 import { update as updateSetting } from '../store/storeSettings'
-import { changeTheme } from '../store/storeThemeNew'
 import Label from '../components/settings/Label'
 import { Dropdown, Option } from '../components/settings/Dropdown'
 import { SettingsCategory } from '../components/settings/SettingsCategory'
@@ -18,6 +17,7 @@ import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
 import TextArea from '../components/settings/TextArea'
 import { Settings } from '../braindump'
 import { LicenseConfiguration } from '../components/settings/LicenseConfiguration'
+import { changeTheme } from '../services/themeService'
 
 const SettingsPage: FunctionComponent = () => {
   const dispatch = useAppDispatch()
@@ -62,13 +62,12 @@ const SettingsPage: FunctionComponent = () => {
     let newValue: string | boolean = value
     if (value === 'boolean.true') newValue = true
     if (value === 'boolean.false') newValue = false
-    dispatch(updateSetting({ id: s.id, value: newValue }))
-    await saveSettings()
 
     if (s.id === 'app.theme') {
-      dispatch(changeTheme({
-        id: value
-      }))
+      await changeTheme(value)
+    } else {
+      dispatch(updateSetting({ id: s.id, value: newValue }))
+      await saveSettings()
     }
   }
 
