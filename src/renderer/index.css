@@ -15,6 +15,10 @@ body {
   outline: none;
 }
 
+.drag {
+  -webkit-app-region: drag
+}
+
 .tablist::-webkit-scrollbar {
   display: none;
 }

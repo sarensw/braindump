@@ -38,13 +38,13 @@ const App: FunctionComponent = _ => {
         {app.platform === 'linux' && <div className='h-4' />}
         {app.platform !== 'linux' &&
           <div
-            className='grid grid-cols-3 content-center'
+            className='grid grid-cols-3 content-center drag'
             style={{
               backgroundColor: colors.titleBar.activeBackground,
               color: colors.titleBar.activeForeground,
               borderBottomColor: colors.titleBar.borderBottom,
               borderBottomWidth: colors.titleBar.borderBottom === null ? '1px' : '0px',
-              WebkitAppRegion: 'drag',
+              // WebkitAppRegion: 'drag',
               height: '24px'
             }}
           ><div />
