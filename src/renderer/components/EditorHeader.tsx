@@ -83,7 +83,7 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
             {/* Note cluster */}
             <input
               ref={el => { refFileNameInput = el }}
-              className='flex-shrink bg-transparent min-w-min italic'
+              className='shrink bg-transparent min-w-min italic'
               style={{
                 color: colors.foregroundLight
               }}
