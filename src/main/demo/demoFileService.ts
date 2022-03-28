@@ -91,6 +91,21 @@ export class FileSystem {
     if (path.includes('files.json')) {
       return JSON.stringify(files)
     }
+    if (path.includes('settings.json')) {
+      return JSON.stringify({
+        'app.theme': 'dark',
+        'app.hotkeys.show': false,
+        'backup.enabled': false,
+        'backup.path': '/Users/sarensw/OneDrive/',
+        'editor.minimap.show': false,
+        'editor.linenumbers.show': true,
+        'editor.wordwrap': true,
+        'editor.mode': 'vim',
+        'tabs.show': false,
+        'presentation.title.subTitle': '',
+        'pro.licenseKey': '6FB42E21-E09C4924-937ACF0A-80C86FA0'
+      })
+    }
     return contents[path]
   }
 
