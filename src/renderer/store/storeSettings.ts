@@ -22,6 +22,7 @@ const initialState: Settings = {
   'editor.minimap.show': getDefaultValue<boolean>('editor.minimap.show') ?? false,
   'editor.linenumbers.show': getDefaultValue<boolean>('editor.linenumber.show') ?? true,
   'editor.wordwrap': getDefaultValue<boolean>('editor.wordwrap') ?? true,
+  'editor.mode': getDefaultValue<string>('editor.mode') ?? 'normal',
   'tabs.show': false,
   'presentation.title.subTitle': getDefaultValue<string>('presentation.title.subTitle') ?? '',
   'pro.licenseKey': getDefaultValue<string>('pro.licenseKey') ?? ''

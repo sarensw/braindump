@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
 import { getViewState, persist } from '../services/fileService'
 import { Positionable } from '../common/cursorPosition'
+import { initVimMode } from '../braindown/vim/vimMode'
 
 interface BraindownEditorProps {
   path: string
@@ -97,6 +98,12 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
         decorationsWidth: event.decorationsWidth
       }))
     })
+
+    // enable vim mode if selected by the user
+    if (settings['editor.mode'] === 'vim') {
+      const statusNode = document.querySelector('.status-node')
+      initVimMode(codeEditor, statusNode)
+    }
   }
 
   function resetViewState (codeEditor: monaco.editor.IStandaloneCodeEditor): void {

@@ -138,23 +138,26 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
   }
 
   return (
-    <Editor
-      options={{
-        formatOnType: true,
-        wordWrap: wordWrap ? 'on' : 'off',
-        automaticLayout: true,
-        autoIndent: 'full',
-        showFoldingControls: 'always',
-        lineNumbers: lineNumbers ? 'on' : 'off',
-        suggest: {
-          preview: true
-        },
-        minimap: {
-          enabled: showMinimap
-        }
-      }}
-      onMount={handleEditorDidMount}
-      onChange={modelChanged}
-    />
+    <>
+      <Editor
+        options={{
+          formatOnType: true,
+          wordWrap: wordWrap ? 'on' : 'off',
+          automaticLayout: true,
+          autoIndent: 'full',
+          showFoldingControls: 'always',
+          lineNumbers: lineNumbers ? 'on' : 'off',
+          suggest: {
+            preview: true
+          },
+          minimap: {
+            enabled: showMinimap
+          }
+        }}
+        onMount={handleEditorDidMount}
+        onChange={modelChanged}
+      />
+      <code className='status-node' />
+    </>
   )
 }

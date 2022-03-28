@@ -1,5 +1,6 @@
 # v0.7
 - [feat] new dark theme
+- [feat] experimental vim mode
 - [support] added 'Buy Me A Coffee' link to support the development
 
 # v0.6.2

@@ -1,8 +1,6 @@
 import * as monaco from 'monaco-editor'
 
-interface HotkeyAction {
-  (source: string, codeEditor: monaco.editor.IStandaloneCodeEditor | null): boolean
-}
+type HotkeyAction = (source: string, codeEditor: monaco.editor.IStandaloneCodeEditor | null) => boolean
 
 interface Hotkey {
   id: string
@@ -26,6 +24,7 @@ interface Settings {
   'editor.minimap.show': boolean
   'editor.linenumbers.show': boolean
   'editor.wordwrap': boolean
+  'editor.mode': string
   'tabs.show': boolean
   'presentation.title.subTitle': string
   'pro.licenseKey': string

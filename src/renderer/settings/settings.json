@@ -77,6 +77,23 @@
         "title": "Word Wrap",
         "description": "Turn word wrapping in the editor on or off",
         "default": true
+      },
+      {
+        "id": "editor.mode",
+        "type": "enum",
+        "title": "Mode",
+        "description": "Select the editor mode",
+        "default": "normal",
+        "values": [
+          {
+            "id": "normal",
+            "label": "Normal"
+          },
+          {
+            "id": "vim",
+            "label": "Vim (experimental)"
+          }
+        ]
       }
     ]
   },
