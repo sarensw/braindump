@@ -142,12 +142,18 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
     if (textModel !== null) {
       let line = event.position.lineNumber
       let headers: string[] | null = null
+      let currentLevel: number = Number.MAX_VALUE
       while (line > 0) {
         const lineContent = textModel.getLineContent(line)
-        if (lineContent.match(/^#{1,6} .*/) !== null) {
+        const groups = lineContent.match(/^(#{1,6}) (.*)/)
+        if (groups !== null) {
           if (headers === null) headers = new Array<string>()
-          headers.unshift(lineContent.substr(lineContent.indexOf(' ') + 1))
-          if (lineContent.match(/^# .*/) !== null) break
+          const level = groups[1].length
+          if (level < currentLevel) {
+            currentLevel = level
+            const header = groups[2]
+            headers?.unshift(header)
+          }
         }
         line--
       }
