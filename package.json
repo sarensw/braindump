@@ -12,7 +12,7 @@
     "build:snowpack": "npx snowpack build",
     "dev": "concurrently -n snowpack,esbuild,electron --prefixColors green,yellow,blue \"npm:dev-snowpack\" \"npm:dev-esbuild\" \"npm:dev-electron\"",
     "dev-esbuild": "esbuild src/main/index.js src/main/preload.js --outdir=dist/main --bundle --platform=node --external:electron --watch --format=cjs",
-    "dev-electron": "wait-on http://localhost:8080 && electron dist/main/index.js",
+    "dev-electron": "wait-on http://localhost:8089 && electron dist/main/index.js",
     "dev-snowpack": "snowpack dev --open none"
   },
   "homepage": "./",

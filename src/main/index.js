@@ -58,7 +58,7 @@ function createMainWindow () {
 
   // window.loadURL(getAssetURL('index.html'))
   if (process.env.NODE_ENV === 'development') {
-    window.loadURL('http://localhost:8080')
+    window.loadURL('http://localhost:8089')
   } else {
     window.loadFile(path.resolve(path.join(__dirname, '../renderer/index.html')))
   }
@@ -123,6 +123,11 @@ app.on('will-quit', () => {
 ipcMain.handle('app/platform', (event, args) => {
   log.debug('app/platform')
   return process.platform
+})
+
+ipcMain.handle('app/demoModeActive', (event, args) => {
+  log.debug('app/demoModeActive')
+  return process.env.BRAINDUMP_DEMO_MODE === 'true'
 })
 
 ipcMain.on('showMainWindow', (event, args) => {

@@ -4,9 +4,12 @@ module.exports = {
     public: { url: '/', static: true },
     'src/renderer': { url: '/dist' }
   },
+  devOptions: {
+    port: 8089
+  },
   buildOptions: {
-    "baseUrl": "./",
-    out: "buildci/renderer"
+    baseUrl: './',
+    out: 'buildci/renderer'
   },
   plugins: [
     '@snowpack/plugin-postcss',
