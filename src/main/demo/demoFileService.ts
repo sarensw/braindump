@@ -13,8 +13,17 @@ let files: any = {
     },
     {
       id: '9302cbcb-55e4-4222-aee0-56af0c23524g',
-      name: 'Feature Overview',
+      name: 'Features',
       path: '/Users/sarensw/Library/Application Support/Electron/dump_2',
+      position: {
+        line: 0,
+        column: 0
+      }
+    },
+    {
+      id: '9302cbcb-55e4-4222-aee0-56af0c23524i',
+      name: 'Features short',
+      path: '/Users/sarensw/Library/Application Support/Electron/dump_3',
       position: {
         line: 0,
         column: 0
@@ -44,7 +53,22 @@ const contents: any = {
     'console.log(\'hello world\')\n' +
     '```\n' +
     '\n' +
-    '> block quotes'
+    '> block quotes',
+  '/Users/sarensw/Library/Application Support/Electron/dump_3':
+    '# Braindump features\n' +
+    '- Minimalistic, Auto save, Offline, Tasks, Quick snippets\n' +
+    '- Start any first level header in presentation mode\n' +
+    '- Available for Mac, Windows Linux\n' +
+    '- VIM mode (experimental)\n' +
+    '\n' +
+    '## Markdown inspired\n' +
+    '- List formatting\n' +
+    '- Links (e.g. https://getbraindump.com)\n' +
+    '> block quotes\n' +
+    '\n' +
+    '```javascript\n' +
+    'console.log(\'source code highlight\')\n' +
+    '```'
 }
 const snippets: any = [
   {
