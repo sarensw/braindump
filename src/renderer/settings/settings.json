@@ -5,6 +5,17 @@
     "show": true,
     "settings": [
       {
+        "id": "app.path",
+        "type": "text",
+        "title": "Path/Directory",
+        "description": "Specifies the path for the data files and settings. Change the path to a DropBox/OneDrive/Google Drive/... directory to enable syncing between different computers.",
+        "default": "",
+        "validation": "path",
+        "action": {
+          "title": "Move"
+        }
+      },
+      {
         "id": "app.theme",
         "type": "enum",
         "title": "Theme",

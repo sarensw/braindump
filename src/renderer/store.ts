@@ -38,6 +38,9 @@ const reducers = combineReducers({
 
 const persistConfig = {
   key: 'root',
+  blacklist: [
+    'files'
+  ],
   storage
 }
 

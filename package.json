@@ -6,12 +6,12 @@
   "scripts": {
     "build": "run-s -l build:esbuild build:snowpack build:electron",
     "build:dir": "run-s -l build:esbuild build:snowpack build:electron:dir",
-    "build:esbuild": "npx esbuild src/main/index.js src/main/preload.js --outdir=buildci/main --bundle --platform=node --external:electron --format=cjs",
+    "build:esbuild": "npx esbuild src/main/index.ts src/main/preload.js --outdir=buildci/main --bundle --platform=node --external:electron --format=cjs",
     "build:electron": "npx electron-builder build --publish never",
     "build:electron:dir": "npx electron-builder build --dir",
     "build:snowpack": "npx snowpack build",
     "dev": "concurrently -n snowpack,esbuild,electron --prefixColors green,yellow,blue \"npm:dev-snowpack\" \"npm:dev-esbuild\" \"npm:dev-electron\"",
-    "dev-esbuild": "esbuild src/main/index.js src/main/preload.js --outdir=dist/main --bundle --platform=node --external:electron --watch --format=cjs",
+    "dev-esbuild": "esbuild src/main/index.ts src/main/preload.js --outdir=dist/main --bundle --platform=node --external:electron --watch --format=cjs",
     "dev-electron": "wait-on http://localhost:8089 && electron dist/main/index.js",
     "dev-snowpack": "snowpack dev --open none"
   },

@@ -8,6 +8,7 @@ import { CursorPosition } from '../common/cursorPosition'
 import dateFormat from 'dateformat'
 import { Direction } from '../common/direction'
 import StackTrace from 'stacktrace-js'
+import { FileServiceMoveResult } from '../braindump.d'
 
 const id = randomString(4)
 const saveTimerInterval = 2000
@@ -428,4 +429,33 @@ function backup (): void {
   }
 }
 
-export { initializeFileService, loadFiles, saveFileContent, saveFile, flushFile, createNewFile, closeFile, readFile, setClusterName, setFileName, setLastUsedFile, getCursorPosition, getViewState, moveFile, persist, calculateOverallFileSizes, isPathValid, backup }
+async function moveUserDataDirectory (newPath: string): Promise<string | null> {
+  const state = store.getState()
+  const files = state.files.files
+
+  let filePaths = files?.map(file => file.path)
+  if (filePaths === undefined) filePaths = []
+
+  const result: FileServiceMoveResult = await window.__preload.invoke({
+    channel: 'file/move',
+    payload: {
+      filePaths: [
+        ...filePaths
+      ],
+      targetPath: newPath
+    }
+  })
+
+  switch (result) {
+    case FileServiceMoveResult.Successful:
+      return null
+    case FileServiceMoveResult.FailedInvalidPath:
+      return 'Invalid path'
+    case FileServiceMoveResult.FailedCopy:
+      return 'Could not move at least one file. Check that the target directory has write accesss.'
+    default:
+      return 'Return code not handled'
+  }
+}
+
+export { initializeFileService, loadFiles, saveFileContent, saveFile, flushFile, createNewFile, closeFile, readFile, setClusterName, setFileName, setLastUsedFile, getCursorPosition, getViewState, moveFile, persist, calculateOverallFileSizes, isPathValid, backup, moveUserDataDirectory }

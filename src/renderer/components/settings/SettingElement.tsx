@@ -7,4 +7,7 @@ export interface SettingElement {
   description: string
   validation?: string
   values?: SettingEnumValue[]
+  action?: {
+    title: string
+  }
 }

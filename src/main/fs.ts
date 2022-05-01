@@ -1,14 +1,35 @@
-import * as electron from 'electron'
-import { join } from 'path'
-import * as fs from 'fs/promises'
-import log from 'electron-log'
 import AdmZip from 'adm-zip'
+import { app } from 'electron'
+import log from 'electron-log'
+import * as fs from 'fs/promises'
+import { join, parse } from 'path'
+import IFileSystem from './IFileSystem'
 
-export class FileSystem {
-  private readonly userDataPath: string
+const PATH_FILE_SNIPPETS: string = 'snippets.yaml'
+const PATH_FILE_SETTINGS: string = 'settings.json'
+const PATH_FILE_FILES: string = 'files.json'
 
-  constructor (parameters) {
-    this.userDataPath = electron.app.getPath('userData')
+export class FileSystem implements IFileSystem {
+  private userDataPath: string
+
+  public async initialize (): Promise<void> {
+    // read the settings to get the current user data directory
+    let userDataPath = ''
+
+    const settingsString = await this.read(PATH_FILE_SETTINGS)
+    if (settingsString == null) {
+      // we're not able to load the file
+      userDataPath = app.getPath('userData')
+    } else {
+      const settings = JSON.parse(settingsString)
+      if (settings['app.path'] == null) {
+        userDataPath = app.getPath('userData')
+      } else {
+        userDataPath = settings['app.path']
+      }
+    }
+
+    this.userDataPath = userDataPath
   }
 
   /**
@@ -48,9 +69,9 @@ export class FileSystem {
     log.debug(`Attempting to read file ${path}`)
 
     let fullPath = path
-    if (!fullPath.startsWith('/')) {
-      fullPath = join(this.userDataPath, path)
-    }
+    fullPath = this.correctPath(path)
+
+    log.debug(`about to read ${fullPath}`)
     const exists = await this.exists(fullPath)
     if (exists) {
       log.debug(`${fullPath} exists. Reading...`)
@@ -64,6 +85,30 @@ export class FileSystem {
   }
 
   /**
+   * Corrects the path in a way that internal files are loaded
+   * from the electron userData dir. All other files are loaded
+   * from the curren user data directory (see settings.json)
+   *
+   * @param path path to correct
+   * @returns corrected path
+   */
+  private correctPath (path: string): string {
+    let result = path
+    if (path === PATH_FILE_FILES ||
+      path === PATH_FILE_SETTINGS ||
+      path === PATH_FILE_SNIPPETS) {
+      log.debug(`about to join ${path} with ${app.getPath('userData')}`)
+      result = join(app.getPath('userData'), path)
+    } else {
+      const parsedPath = parse(path)
+      if (parsedPath.dir == null || parsedPath.dir === '') {
+        result = join(this.userDataPath, path)
+      }
+    }
+    return result
+  }
+
+  /**
    * Writes the given text into the given file. Existing content is overriden.
    * @param path path to the file to write
    * @param text text to write into the file
@@ -72,9 +117,7 @@ export class FileSystem {
     log.debug(`attempting to write some text of length ${text.length} to ${path}`)
 
     let fullPath = path
-    if (!fullPath.startsWith('/')) {
-      fullPath = join(this.userDataPath, path)
-    }
+    fullPath = this.correctPath(path)
 
     await fs.writeFile(fullPath, text)
   }
@@ -98,5 +141,45 @@ export class FileSystem {
       }
     })
     zip.writeZip(targetPath)
+  }
+
+  /**
+   * Moves all given files to the new path. This method can have the following return codes
+   *  - 0: successfull
+   *  - 1: failed because the target directory doesn't exist
+   *  - 2: failed because one of the files couldn't be moved
+   *
+   * @param filePaths list of paths to all files that shall be moved to the new location
+   * @param newPath the new path to move all the given files to
+   * @returns number that describes the status
+   */
+  async move (filePaths: string[], newPath: string): Promise<number> {
+    log.debug(`Moving ${filePaths.length} to ${newPath}`)
+    log.debug(filePaths)
+
+    // check if the target path exists
+    const newPathExists = await this.exists(newPath)
+    if (!newPathExists) {
+      log.info(`target path ${newPath} does not exist`)
+      return 1 // FileServiceMoveResult.FailedInvalidPath
+    }
+
+    // move all the given files
+    for (const filePath of filePaths) {
+      const parsedPath = parse(filePath)
+
+      let fullFilePath = ''
+      if (parsedPath.dir !== '') fullFilePath = filePath
+      else fullFilePath = join(this.userDataPath, filePath)
+
+      try {
+        await fs.copyFile(fullFilePath, join(newPath, parsedPath.base))
+      } catch (err) {
+        log.info(`could not copy the file ${filePath} because ${String(err)}`)
+        return 2 // FileServiceMoveResult.FailedCopy
+      }
+    }
+
+    return 0 // FileServiceMoveResult.Successful
   }
 }

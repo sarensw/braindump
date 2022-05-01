@@ -17,6 +17,7 @@ interface SerializableHotkey {
 }
 
 interface Settings {
+  'app.path': string
   'app.theme': string
   'app.hotkeys.show': boolean
   'backup.enabled': boolean
@@ -41,4 +42,10 @@ export interface SharedFile {
   cluster: string
   name: string
   path: string
+}
+
+export enum FileServiceMoveResult {
+  Successful,
+  FailedInvalidPath,
+  FailedCopy
 }

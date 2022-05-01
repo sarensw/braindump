@@ -1,4 +1,6 @@
+/* eslint-disable no-template-curly-in-string */
 import * as electron from 'electron'
+import IFileSystem from '../IFileSystem'
 
 let files: any = {
   files: [
@@ -88,12 +90,17 @@ const snippets: any = [
   }
 ]
 
-export class FileSystem {
+export class FileSystem implements IFileSystem {
   private readonly userDataPath: string
 
   constructor (parameters) {
     this.userDataPath = electron.app.getPath('userData')
   }
+
+  initialize: () => Promise<void>
+  size: (path: string) => Promise<number>
+  compress: (filePaths: string[], targetPath: string) => Promise<void>
+  move: (filePaths: string[], newPath: string) => Promise<number>
 
   /**
    * Checks whether the given file actually exists
@@ -117,6 +124,7 @@ export class FileSystem {
     }
     if (path.includes('settings.json')) {
       return JSON.stringify({
+        'app.path': electron.app.getPath('userData'),
         'app.theme': 'dark',
         'app.hotkeys.show': false,
         'backup.enabled': false,

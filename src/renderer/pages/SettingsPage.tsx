@@ -11,13 +11,14 @@ import { saveSettings } from '../services/settingsService'
 import Text from '../components/settings/Text'
 import { Description } from '../components/settings/Description'
 import { SettingElement } from '../components/settings/SettingElement'
-import { isPathValid } from '../services/fileService'
+import { isPathValid, moveUserDataDirectory } from '../services/fileService'
 import { goToLastPage } from '../store/storeApp'
 import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
 import TextArea from '../components/settings/TextArea'
 import { Settings } from '../braindump'
 import { changeTheme } from '../services/themeService'
 import { BuyMeCoffee } from '../components/settings/BuyMeCoffee'
+import Button from '../components/elements/Button'
 
 const SettingsPage: FunctionComponent = () => {
   const dispatch = useAppDispatch()
@@ -91,7 +92,10 @@ const SettingsPage: FunctionComponent = () => {
             [s.id]: undefined
           }))
 
-          await storeSetting(cid, s, value)
+          // only store the setting if there is no separate action defined
+          if (s.action === undefined) {
+            await storeSetting(cid, s, value)
+          }
         } else {
           setValidationError(prev => ({
             ...prev,
@@ -100,8 +104,23 @@ const SettingsPage: FunctionComponent = () => {
         }
       }
     } else {
-      await storeSetting(cid, s, value)
+      // only store the setting if there is no separate action defined
+      if (s.action === undefined) {
+        await storeSetting(cid, s, value)
+      }
     }
+  }
+
+  const onAction = async (cid: string, s: SettingElement, value: string): Promise<void> => {
+    const result = await moveUserDataDirectory(value)
+    if (result !== null) {
+      setValidationError(prev => ({
+        ...prev,
+        [s.id]: result
+      }))
+    }
+
+    await storeSetting(cid, s, value)
   }
 
   return (
@@ -148,7 +167,15 @@ const SettingsPage: FunctionComponent = () => {
 
                       {/* setting type text */}
                       {s.type === 'text' &&
-                        <Text className='w-full' onChange={async e => await onChangeSetting(c.id, s, (e.target as HTMLInputElement).value)} value={temporaryTextValue[s.id]} />}
+                        <div className='flex flex-row w-full gap-2'>
+                          {s.action === undefined &&
+                            <Text className='flex-grow' onChange={async e => await onChangeSetting(c.id, s, (e.target as HTMLInputElement).value)} value={temporaryTextValue[s.id]} />}
+                          {s.action !== undefined &&
+                            <>
+                              <Text className='flex-grow' onChange={async e => await onChangeSetting(c.id, s, (e.target as HTMLInputElement).value)} value={temporaryTextValue[s.id]} />
+                              <Button onClick={async e => await onAction(c.id, s, temporaryTextValue[s.id])}>{s.action.title}</Button>
+                            </>}
+                        </div>}
 
                       {/* setting type textarea */}
                       {s.type === 'textarea' &&
