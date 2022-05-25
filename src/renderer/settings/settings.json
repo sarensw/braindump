@@ -31,13 +31,6 @@
             "label": "Dark"
           }
         ]
-      },
-      {
-        "id": "app.hotkeys.show",
-        "type": "boolean",
-        "title": "Show Keyboard Shortcuts",
-        "description": "Turns on/off showing keyboard shortcuts at the bottom of the app",
-        "default": "false"
       }
     ]
   },

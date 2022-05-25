@@ -10,7 +10,6 @@ import { store } from '../store'
 import { setActivePage } from '../store/storeApp'
 import { saveFile } from '../services/fileService'
 import { setPresentationContent } from '../store/storePresentation'
-import { runActionForHotkey } from '../services/hotkeyService'
 
 class BraindownLanguage {
   languageHandlers: BraindownLanguageExtension[] = []
@@ -316,6 +315,10 @@ class BraindownLanguage {
       keyHandler('p', true, false, false)
     },
     '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
+    this.editor.addCommand(me.KeyMod.CtrlCmd | me.KeyCode.KeyK, () => {
+      keyHandler('k', true, false, false)
+    },
+    '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
 
     this.editor.addCommand(me.KeyCode.Enter, () => {
       for (const handler of this.languageHandlers) {
@@ -346,16 +349,6 @@ class BraindownLanguage {
     '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
     this.editor.addCommand(me.KeyMod.CtrlCmd | me.KeyCode.KeyR, () => {
       keyHandler('r', true, false, false)
-    },
-    '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
-    this.editor.addCommand(me.KeyMod.CtrlCmd | me.KeyCode.KeyK, () => {
-      saveFile()
-      runActionForHotkey('command+k', 'editor', this.editor)
-    },
-    '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
-    this.editor.addCommand(me.KeyMod.CtrlCmd | me.KeyCode.KeyJ, () => {
-      saveFile()
-      runActionForHotkey('command+j', 'editor', this.editor)
     },
     '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
   }

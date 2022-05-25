@@ -3,7 +3,6 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { keys, handleKeyDownEvent } from './hotkeys'
 import PageContainer from './pages/PageContainer'
 import { useAppSelector } from './hooks'
-import HotkeyPeek from './components/HotkeyPeek'
 import WindowsButtons from './components/WindowsButtons'
 import PopupContainer from './components/PopupContainer'
 import log from './log'
@@ -60,10 +59,6 @@ const App: FunctionComponent = _ => {
 
         <div className='font-mono'>
           <PageContainer />
-        </div>
-
-        <div className='font-mono max-w-full'>
-          {settings['app.hotkeys.show'] && <HotkeyPeek />}
         </div>
 
         <PopupContainer />

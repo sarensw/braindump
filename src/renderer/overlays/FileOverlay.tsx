@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactElement, useEffect } from 'react'
+import React, { FunctionComponent, ReactElement, useEffect, useRef } from 'react'
 import { List } from '../components/elements/List'
 import { FileListItem } from '../components/files/FileListItem'
 import { useAppDispatch, useAppSelector } from '../hooks'
@@ -10,6 +10,7 @@ import { Overlay } from './Overlay'
 const FileOverlay: FunctionComponent = (): ReactElement => {
   const dispatch = useAppDispatch()
   const files = useAppSelector(state => state.files.files)
+  const refList = useRef()
 
   const { to } = useKeyboardNavigation(
     'file/quick_change',
@@ -19,6 +20,10 @@ const FileOverlay: FunctionComponent = (): ReactElement => {
         dispatch(setActiveOverlay(null))
         to('editor/editor')
       }
+    },
+    undefined,
+    () => {
+      to('file/quick_change/list')
     }
   )
 
