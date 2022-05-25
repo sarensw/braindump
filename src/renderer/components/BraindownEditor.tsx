@@ -37,6 +37,10 @@ export const BraindownEditor = ({
     FocusElementType.Element,
     {
       CmdCtrl_R: (to) => to('editor/header/name')
+    },
+    undefined,
+    () => {
+      codeEditor?.focus()
     }
   )
 

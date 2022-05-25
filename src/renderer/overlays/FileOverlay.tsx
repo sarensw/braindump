@@ -10,7 +10,6 @@ import { Overlay } from './Overlay'
 const FileOverlay: FunctionComponent = (): ReactElement => {
   const dispatch = useAppDispatch()
   const files = useAppSelector(state => state.files.files)
-  const refList = useRef()
 
   const { to } = useKeyboardNavigation(
     'file/quick_change',
@@ -29,6 +28,9 @@ const FileOverlay: FunctionComponent = (): ReactElement => {
 
   useEffect(() => {
     to('file/quick_change/list')
+    return () => {
+      to('editor/editor')
+    }
   }, [])
 
   return (

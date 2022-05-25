@@ -112,10 +112,6 @@ function useKeyboardNavigation (
   const shortcutHandler = (key: string, ctrlOrCmd: boolean, shift: boolean, alt: boolean, e: KeyboardEvent | null = null): void => {
     log.debug(`key detected: ${key}, ctrlOrCmd: ${String(ctrlOrCmd)}, shift: ${String(shift)}, alt: ${String(alt)}`)
 
-    if (key === 'p') {
-      console.log('key')
-    }
-
     let keyId = key
     if (ctrlOrCmd) keyId = `CmdCtrl_${key.toUpperCase()}`
 
@@ -171,6 +167,7 @@ function useKeyboardNavigation (
       console.log(`add event listener for ${focusElement.id} of type ${focusElement.type} and ${id} `)
 
       if (focusElement.id === id) {
+        console.log(`actively setting the focus to ${id}`)
         focusRef?.current?.focus()
       }
 
