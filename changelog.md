@@ -1,5 +1,6 @@
 # v0.8
 - [feat] allow to change the user data directory
+- [feat] fuzzy search using Cmd+P/Ctrl+P
 
 # v0.7
 - [feat] new dark theme
