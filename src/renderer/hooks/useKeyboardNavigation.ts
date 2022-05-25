@@ -69,12 +69,10 @@ function useKeyboardNavigation (
 
     const fe = staticStoreElements.retrieve(id)
     if (fe != null) {
-      console.log(`about to focus from ${currentIdentifier} to ${id}`)
       let canBeFocused = true
       if (fe.beforeFocus != null) {
         canBeFocused = fe.beforeFocus()
       }
-      console.log(`canBeFocused = ${String(canBeFocused)}`)
       if (canBeFocused) {
         dispatch(setFocusElement({
           id: fe.id,
@@ -164,10 +162,7 @@ function useKeyboardNavigation (
         staticStoreHierarchy.store('element', id)
       }
 
-      console.log(`add event listener for ${focusElement.id} of type ${focusElement.type} and ${id} `)
-
       if (focusElement.id === id) {
-        console.log(`actively setting the focus to ${id}`)
         focusRef?.current?.focus()
       }
 
@@ -176,8 +171,6 @@ function useKeyboardNavigation (
       // give the event to the component that it received the focus
       if (onFocus != null) onFocus()
     } else {
-      console.log(`remove event listener for ${id} because ${focusElement.id} of type ${focusElement.type}`)
-
       window.removeEventListener('keydown', keydownHandler)
     }
 

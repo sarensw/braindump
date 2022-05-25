@@ -43,7 +43,6 @@ function registerShortcuts (): void {
   window.__preload.receive('shortcut', (data: any) => {
     for (const shortcut of shortcuts) {
       if (shortcut.id === data) {
-        console.log(`shortcut ${shortcut.id} received`)
         log.debug(`shortcut ${shortcut.id} received`)
         if (shortcut.action !== undefined && shortcut.action !== null) {
           shortcut.action()
@@ -53,7 +52,6 @@ function registerShortcuts (): void {
   })
 
   log.debug('shortcuts registered')
-  console.log('shortcuts registered')
 }
 
 export default registerShortcuts
