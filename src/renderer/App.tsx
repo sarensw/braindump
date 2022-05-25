@@ -10,7 +10,6 @@ import log from './log'
 const App: FunctionComponent = _ => {
   const platform = useAppSelector(state => state.app.platform)
   const colors = useAppSelector(state => state.themeNew.colors)
-  const settings = useAppSelector(state => state.settings)
 
   useEffect(() => {
     log.debug('loading app')

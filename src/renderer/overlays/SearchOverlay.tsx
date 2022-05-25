@@ -25,7 +25,7 @@ const SearchOverlay: FunctionComponent = (): ReactElement => {
   }, [])
 
   return (
-    <Overlay width='w-full' height='h-full'>
+    <Overlay type='full'>
       <div
         style={{
           gridTemplateRows: 'auto 1fr'
