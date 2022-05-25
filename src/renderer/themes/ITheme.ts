@@ -59,6 +59,16 @@ export interface ITheme {
     hoverBackground?: string
     hoverBorder?: string
   }
+  list: {
+    selectedBackground?: string
+    selectedForeground?: string
+    foreground?: string
+    secondaryForeground?: string
+    highlight?: string
+  }
+  overlay: {
+    border?: string
+  }
   settings: {
     label: {
       foreground?: string

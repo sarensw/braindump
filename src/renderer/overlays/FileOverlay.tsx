@@ -1,10 +1,10 @@
-import React, { FunctionComponent, ReactElement, useEffect, useRef } from 'react'
+import React, { FunctionComponent, ReactElement, useEffect } from 'react'
 import { List } from '../components/elements/List'
 import { FileListItem } from '../components/files/FileListItem'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
 import { FocusElementType, setActiveOverlay } from '../store/storeApp'
-import { SerializableFile } from '../store/storeFiles'
+import { SerializableFile, setCurrentFile } from '../store/storeFiles'
 import { Overlay } from './Overlay'
 
 const FileOverlay: FunctionComponent = (): ReactElement => {
@@ -33,13 +33,27 @@ const FileOverlay: FunctionComponent = (): ReactElement => {
     }
   }, [])
 
+  const openFile = (selected: SerializableFile): void => {
+    dispatch(setCurrentFile(selected.id))
+    dispatch(setActiveOverlay(null))
+    to('editor/editor')
+  }
+
   return (
     <Overlay type='box'>
-      <List<SerializableFile>
-        focusId='file/quick_change/list'
-        items={files ?? []}
-        display={(item, index) => <FileListItem key={index} index={index} item={item} />}
-      />
+      <div
+        style={{
+          gridTemplateRows: '1fr'
+        }}
+        className='grid h-full'
+      >
+        <List<SerializableFile>
+          focusId='file/quick_change/list'
+          items={files ?? []}
+          onClick={(item) => openFile(item)}
+          display={(item, index, selected) => <FileListItem key={index} index={index} item={item} selected={selected} />}
+        />
+      </div>
     </Overlay>
   )
 }

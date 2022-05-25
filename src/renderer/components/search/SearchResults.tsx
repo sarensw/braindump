@@ -1,5 +1,6 @@
 import fuzzysort from 'fuzzysort'
 import React, { ReactElement } from 'react'
+import { useAppSelector } from '../../hooks'
 import useElementSize from '../../hooks/useElementSize'
 
 interface SearchResult {
@@ -52,10 +53,10 @@ const truncate = (result: SearchResult, maxLength: number): SearchResult => {
   }
 }
 
-const colorize = (truncatedResult: SearchResult): string => {
+const colorize = (truncatedResult: SearchResult, highlight: string): string => {
   const result = fuzzysort.highlight(
     truncatedResult,
-    '<span class="text-green-500">',
+    `<span style="color: ${highlight}">`,
     '</span>')
   return result ?? truncatedResult.target
 }
@@ -68,24 +69,44 @@ function getCharacterWidth (): number {
   return context.measureText('X').width
 }
 
-const format = (searchResult: SearchResult, width: number): string => {
+const format = (searchResult: SearchResult, width: number, highlight: string): string => {
   const result = searchResult // props.result as SearchResult
   const widthInChars = width / getCharacterWidth()
   const truncatedResult = truncate(result, widthInChars)
-  const coloredTarget = colorize(truncatedResult)
+  const coloredTarget = colorize(truncatedResult, highlight)
   return coloredTarget
 }
 
 const SearchResultRow = (props): ReactElement => {
   const [divRef, { width }] = useElementSize()
+  const colors = useAppSelector(state => state.themeNew.colors)
 
   const result = props.result as SearchResult
 
   return (
     <div className='flex flex-row gap-4'>
-      <div ref={divRef} className='truncate flex-grow' dangerouslySetInnerHTML={{ __html: format(result, width) }} />
-      <div className='text-white/30 text-sm self-center'>{result.name}</div>
-      <div className='text-white/30 text-sm self-center'>({result.lnr})</div>
+      <div
+        ref={divRef}
+        className='truncate flex-grow'
+        style={{
+          color: props.selected === true ? colors.list.selectedForeground : colors.list.foreground
+        }}
+        dangerouslySetInnerHTML={{ __html: format(result, width, colors.list.highlight ?? '#22c55e') }}
+      />
+      <div
+        className='text-sm self-center'
+        style={{
+          color: props.selected === true ? colors.list.selectedForeground : colors.list.secondaryForeground
+        }}
+      >{result.name}
+      </div>
+      <div
+        className='text-sm self-center'
+        style={{
+          color: props.selected === true ? colors.list.selectedForeground : colors.list.secondaryForeground
+        }}
+      >({result.lnr})
+      </div>
     </div>
   )
 }

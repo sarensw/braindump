@@ -1,4 +1,5 @@
 import React, { ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
+import { useAppSelector } from '../../hooks'
 import { useKeyboardNavigation } from '../../hooks/useKeyboardNavigation'
 import { FocusElementType } from '../../store/storeApp'
 
@@ -9,10 +10,11 @@ interface ListProps<T> {
   nextFocusId?: string
   onSelected?: (item: T) => void
   onClick?: (item: T) => void
-  display: (item: T, index: number) => ReactNode
+  display: (item: T, index: number, selected: boolean) => ReactNode
 }
 
 const List: <T>(props: ListProps<T>) => ReactElement = (props) => {
+  const colors = useAppSelector(state => state.themeNew.colors)
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const refSelectedIndex = useRef(-1)
   const refContainer: React.RefObject<HTMLDivElement> = useRef(null)
@@ -56,7 +58,7 @@ const List: <T>(props: ListProps<T>) => ReactElement = (props) => {
         setSelectedIndex(-1)
       }
     },
-    undefined,
+    refContainer,
     () => {
       if (selectedIndex < 0) {
         refSelectedIndex.current = 0
@@ -89,7 +91,12 @@ const List: <T>(props: ListProps<T>) => ReactElement = (props) => {
 
   return (
     <>
-      <div ref={refContainer} className='overflow-y-auto'>
+      <div
+        id={`list/${props.focusId}`}
+        tabIndex={0}
+        ref={refContainer}
+        className='overflow-y-auto outline-0'
+      >
         <ul>
           {items.map((item, index) =>
             <li
@@ -98,6 +105,9 @@ const List: <T>(props: ListProps<T>) => ReactElement = (props) => {
               className={
                 (selectedIndex === index ? 'bg-white' : '')
               }
+              style={{
+                color: colors.list.selectedBackground ?? '#000000'
+              }}
               onClick={() => {
                 refSelectedIndex.current = index
                 setSelectedIndex(index)
@@ -105,7 +115,7 @@ const List: <T>(props: ListProps<T>) => ReactElement = (props) => {
                 console.log('onClick')
               }}
             >
-              {props.display(item, index)}
+              {props.display(item, index, selectedIndex === index)}
             </li>
           )}
         </ul>

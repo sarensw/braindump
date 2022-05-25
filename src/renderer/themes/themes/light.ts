@@ -79,6 +79,18 @@ export default {
     hoverBackground: 'lightgrey'
   },
 
+  list: {
+    selectedBackground: '#000000',
+    selectedForeground: '#ffffff',
+    highlight: '#22c55e',
+    secondaryForeground: '#0000004d',
+    foreground: '#000000'
+  },
+
+  overlay: {
+    border: '#97938a'
+  },
+
   settings: {
     label: {
       foreground: 'black'

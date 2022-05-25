@@ -80,6 +80,18 @@ export default {
     hoverBorder: '#e1e1e1'
   },
 
+  list: {
+    selectedBackground: '#ffffff',
+    selectedForeground: '#000000',
+    highlight: '#22c55e',
+    secondaryForeground: '#ffffff4d',
+    foreground: '#ffffff'
+  },
+
+  overlay: {
+    border: '#e1e1e1'
+  },
+
   settings: {
     label: {
       foreground: '#e1e1e1'

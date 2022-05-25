@@ -4,7 +4,7 @@ import { useAppSelector } from '../hooks'
 const Overlay = ({ escToGoBack = false, type = 'full', children }): ReactElement => {
   const colors = useAppSelector(store => store.themeNew.colors)
 
-  let size = 'w-96 h-96 top-20 p-4'
+  let size = 'w-96 h-96 top-20 p-4 border border-1'
   if (type === 'full') size = 'h-full w-full p-8'
 
   return (
@@ -12,7 +12,8 @@ const Overlay = ({ escToGoBack = false, type = 'full', children }): ReactElement
       <div
         className={`relative mx-auto ${size}`}
         style={{
-          background: colors.editor.background
+          background: colors.editor.background,
+          borderColor: colors.overlay.border
         }}
       >
         {children}

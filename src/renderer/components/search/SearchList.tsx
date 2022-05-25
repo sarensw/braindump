@@ -43,7 +43,7 @@ const SearchList: FunctionComponent = (): ReactElement => {
       prevFocusId='search/field'
       items={fuzzy}
       onClick={(item) => openFileAtPosition(item)}
-      display={(item, index) => <SearchResultRow key={index} index={index} result={item} />}
+      display={(item, index, selected) => <SearchResultRow key={index} index={index} result={item} selected={selected} />}
     />
   )
 }
