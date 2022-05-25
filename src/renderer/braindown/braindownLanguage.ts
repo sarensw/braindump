@@ -7,7 +7,7 @@ import { Monaco } from '@monaco-editor/react'
 import { loadContactSuggestions, loadWordSuggestions } from './suggestions'
 import { loadCommandSuggestions } from './suggestions/commandSuggestions'
 import { store } from '../store'
-import { setActivePage, setFocusElement } from '../store/storeApp'
+import { setActivePage } from '../store/storeApp'
 import { saveFile } from '../services/fileService'
 import { setPresentationContent } from '../store/storePresentation'
 import { runActionForHotkey } from '../services/hotkeyService'
@@ -19,7 +19,7 @@ class BraindownLanguage {
   disposables: me.IDisposable[]
   oldDecorations: string[]
 
-  initialize (editor: me.editor.IStandaloneCodeEditor, monaco: Monaco): void {
+  initialize (editor: me.editor.IStandaloneCodeEditor, monaco: Monaco, keyHandler: (key: string, ctrlOrCmd: boolean, shift: boolean, alt: boolean) => void): void {
     this.languageHandlers.push(new ListExtensionHandler(editor))
     this.languageHandlers.push(new NewLineExtensionHandler(editor))
     // this.languageHandlers.push(new CodeExtensionHandler(editor))
@@ -33,7 +33,7 @@ class BraindownLanguage {
 
     this.editor = editor
     this.monaco = monaco
-    this.addKeyBindings()
+    this.addKeyBindings(keyHandler)
     this.registerTokenProvider()
     this.registerOnTypeFormattingProviders()
     this.registerCompletionItemProviders()
@@ -311,7 +311,12 @@ class BraindownLanguage {
     this.disposables.push(provider)
   }
 
-  addKeyBindings (): void {
+  addKeyBindings (keyHandler: (key: string, ctrlOrCmd: boolean, shift: boolean, alt: boolean) => void): void {
+    this.editor.addCommand(me.KeyMod.CtrlCmd | me.KeyCode.KeyP, () => {
+      keyHandler('p', true, false, false)
+    },
+    '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
+
     this.editor.addCommand(me.KeyCode.Enter, () => {
       for (const handler of this.languageHandlers) {
         if (handler.willHandleEnter()) {
@@ -340,7 +345,7 @@ class BraindownLanguage {
     },
     '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
     this.editor.addCommand(me.KeyMod.CtrlCmd | me.KeyCode.KeyR, () => {
-      store.dispatch(setFocusElement('fileName'))
+      keyHandler('r', true, false, false)
     },
     '!suggestWidgetVisible && !findWidgetVisible && !inSnippetMode')
     this.editor.addCommand(me.KeyMod.CtrlCmd | me.KeyCode.KeyK, () => {

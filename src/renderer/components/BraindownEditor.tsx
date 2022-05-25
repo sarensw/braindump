@@ -1,18 +1,19 @@
-import React, { ReactElement, useRef, useEffect, useState } from 'react'
-import * as monaco from 'monaco-editor'
-import { ThemedEditor } from './ThemedEditor'
 import { Monaco } from '@monaco-editor/react'
-import log from '../log'
-import { BraindownLanguage } from '../braindown/braindownLanguage'
-import { run as extensionsRun } from '../extensions/extensions'
-import { handleKeyDownEvent } from '../hotkeys'
-import { setDirtyText, setLastCursorPosition, setViewState } from '../store/storeFiles'
-import { setCurrentHeaders, setCursorPosition, setDecorationsSizes } from '../store/storeEditor'
+import * as monaco from 'monaco-editor'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useAppSelector } from '../hooks'
-import { getViewState, persist } from '../services/fileService'
-import { Positionable } from '../common/cursorPosition'
+import { BraindownLanguage } from '../braindown/braindownLanguage'
 import { initVimMode } from '../braindown/vim/vimMode'
+import { run as extensionsRun } from '../extensions/extensions'
+import { useAppSelector } from '../hooks'
+import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
+import { handleKeyDownEvent } from '../hotkeys'
+import log from '../log'
+import { getViewState, persist } from '../services/fileService'
+import { FocusElementType } from '../store/storeApp'
+import { setCurrentHeaders, setDecorationsSizes } from '../store/storeEditor'
+import { setDirtyText, setViewState } from '../store/storeFiles'
+import { ThemedEditor } from './ThemedEditor'
 
 interface BraindownEditorProps {
   path: string
@@ -20,12 +21,24 @@ interface BraindownEditorProps {
   onTextChanged?: (text: string) => void
 }
 
-export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text) => {} }: BraindownEditorProps): ReactElement => {
+export const BraindownEditor = ({
+  path,
+  initialText = '',
+  onTextChanged = (text) => {}
+}: BraindownEditorProps): ReactElement => {
   const dispatch = useDispatch()
   const braindown = useRef<BraindownLanguage | null>(null)
   const settings = useAppSelector(state => state.settings)
   const current = useAppSelector(state => state.files.current)
   const [codeEditor, setCodeEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null)
+
+  const { to, handle } = useKeyboardNavigation(
+    'editor/editor',
+    FocusElementType.Element,
+    {
+      CmdCtrl_R: (to) => to('editor/header/name')
+    }
+  )
 
   useEffect(() => {
     window.addEventListener('beforeunload', persistDuringUnload)
@@ -43,8 +56,8 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
   }, [])
 
   useEffect(() => {
-    log.debug('current file has changed from the outside in the braindown editor')
-    if (codeEditor === null) return
+    log.debug('current file has changed from the outside')
+    if (codeEditor == null) return
     resetViewState(codeEditor)
   }, [current])
 
@@ -64,7 +77,7 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
 
     // register the new language handler
     braindown.current = new BraindownLanguage()
-    braindown.current.initialize(codeEditor, monaco)
+    braindown.current.initialize(codeEditor, monaco, handle)
 
     ;(codeEditor as any).onDidType(function (text: string) {
       extensionsRun(text, codeEditor)
@@ -107,16 +120,32 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
   }
 
   function resetViewState (codeEditor: monaco.editor.IStandaloneCodeEditor): void {
-    const viewStateString = getViewState(current)
+    if (current == null) {
+      // do nothing
+    } else if (typeof current === 'string') {
+      const viewStateString = getViewState(current)
 
-    log.debug('setting focus and cursor position')
-    if (viewStateString !== null) {
-      const viewState = JSON.parse(viewStateString)
-      codeEditor.restoreViewState(viewState)
+      log.debug('setting focus and cursor position based on view state')
+      if (viewStateString !== null) {
+        const viewState = JSON.parse(viewStateString)
+        codeEditor.restoreViewState(viewState)
+      }
+    } else if (typeof current === 'object') {
+      log.debug('setting focus and cursor position based on input')
+
+      const position = {
+        lineNumber: current.line,
+        column: current.column
+      }
+      codeEditor.setPosition(position)
+      codeEditor.revealPosition(position)
+      codeEditor.focus()
     }
   }
 
   function handleLoaded (codeEditor: monaco.editor.IStandaloneCodeEditor): void {
+    log.debug('model loaded')
+
     // set the focus once
     if (codeEditor !== null) {
       resetViewState(codeEditor)
@@ -134,10 +163,6 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
   }
 
   function handleCursorPositionChanged (event: monaco.editor.ICursorPositionChangedEvent, textModel: monaco.editor.ITextModel | null): void {
-    const position = { line: event.position.lineNumber, column: event.position.column }
-    dispatch(setCursorPosition(position as Positionable))
-    dispatch(setLastCursorPosition(position as Positionable))
-
     // detect headers
     if (textModel !== null) {
       let line = event.position.lineNumber
@@ -170,6 +195,7 @@ export const BraindownEditor = ({ path, initialText = '', onTextChanged = (text)
       onEditorDidMount={handleEditorDidMount}
       onLoaded={handleLoaded}
       onCursorPositionChanged={handleCursorPositionChanged}
+      onDidFocusEditorText={() => to('editor/editor')}
       showMinimap={settings['editor.minimap.show']}
       wordWrap={settings['editor.wordwrap']}
       lineNumbers={settings['editor.linenumbers.show']}

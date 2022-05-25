@@ -12,8 +12,6 @@ import Text from '../components/settings/Text'
 import { Description } from '../components/settings/Description'
 import { SettingElement } from '../components/settings/SettingElement'
 import { isPathValid, moveUserDataDirectory } from '../services/fileService'
-import { goToLastPage } from '../store/storeApp'
-import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
 import TextArea from '../components/settings/TextArea'
 import { Settings } from '../braindump'
 import { changeTheme } from '../services/themeService'
@@ -38,22 +36,6 @@ const SettingsPage: FunctionComponent = () => {
           temporaryTextValue[setting.id] = settings[setting.id]
         }
       }
-    }
-  }, [])
-
-  useEffect(() => {
-    const escHk = {
-      id: 'settings:esc',
-      key: 'esc',
-      description: 'last page',
-      action: (source, codeEditor): boolean => {
-        dispatch(goToLastPage(''))
-        return true
-      }
-    }
-    registerHotkey(escHk, 'editor', null)
-    return () => {
-      unregisterHotkey(escHk)
     }
   }, [])
 
@@ -124,7 +106,7 @@ const SettingsPage: FunctionComponent = () => {
   }
 
   return (
-    <Page>
+    <Page escToGoBack>
       <div className='h-full w-full overflow-y-auto styled-scrollbars'>
         <div className='max-w-xl m-auto px-2 h-full'>
           {/* license settings */}

@@ -9,7 +9,7 @@ import PopupContainer from './components/PopupContainer'
 import log from './log'
 // lic 6FB42E21-E09C4924-937ACF0A-80C86FA0
 const App: FunctionComponent = _ => {
-  const app = useAppSelector(state => state.app)
+  const platform = useAppSelector(state => state.app.platform)
   const colors = useAppSelector(state => state.themeNew.colors)
   const settings = useAppSelector(state => state.settings)
 
@@ -35,8 +35,8 @@ const App: FunctionComponent = _ => {
           gridTemplateRows: '[title] auto [container] minmax(0, 1fr) [hotkey] auto'
         }}
       >
-        {app.platform === 'linux' && <div className='h-4' />}
-        {app.platform !== 'linux' &&
+        {platform === 'linux' && <div className='h-4' />}
+        {platform !== 'linux' &&
           <div
             className='grid grid-cols-3 content-center drag'
             style={{
@@ -55,7 +55,7 @@ const App: FunctionComponent = _ => {
               }}
             >Braindump
             </div>
-            {app.platform === 'win32' && <WindowsButtons />}
+            {platform === 'win32' && <WindowsButtons />}
           </div>}
 
         <div className='font-mono'>

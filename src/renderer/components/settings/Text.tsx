@@ -5,7 +5,9 @@ const ifExists = (color: string | undefined, yes: any, no: any): any => {
   return no
 }
 
-const Text = styled.input`
+const Text = styled.input.attrs(props => ({
+  tabindex: '-1'
+}))`
   background-color: ${props => props.theme.settings.text.background};
   color: ${props => props.theme.settings.text.foreground};
   padding: 0.2rem 0.3rem;

@@ -8,17 +8,17 @@ import SettingsPage from './SettingsPage'
 import SnippetsPage from './SnippetsPage'
 
 const PageContainer: FunctionComponent = (): ReactElement => {
-  const app = useAppSelector(state => state.app)
+  const appPage = useAppSelector(state => state.app.page)
   const [page, setPage] = useState<FunctionComponent>(() => SettingsPage)
 
   useEffect(() => {
-    log.debug(`app page changed to ${app.page}`)
-    if (app.page === 'files') setPage(() => FilesPage)
-    else if (app.page === 'editor') setPage(() => EditorPage)
-    else if (app.page === 'snippets') setPage(() => SnippetsPage)
-    else if (app.page === 'presentation') setPage(() => PresentationPage)
+    log.debug(`app page changed to ${appPage}`)
+    if (appPage === 'files') setPage(() => FilesPage)
+    else if (appPage === 'editor') setPage(() => EditorPage)
+    else if (appPage === 'snippets') setPage(() => SnippetsPage)
+    else if (appPage === 'presentation') setPage(() => PresentationPage)
     else setPage(() => SettingsPage)
-  }, [app.page])
+  }, [appPage])
 
   return React.createElement(page, {})
 }

@@ -6,7 +6,7 @@ import { useAppSelector } from '../hooks'
 import { moveFile, setLastUsedFile } from '../services/fileService'
 import { setActivePage } from '../store/storeApp'
 import { setCurrentHeaders } from '../store/storeEditor'
-import { setCurrentFile } from '../store/storeFiles'
+import { CurrentFileWithPosition, setCurrentFile } from '../store/storeFiles'
 import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
 import Page from './Page'
 
@@ -14,7 +14,7 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   const files = useAppSelector(state => state.files.files)
   const currentFile = useAppSelector(state => state.files.current)
   const colors = useAppSelector(state => state.themeNew.colors)
-  const [selected, setSelected] = useState<string | null>(currentFile)
+  const [selected, setSelected] = useState<string | CurrentFileWithPosition | null>(currentFile)
   const dispatch = useDispatch()
 
   const container = React.createRef<HTMLDivElement>()
@@ -31,11 +31,13 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   useEffect(() => {
     if (refs === undefined || selected === null || container === null || container.current === null) return
 
-    const element = refs[selected].current
-    if (element.getBoundingClientRect().top < container.current.getBoundingClientRect().top) {
-      element.scrollIntoView()
-    } else if (element.getBoundingClientRect().bottom > container.current.getBoundingClientRect().bottom) {
-      element.scrollIntoView(false)
+    const element = (typeof selected === 'string' ? refs[selected].current : refs[selected.id].current)
+    if (element != null) {
+      if (element.getBoundingClientRect().top < container.current.getBoundingClientRect().top) {
+        element.scrollIntoView()
+      } else if (element.getBoundingClientRect().bottom > container.current.getBoundingClientRect().bottom) {
+        element.scrollIntoView(false)
+      }
     }
   }, [selected])
 
@@ -94,7 +96,8 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
         if (selected === null) return true
         dispatch(setActivePage('editor'))
         dispatch(setCurrentFile(selected))
-        setLastUsedFile(selected).then(() => {}, () => {})
+        const selectedFileId = (typeof selected === 'string' ? selected : selected.id)
+        setLastUsedFile(selectedFileId).then(() => {}, () => {})
         return true
       }
     }
@@ -135,7 +138,9 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
     if (selected === null) return
     dispatch(setActivePage('editor'))
     dispatch(setCurrentFile(selected))
-    setLastUsedFile(selected).then(() => {}, () => {})
+
+    const selectedFileId = (typeof selected === 'string' ? selected : selected.id)
+    setLastUsedFile(selectedFileId).then(() => {}, () => {})
   }
 
   let previousCluster = ''

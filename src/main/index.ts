@@ -7,6 +7,7 @@ import { FileSystem as DemoFileSystem } from './demo/demoFileService'
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
 import { dialog, Menu } from 'electron/main'
 import { EditorWindow } from './windows/windowEditor'
+import { FuzzySearch } from './search/fuzzy'
 
 crashReporter.start({ uploadToServer: false })
 
@@ -187,6 +188,11 @@ const setupIpcHandlers = (fileSystem: FileSystem, demoFileSystem: DemoFileSystem
 
   ipcMain.handle('windows/isMaximized', (event, args) => {
     return mainWindow.isMaximized()
+  })
+
+  ipcMain.handle('search/fuzzy', async (event, args) => {
+    const result = await new FuzzySearch().search(args.files, args.what)
+    return result
   })
 }
 

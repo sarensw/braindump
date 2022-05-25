@@ -16,12 +16,25 @@ interface ThemedEditorProps {
   onEditorDidMount?: (codeEditor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => void
   onLoaded?: (codeEditor: monaco.editor.IStandaloneCodeEditor) => void
   onCursorPositionChanged?: (event: monaco.editor.ICursorPositionChangedEvent, textModel: monaco.editor.ITextModel | null) => void
+  onDidFocusEditorText?: () => void
   showMinimap: boolean
   wordWrap?: boolean
   lineNumbers?: boolean
 }
 
-export const ThemedEditor = ({ language, path, initialText = '', onTextChanged = () => {}, onEditorDidMount = () => {}, onLoaded = () => {}, onCursorPositionChanged = () => {}, showMinimap = false, wordWrap = true, lineNumbers = true }: ThemedEditorProps): ReactElement => {
+export const ThemedEditor = ({
+  language,
+  path,
+  initialText = '',
+  onTextChanged = () => {},
+  onEditorDidMount = () => {},
+  onLoaded = () => {},
+  onCursorPositionChanged = () => {},
+  onDidFocusEditorText = () => {},
+  showMinimap = false,
+  wordWrap = true,
+  lineNumbers = true
+}: ThemedEditorProps): ReactElement => {
   const themeId = useAppSelector(state => state.themeNew.id)
   const theme = useAppSelector(state => state.themeNew.colors)
   const monaco = useMonaco()
@@ -128,6 +141,9 @@ export const ThemedEditor = ({ language, path, initialText = '', onTextChanged =
 
     // report changed cursor position
     codeEditor.onDidChangeCursorPosition(event => onCursorPositionChanged(event, editor.current?.getModel() ?? null))
+
+    // report focus changed to the editor
+    codeEditor.onDidFocusEditorText(() => onDidFocusEditorText())
 
     // call parent component
     onEditorDidMount(codeEditor, monaco)

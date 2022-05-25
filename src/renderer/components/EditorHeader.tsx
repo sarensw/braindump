@@ -1,21 +1,35 @@
-import React, { ReactElement, useState, useEffect } from 'react'
+import React, { ReactElement, useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../hooks'
 import { setClusterName, setFileName } from '../services/fileService'
-import { setFocusElement } from '../store/storeApp'
+import { FocusElementType } from '../store/storeApp'
 import { getMenuTemplate } from '../services/contextMenuService'
 import Icon from '../components/elements/Icon'
 import { setShareFile } from '../store/storeFiles'
+import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
 
 const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactElement => {
   const dispatch = useDispatch()
-  let refFileNameInput: HTMLInputElement | null = null
+  const refName = useRef<HTMLInputElement>(null)
+  // let refFileNameInput: HTMLInputElement | null = null
   const [name, setName] = useState('')
   const [cluster, setCluster] = useState('')
   const files = useAppSelector(state => state.files)
   const editor = useAppSelector(state => state.editor)
-  const focusElement = useAppSelector(state => state.app.focusElement)
   const colors = useAppSelector(state => state.themeNew.colors)
+
+  const { to } = useKeyboardNavigation(
+    'editor/header/name',
+    FocusElementType.Element,
+    {},
+    refName
+  )
+
+  // useKeyboardNavigation(
+  //   'editor/header/category',
+  //   FocusElementType.Element,
+  //   {}
+  // )
 
   useEffect(() => {
     if (files.current !== null) {
@@ -27,16 +41,6 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
       }
     }
   }, [files.current])
-
-  useEffect(() => {
-    if (focusElement === 'fileName') {
-      refFileNameInput?.select()
-      refFileNameInput?.focus()
-    }
-    return () => {
-      dispatch(setFocusElement(''))
-    }
-  }, [focusElement])
 
   const handleClusterChange = async (event): Promise<void> => {
     setCluster(event.target.value)
@@ -82,7 +86,7 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
           <div className='flex flex-row gap-2'>
             {/* Note cluster */}
             <input
-              ref={el => { refFileNameInput = el }}
+              // ref={el => { refFileNameInput = el }}
               className='shrink bg-transparent min-w-min italic'
               style={{
                 color: colors.foregroundLight
@@ -92,15 +96,17 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
               placeholder='unclustered'
               size={cluster === undefined || cluster.length === 0 ? 'unclustered'.length : cluster.length}
               onChange={handleClusterChange}
+              onFocus={e => to('editor/header/category')}
             />
 
             {/* Note name */}
             <input
-              ref={el => { refFileNameInput = el }}
+              ref={refName}
               className='flex-grow bg-transparent'
               type='text'
               value={name}
               onChange={handleNameChange}
+              onFocus={e => to('editor/header/name')}
             />
 
             <button tabIndex={-1} onClick={() => showShareMenu()}>

@@ -1,25 +1,39 @@
 import React, { ReactElement, useEffect, useState } from 'react'
-import Page from './Page'
-import Dumps from '../components/Dumps'
 import { useDispatch } from 'react-redux'
-import { useAppSelector } from '../hooks'
-import { readFile } from '../services/fileService'
 import useAsyncEffect from 'use-async-effect'
 import { BraindownEditor } from '../components/BraindownEditor'
-import { setActivePage, setFocusElement, setVisiblePopup } from '../store/storeApp'
+import Dumps from '../components/Dumps'
 import EditorHeader from '../components/EditorHeader'
+import { useAppSelector } from '../hooks'
+import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
+import OverlayContainer from '../overlays/OverlayContainer'
+import { readFile } from '../services/fileService'
 import { registerHotkey, unregisterHotkey } from '../services/hotkeyService'
+import { FocusElementType, setActiveOverlay, setActivePage, setVisiblePopup } from '../store/storeApp'
 import { setCurrentFile, setViewState } from '../store/storeFiles'
+import Page from './Page'
 
 const EditorPage: React.FunctionComponent = (): ReactElement => {
   const dispatch = useDispatch()
   const [editorProps, setEditorProps] = useState<{path: string, text: string}>({ path: '', text: '' })
-  const files = useAppSelector(state => state.files)
+  const files = useAppSelector(state => state.files.files)
+  const currentFile = useAppSelector(state => state.files.current)
   const settings = useAppSelector(state => state.settings)
 
+  const { to } = useKeyboardNavigation(
+    'editor', // id,
+    FocusElementType.Page,
+    {
+      Escape: (to) => dispatch(setActivePage('files')),
+      CmdCtrl_P: (to) => dispatch(setActiveOverlay('search')),
+      CmdCtrl_K: (to) => dispatch(setActiveOverlay('files/quick_change'))
+    }
+  )
+
   useAsyncEffect(async () => {
-    if (files.current !== null) {
-      const file = files.files?.find(f => f.id === files.current)
+    if (currentFile !== null) {
+      const currentFileId = (typeof currentFile === 'string' ? currentFile : currentFile.id)
+      const file = files?.find(f => f.id === currentFileId)
 
       if (file !== undefined) {
         const fileRaw = await readFile(file.path)
@@ -30,22 +44,22 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
         })
 
         if (file.isNew) {
-          dispatch(setFocusElement('fileName'))
+          to('editor/name')
         }
       }
     }
-  }, [files.current])
+  }, [currentFile])
 
   useEffect(() => {
-    const escHk = {
-      id: 'editor:esc',
-      key: 'esc',
-      description: 'list notes',
-      action: (source, codeEditor): boolean => {
-        dispatch(setActivePage('files'))
-        return true
-      }
-    }
+    // const escHk = {
+    //   id: 'editor:esc',
+    //   key: 'esc',
+    //   description: 'list notes',
+    //   action: (source, codeEditor): boolean => {
+    //     dispatch(setActivePage('files'))
+    //     return true
+    //   }
+    // }
     const up = {
       id: 'files:up',
       key: 'command+k',
@@ -61,10 +75,11 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
         dispatch(setVisiblePopup('fileSelector'))
 
         // change the file
-        if (files === null || files.files === null || files.files === undefined) return true
-        const currentIndex = files.files?.findIndex(f => f.id === files.current)
-        if (currentIndex === files.files?.length - 1) return true
-        const newSelected = files.files[currentIndex + 1].id
+        if (files === null || files === null || files === undefined || currentFile == null) return true
+        const currentFileId = (typeof currentFile === 'string' ? currentFile : currentFile.id)
+        const currentIndex = files?.findIndex(f => f.id === currentFileId)
+        if (currentIndex === files?.length - 1) return true
+        const newSelected = files[currentIndex + 1].id
         dispatch(setCurrentFile(newSelected))
 
         return true
@@ -90,10 +105,11 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
         dispatch(setVisiblePopup('fileSelector'))
 
         // change the file
-        if (files.files === null) return true
-        const currentIndex = files.files?.findIndex(f => f.id === files.current)
+        if (files === null || currentFile == null) return true
+        const currentFileId = (typeof currentFile === 'string' ? currentFile : currentFile.id)
+        const currentIndex = files?.findIndex(f => f.id === currentFileId)
         if (currentIndex === 0) return true
-        const newSelected = files.files[currentIndex - 1].id
+        const newSelected = files[currentIndex - 1].id
         dispatch(setCurrentFile(newSelected))
 
         return true
@@ -104,20 +120,31 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
         return true
       }
     }
-    registerHotkey(up, 'editor', null)
-    registerHotkey(down, 'editor', null)
-    registerHotkey(escHk, 'editor', null)
+    // const search = {
+    //   id: 'editor:search',
+    //   key: 'cmd+p',
+    //   description: 'fuzzy search',
+    //   action: (source, codeEditor): boolean => {
+    //     dispatch(setActiveOverlay('search'))
+    //     return true
+    //   }
+    // }
+    // registerHotkey(up, 'editor', null)
+    // registerHotkey(down, 'editor', null)
+    // registerHotkey(escHk, 'editor', null)
+    // registerHotkey(search, 'editor', null)
     return () => {
-      unregisterHotkey(up)
-      unregisterHotkey(down)
-      unregisterHotkey(escHk)
+      // unregisterHotkey(up)
+      // unregisterHotkey(down)
+      // unregisterHotkey(escHk)
+      // unregisterHotkey(search)
     }
-  }, [files.current])
+  }, [currentFile])
 
   return (
     <Page>
       <div
-        className='grid h-full'
+        className='grid h-full relative'
         style={{
           gridTemplateRows: '[header] auto [name] auto [main] minmax(0, 1fr)',
           gridTemplateColumns: 'minmax(0, 1fr)'
@@ -134,6 +161,8 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
           path={editorProps.path}
           initialText={editorProps.text}
         />
+
+        <OverlayContainer />
       </div>
     </Page>
   )

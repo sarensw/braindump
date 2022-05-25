@@ -4,7 +4,7 @@ import type { Positionable } from '../common/cursorPosition'
 import log from '../log'
 import { File } from './files/file'
 
-interface SerializableFile extends SharedFile {
+export interface SerializableFile extends SharedFile {
   loaded: boolean
   text: string
   isNew: boolean
@@ -12,8 +12,14 @@ interface SerializableFile extends SharedFile {
   viewState: string
 }
 
+export interface CurrentFileWithPosition {
+  id: string
+  line: number
+  column: number
+}
+
 interface FilesState {
-  current: string | null
+  current: string | CurrentFileWithPosition | null
   files: SerializableFile[] | null
   filesSize: number
   filesSearch: string
@@ -88,7 +94,7 @@ export const filesSlice = createSlice({
       const i = state.files.findIndex(f => f.path === action.payload.path)
       state.files[i].name = name
     },
-    setCurrentFile: (state, action: PayloadAction<string>) => {
+    setCurrentFile: (state, action: PayloadAction<string | CurrentFileWithPosition | null>) => {
       state.current = action.payload
     },
     setCount: (state, action: PayloadAction<number>) => {
@@ -110,12 +116,6 @@ export const filesSlice = createSlice({
 
       const i = state.files.findIndex(f => f.id === state.current)
       state.files[i].isNew = false
-    },
-    setLastCursorPosition: (state, action: PayloadAction<Positionable>) => {
-      const i = state.files?.findIndex(f => f.id === state.current)
-      if (i !== undefined && state.files !== null) {
-        state.files[i].position = action.payload
-      }
     },
     setViewState: (state, action: PayloadAction<string>) => {
       const i = state.files?.findIndex(f => f.id === state.current)
@@ -174,5 +174,5 @@ export const filesSlice = createSlice({
   }
 })
 
-export const { setFiles, addFile, closeFile, setCluster, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setLastCursorPosition, setViewState, moveFileUp, moveFileDown, setFilesSearch, setShareFile } = filesSlice.actions
+export const { setFiles, addFile, closeFile, setCluster, setName, setCurrentFile, setCount, increaseCount, setDirtyText, cleanDirtyText, setViewState, moveFileUp, moveFileDown, setFilesSearch, setShareFile } = filesSlice.actions
 export default filesSlice.reducer

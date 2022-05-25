@@ -4,7 +4,6 @@ import { File } from '../store/files/file'
 import { setFiles, closeFile as closeFileInStore, setCurrentFile, cleanDirtyText, setCount, addFile, setName, moveFileUp, moveFileDown, setCluster } from '../store/storeFiles'
 import { randomString } from './utilitiesService'
 import { v4 as uuidv4 } from 'uuid'
-import { CursorPosition } from '../common/cursorPosition'
 import dateFormat from 'dateformat'
 import { Direction } from '../common/direction'
 import StackTrace from 'stacktrace-js'
@@ -117,6 +116,9 @@ async function createNewFile (): Promise<void> {
 
 async function setLastUsedFile (id: string): Promise<void> {
   log.debug(`about to set the last used file to ${id}`)
+
+  // TODO why do I set the current file ID here? This
+  //      causes a rerender and reload in the editor
   store.dispatch(setCurrentFile(id))
 
   const state = store.getState()
@@ -321,21 +323,6 @@ async function closeFile (id: string): Promise<void> {
   saveFilesFile(newFiles)
 }
 
-function getCursorPosition (id: string | null): CursorPosition {
-  if (id === null) return new CursorPosition(0, 0)
-
-  log.debug(`get cursor position for file ${id}`)
-  const state = store.getState()
-  if (state !== undefined) {
-    const file = state.files.files?.find(f => f.id === id)
-
-    if (file?.position !== undefined) {
-      return file.position
-    }
-  }
-  return new CursorPosition(0, 0)
-}
-
 function getViewState (id: string | null): string | null {
   if (id === null) return null
 
@@ -370,11 +357,11 @@ function persist (): void {
   log.debug('persisting files')
   const state = store.getState()
 
-  log.debug({
-    files: state.files.files,
-    lastUsed: state.files.current,
-    count: state.files.count
-  })
+  // log.debug({
+  //   files: state.files.files,
+  //   lastUsed: state.files.current,
+  //   count: state.files.count
+  // })
 
   const newFiles = {
     files: state.files.files,
@@ -458,4 +445,4 @@ async function moveUserDataDirectory (newPath: string): Promise<string | null> {
   }
 }
 
-export { initializeFileService, loadFiles, saveFileContent, saveFile, flushFile, createNewFile, closeFile, readFile, setClusterName, setFileName, setLastUsedFile, getCursorPosition, getViewState, moveFile, persist, calculateOverallFileSizes, isPathValid, backup, moveUserDataDirectory }
+export { initializeFileService, loadFiles, saveFileContent, saveFile, flushFile, createNewFile, closeFile, readFile, setClusterName, setFileName, setLastUsedFile, getViewState, moveFile, persist, calculateOverallFileSizes, isPathValid, backup, moveUserDataDirectory }
