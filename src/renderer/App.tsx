@@ -4,7 +4,6 @@ import { keys, handleKeyDownEvent } from './hotkeys'
 import PageContainer from './pages/PageContainer'
 import { useAppSelector } from './hooks'
 import WindowsButtons from './components/WindowsButtons'
-import PopupContainer from './components/PopupContainer'
 import log from './log'
 // lic 6FB42E21-E09C4924-937ACF0A-80C86FA0
 const App: FunctionComponent = _ => {
@@ -59,8 +58,6 @@ const App: FunctionComponent = _ => {
         <div className='font-mono'>
           <PageContainer />
         </div>
-
-        <PopupContainer />
       </div>
     </>
   )
