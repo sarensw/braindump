@@ -27,7 +27,6 @@ const SearchList: FunctionComponent = (): ReactElement => {
   )
 
   const openFileAtPosition = (selected: SearchResult): void => {
-    console.log(selected)
     dispatch(setCurrentFile({
       id: selected.id,
       line: selected.lnr,

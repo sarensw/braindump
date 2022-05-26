@@ -27,8 +27,6 @@ const List: <T>(props: ListProps<T>) => ReactElement = (props) => {
   })
   const refItems = useRef(items)
   refItems.current = items
-  console.log(selectedIndex)
-  console.log(items)
 
   const { to } = useKeyboardNavigation(
     props.focusId, // id,
@@ -66,8 +64,6 @@ const List: <T>(props: ListProps<T>) => ReactElement = (props) => {
       }
     },
     () => {
-      console.log('in beforeFocus')
-      console.log(refItems.current.length)
       if (refItems.current.length <= 0) return false
       return true
     }
@@ -112,7 +108,6 @@ const List: <T>(props: ListProps<T>) => ReactElement = (props) => {
                 refSelectedIndex.current = index
                 setSelectedIndex(index)
                 to(props.focusId)
-                console.log('onClick')
               }}
             >
               {props.display(item, index, selectedIndex === index)}
