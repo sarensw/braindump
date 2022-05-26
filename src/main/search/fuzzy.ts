@@ -2,6 +2,7 @@ import { open } from 'fs/promises'
 import log from 'electron-log'
 import fuzzysort from 'fuzzysort'
 import { join } from 'path'
+import { FileSystem } from '../fs'
 
 interface SearchResult {
   id: string
@@ -72,8 +73,11 @@ class FuzzySearch {
 
     const allResults: SearchResult[] = []
 
+    const fs = new FileSystem()
+    const directory = await fs.getDataPath()
+
     for (const file of files) {
-      const directory = '/Users/sarensw/OneDrive/bddata/'
+      // const directory = '/Users/sarensw/OneDrive/bddata/'
       const result = await this.searchPath(file.id, file.path, directory, what)
       allResults.push(...result)
     }

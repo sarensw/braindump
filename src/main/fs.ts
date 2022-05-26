@@ -13,6 +13,14 @@ export class FileSystem implements IFileSystem {
   private userDataPath: string
 
   public async initialize (): Promise<void> {
+    this.userDataPath = await this.getDataPath()
+  }
+
+  /**
+   * Determines the current path to where the user files are stored
+   * @returns path to where the dumps are stored
+   */
+  public async getDataPath (): Promise<string> {
     // read the settings to get the current user data directory
     let userDataPath = ''
 
@@ -22,14 +30,13 @@ export class FileSystem implements IFileSystem {
       userDataPath = app.getPath('userData')
     } else {
       const settings = JSON.parse(settingsString)
-      if (settings['app.path'] == null) {
+      if (settings['app.path'] == null || settings['app.path'] === '') {
         userDataPath = app.getPath('userData')
       } else {
         userDataPath = settings['app.path']
       }
     }
-
-    this.userDataPath = userDataPath
+    return userDataPath
   }
 
   /**
