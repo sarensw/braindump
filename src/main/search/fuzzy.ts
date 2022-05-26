@@ -85,7 +85,10 @@ class FuzzySearch {
     // sort all results by relevance
     allResults.sort((a, b) => b.score - a.score)
 
-    return allResults
+    // only return the first 100 results
+    const result = allResults.slice(0, 100)
+
+    return result
   }
 }
 
