@@ -22,7 +22,6 @@ class EditorWindow {
       titleBarStyle: 'hidden',
       show: false,
       icon: path.join(__dirname, '../../assets/logo/logo_48x48.png')
-      // icon: path.join(__dirname, '../../assets/logo/logo_48x48.png')
     }
     if (process.env.BRAINDUMP_DEMO_MODE === 'true') {
       windowOptions.width = 640
