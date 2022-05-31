@@ -145,6 +145,16 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
 
   let previousCluster = ''
 
+  const getCurrentFileId = (stateCurrent: string | CurrentFileWithPosition | null): string | null => {
+    if (typeof stateCurrent === 'object' && stateCurrent != null) {
+      return stateCurrent?.id
+    } else if (typeof stateCurrent === 'string') {
+      return stateCurrent
+    }
+
+    return null
+  }
+
   return (
     <Page>
       <div
@@ -170,7 +180,8 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
                 const hideHeader = cluster === previousCluster
                 previousCluster = cluster
                 const itemPadding = cluster === '' ? '26px' : '46px'
-                if (file.id === selected) {
+                const currentFileId = getCurrentFileId(selected)
+                if (file.id === currentFileId) {
                   return (
                     <React.Fragment key={index}>
                       {!hideHeader &&

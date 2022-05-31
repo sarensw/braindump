@@ -50,6 +50,16 @@ const initialState: FilesState = {
   shareFile: null
 }
 
+const getCurrentFileId = (stateCurrent: string | CurrentFileWithPosition | null): string | null => {
+  if (typeof stateCurrent === 'object' && stateCurrent != null) {
+    return stateCurrent?.id
+  } else if (typeof stateCurrent === 'string') {
+    return stateCurrent
+  }
+
+  return null
+}
+
 export const filesSlice = createSlice({
   name: 'tabs',
   initialState,
@@ -61,8 +71,11 @@ export const filesSlice = createSlice({
       state.files?.splice(0, 0, action.payload)
     },
     closeFile: (state, action: PayloadAction<string>) => {
+      const currentFileId = getCurrentFileId(state.current)
+      if (currentFileId == null) return
+
       const id = action.payload
-      if (id === state.current) {
+      if (id === currentFileId) {
         const i = state.files === null ? 0 : state.files?.findIndex(f => f.id === id)
 
         const files = state.files === null ? [] : state.files
@@ -114,11 +127,17 @@ export const filesSlice = createSlice({
 
       if (state.files === null || state.files === undefined) return
 
-      const i = state.files.findIndex(f => f.id === state.current)
+      const currentFileId = getCurrentFileId(state.current)
+      if (currentFileId == null) return
+
+      const i = state.files.findIndex(f => f.id === currentFileId)
       state.files[i].isNew = false
     },
     setViewState: (state, action: PayloadAction<string>) => {
-      const i = state.files?.findIndex(f => f.id === state.current)
+      const currentFileId = getCurrentFileId(state.current)
+      if (currentFileId == null) return
+
+      const i = state.files?.findIndex(f => f.id === currentFileId)
       if (i !== undefined && state.files !== null) {
         state.files[i].viewState = action.payload
 
@@ -129,7 +148,10 @@ export const filesSlice = createSlice({
     moveFileUp: (state) => {
       if (state === null || state.files === null || state.files === undefined) return
 
-      const i = state.files.findIndex(f => f.id === state.current)
+      const currentFileId = getCurrentFileId(state.current)
+      if (currentFileId == null) return
+
+      const i = state.files.findIndex(f => f.id === currentFileId)
       const file = state.files[i]
 
       if (i <= 0) return
@@ -150,7 +172,10 @@ export const filesSlice = createSlice({
     moveFileDown: (state) => {
       if (state === null || state.files === null || state.files === undefined) return
 
-      const i = state.files.findIndex(f => f.id === state.current)
+      const currentFileId = getCurrentFileId(state.current)
+      if (currentFileId == null) return
+
+      const i = state.files.findIndex(f => f.id === currentFileId)
       const file = state.files[i]
 
       if (i >= state.files.length - 1) return
