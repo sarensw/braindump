@@ -40,6 +40,7 @@ const fuzzySearch = createAsyncThunk(
     result = result.map(item => {
       return {
         ...item,
+        _indexes: item.indexes,
         name: getNameFromPath(item.path)
       }
     })

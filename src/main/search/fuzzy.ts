@@ -7,7 +7,7 @@ import { FileSystem } from '../fs'
 interface SearchResult {
   id: string
   score: number
-  indexes: number[]
+  indexes: readonly Number[]
   target: string
   path: string
   lnr: number
@@ -15,7 +15,7 @@ interface SearchResult {
 
 class FuzzySearch {
   private readonly fuzzyLimit: number = 100
-  private readonly fuzzyThreshold: number = -10000
+  private readonly fuzzyThreshold: number = -100
 
   async searchPath (id: string, path: string, directory: string, what: string): Promise<SearchResult[]> {
     // const id = '717a60b5-be89-49bb-9bbb-f7600a4170c5'
@@ -39,7 +39,7 @@ class FuzzySearch {
           // increase the line number before because lnr starts at 0
           lnr++
 
-          const searchResults = await fuzzysort.goAsync(what, [target], {
+          const searchResults = fuzzysort.go(what, [target], {
             limit: this.fuzzyLimit,
             threshold: this.fuzzyThreshold
           })
@@ -51,7 +51,7 @@ class FuzzySearch {
               result.push({
                 id,
                 score: searchResult.score,
-                indexes: searchResult.indexes,
+                indexes: fuzzysort.indexes(searchResult),
                 target: searchResult.target,
                 path,
                 lnr
