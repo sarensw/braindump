@@ -94,8 +94,6 @@ function useKeyboardNavigation (
   }
 
   const keydownHandler = (e: KeyboardEvent): void => {
-    log.debug(`key detected: ${e.key}, ctrl: ${String(e.ctrlKey)}, meta: ${String(e.metaKey)}, shift: ${String(e.shiftKey)}, alt: ${String(e.altKey)}`)
-
     // The Meta key on Mac (command key) and the Ctrl key on Windows/Linux
     // are equivalent. So we have to check the platform first, then see
     // whether Meta/Ctrl was pressed, and then map that to the keyboard
