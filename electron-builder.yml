@@ -16,7 +16,7 @@ files:
 mac:
   target: dmg
   category: public.app-category.productivity
-  icon: scripts/build/logo.icns
+  icon: build/logo.icns
   entitlements: scripts/build/entitlements.mac.plist
   entitlementsInherit: scripts/build/entitlements.mac.plist
   type: distribution
@@ -35,6 +35,7 @@ linux:
   vendor: FeatureNinjas OUe
   category: Development
   artifactName: braindump-${version}.${ext}
+  icon: build/icons
 
 deb:
   artifactName: braindump_${version}_${arch}.${ext}
