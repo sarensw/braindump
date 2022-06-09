@@ -34,7 +34,9 @@ const FileOverlay: FunctionComponent = (): ReactElement => {
   }, [])
 
   const openFile = (selected: SerializableFile): void => {
-    dispatch(setCurrentFile(selected.id))
+    dispatch(setCurrentFile({
+      id: selected.id
+    }))
     dispatch(setActiveOverlay(null))
     to('editor/editor')
   }
