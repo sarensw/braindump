@@ -29,21 +29,20 @@ const EditorPage: React.FunctionComponent = (): ReactElement => {
   )
 
   useAsyncEffect(async () => {
-    if (currentFile !== null) {
-      const currentFileId = (typeof currentFile === 'string' ? currentFile : currentFile.id)
-      const file = files?.find(f => f.id === currentFileId)
+    if (currentFile == null) return
 
-      if (file !== undefined) {
-        const fileRaw = await readFile(file.path)
+    const file = files?.find(f => f.id === currentFile.id)
 
-        setEditorProps({
-          path: file.path,
-          text: fileRaw
-        })
+    if (file !== undefined) {
+      const fileRaw = await readFile(file.path)
 
-        if (file.isNew) {
-          to('editor/name')
-        }
+      setEditorProps({
+        path: file.path,
+        text: fileRaw
+      })
+
+      if (file.isNew) {
+        to('editor/name')
       }
     }
   }, [currentFile])

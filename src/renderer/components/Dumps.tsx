@@ -30,8 +30,8 @@ const Dumps = (): ReactElement => {
   }
 
   const isCurrentTabActive = (file: File): boolean => {
-    if (currentFile === null || currentFile === undefined) return false
-    if (file.id === currentFile) return true
+    if (currentFile == null) return false
+    if (file.id === currentFile.id) return true
     return false
   }
 

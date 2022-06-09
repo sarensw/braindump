@@ -30,6 +30,7 @@ export const BraindownEditor = ({
   const braindown = useRef<BraindownLanguage | null>(null)
   const settings = useAppSelector(state => state.settings)
   const current = useAppSelector(state => state.files.current)
+  const overlay = useAppSelector(state => state.app.overlay)
   const [codeEditor, setCodeEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null)
 
   const { to, handle } = useKeyboardNavigation(
@@ -64,6 +65,13 @@ export const BraindownEditor = ({
     if (codeEditor == null) return
     resetViewState(codeEditor)
   }, [current])
+
+  useEffect(() => {
+    log.debug('overlay status changed, persisting')
+    if (codeEditor == null) return
+    if (overlay == null) return
+    persistDuringUnload(null)
+  }, [overlay])
 
   const persistDuringUnload = (e): void => {
     log.debug('window is about to be unloaded, request to persist the current state')
@@ -124,27 +132,26 @@ export const BraindownEditor = ({
   }
 
   function resetViewState (codeEditor: monaco.editor.IStandaloneCodeEditor): void {
-    if (current == null) {
-      // do nothing
-    } else if (typeof current === 'string') {
-      const viewStateString = getViewState(current)
+    if (current == null) return
 
-      log.debug('setting focus and cursor position based on view state')
-      if (viewStateString !== null) {
-        const viewState = JSON.parse(viewStateString)
-        codeEditor.restoreViewState(viewState)
-      }
-    } else if (typeof current === 'object') {
+    if (current.line != null && current.column != null) {
       log.debug('setting focus and cursor position based on input')
-
       const position = {
         lineNumber: current.line,
         column: current.column
       }
       codeEditor.setPosition(position)
       codeEditor.revealPosition(position)
-      codeEditor.focus()
+    } else {
+      log.debug('setting focus and cursor position based on view state')
+
+      const viewStateString = getViewState(current.id)
+      if (viewStateString !== null) {
+        const viewState = JSON.parse(viewStateString)
+        codeEditor.restoreViewState(viewState)
+      }
     }
+    codeEditor.focus()
   }
 
   function handleLoaded (codeEditor: monaco.editor.IStandaloneCodeEditor): void {

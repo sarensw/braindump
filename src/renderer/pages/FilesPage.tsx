@@ -14,7 +14,7 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   const files = useAppSelector(state => state.files.files)
   const currentFile = useAppSelector(state => state.files.current)
   const colors = useAppSelector(state => state.themeNew.colors)
-  const [selected, setSelected] = useState<string | CurrentFileWithPosition | null>(currentFile)
+  const [selected, setSelected] = useState<CurrentFileWithPosition | null>(currentFile)
   const dispatch = useDispatch()
 
   const container = React.createRef<HTMLDivElement>()
@@ -29,9 +29,9 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   }, [])
 
   useEffect(() => {
-    if (refs === undefined || selected === null || container === null || container.current === null) return
+    if (refs == null || selected == null || container == null || container.current == null) return
 
-    const element = (typeof selected === 'string' ? refs[selected].current : refs[selected.id].current)
+    const element = refs[selected.id].current
     if (element != null) {
       if (element.getBoundingClientRect().top < container.current.getBoundingClientRect().top) {
         element.scrollIntoView()
@@ -48,11 +48,15 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
       description: 'select prev',
       action: (source, codeEditor): boolean => {
         if (files === null) return true
-        const currentIndex = files.findIndex(f => f.id === selected)
+        const currentIndex = files.findIndex(f => f.id === selected?.id)
         if (currentIndex === files.length - 1) return true
         const newSelected = files[currentIndex + 1].id
-        setSelected(newSelected)
-        dispatch(setCurrentFile(newSelected))
+        setSelected({
+          id: newSelected
+        })
+        dispatch(setCurrentFile({
+          id: newSelected
+        }))
         return true
       }
     }
@@ -62,11 +66,15 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
       description: 'select next',
       action: (source, codeEditor): boolean => {
         if (files === null) return true
-        const currentIndex = files.findIndex(f => f.id === selected)
+        const currentIndex = files.findIndex(f => f.id === selected?.id)
         if (currentIndex === 0) return true
         const newSelected = files[currentIndex - 1].id
-        setSelected(newSelected)
-        dispatch(setCurrentFile(newSelected))
+        setSelected({
+          id: newSelected
+        })
+        dispatch(setCurrentFile({
+          id: newSelected
+        }))
         return true
       }
     }
@@ -95,7 +103,9 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
       action: (source, codeEditor): boolean => {
         if (selected === null) return true
         dispatch(setActivePage('editor'))
-        dispatch(setCurrentFile(selected))
+        dispatch(setCurrentFile({
+          id: selected.id
+        }))
         const selectedFileId = (typeof selected === 'string' ? selected : selected.id)
         setLastUsedFile(selectedFileId).then(() => {}, () => {})
         return true
@@ -116,24 +126,24 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
   }, [selected, files])
 
   const fileSelected = (id: string): void => {
-    if (files === null || selected === null) return
-    if (selected === id) {
+    if (files == null || selected == null) return
+    if (selected.id === id) {
       // file already selected
     } else {
       // select that file
-      setSelected(id)
-      dispatch(setCurrentFile(id))
+      setSelected({ id })
+      dispatch(setCurrentFile({ id }))
     }
   }
 
   const fileSelectedToOpen = (id: string): void => {
-    if (files === null || selected === null) return
-    if (selected === id) {
+    if (files == null || selected == null) return
+    if (selected.id === id) {
       // file already selected
     } else {
       // select that file
-      setSelected(id)
-      dispatch(setCurrentFile(id))
+      setSelected({ id })
+      dispatch(setCurrentFile({ id }))
     }
     if (selected === null) return
     dispatch(setActivePage('editor'))

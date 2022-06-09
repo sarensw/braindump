@@ -14,12 +14,12 @@ export interface SerializableFile extends SharedFile {
 
 export interface CurrentFileWithPosition {
   id: string
-  line: number
-  column: number
+  line?: number
+  column?: number
 }
 
 interface FilesState {
-  current: string | CurrentFileWithPosition | null
+  current: CurrentFileWithPosition | null
   files: SerializableFile[] | null
   filesSize: number
   filesSearch: string
@@ -50,16 +50,6 @@ const initialState: FilesState = {
   shareFile: null
 }
 
-const getCurrentFileId = (stateCurrent: string | CurrentFileWithPosition | null): string | null => {
-  if (typeof stateCurrent === 'object' && stateCurrent != null) {
-    return stateCurrent?.id
-  } else if (typeof stateCurrent === 'string') {
-    return stateCurrent
-  }
-
-  return null
-}
-
 export const filesSlice = createSlice({
   name: 'tabs',
   initialState,
@@ -71,7 +61,7 @@ export const filesSlice = createSlice({
       state.files?.splice(0, 0, action.payload)
     },
     closeFile: (state, action: PayloadAction<string>) => {
-      const currentFileId = getCurrentFileId(state.current)
+      const currentFileId = state.current?.id
       if (currentFileId == null) return
 
       const id = action.payload
@@ -84,10 +74,14 @@ export const filesSlice = createSlice({
         if (i === length - 1) {
           // 4 === 5-1
           // 3
-          state.current = files[i - 1].id
+          state.current = {
+            id: files[i - 1].id
+          }
         } else {
           // 2
-          state.current = files[i + 1].id
+          state.current = {
+            id: files[i + 1].id
+          }
         }
       }
 
@@ -107,7 +101,7 @@ export const filesSlice = createSlice({
       const i = state.files.findIndex(f => f.path === action.payload.path)
       state.files[i].name = name
     },
-    setCurrentFile: (state, action: PayloadAction<string | CurrentFileWithPosition | null>) => {
+    setCurrentFile: (state, action: PayloadAction<CurrentFileWithPosition | null>) => {
       state.current = action.payload
     },
     setCount: (state, action: PayloadAction<number>) => {
@@ -127,14 +121,14 @@ export const filesSlice = createSlice({
 
       if (state.files === null || state.files === undefined) return
 
-      const currentFileId = getCurrentFileId(state.current)
+      const currentFileId = state.current?.id
       if (currentFileId == null) return
 
       const i = state.files.findIndex(f => f.id === currentFileId)
       state.files[i].isNew = false
     },
     setViewState: (state, action: PayloadAction<string>) => {
-      const currentFileId = getCurrentFileId(state.current)
+      const currentFileId = state.current?.id
       if (currentFileId == null) return
 
       const i = state.files?.findIndex(f => f.id === currentFileId)
@@ -148,7 +142,7 @@ export const filesSlice = createSlice({
     moveFileUp: (state) => {
       if (state === null || state.files === null || state.files === undefined) return
 
-      const currentFileId = getCurrentFileId(state.current)
+      const currentFileId = state.current?.id
       if (currentFileId == null) return
 
       const i = state.files.findIndex(f => f.id === currentFileId)
@@ -172,7 +166,7 @@ export const filesSlice = createSlice({
     moveFileDown: (state) => {
       if (state === null || state.files === null || state.files === undefined) return
 
-      const currentFileId = getCurrentFileId(state.current)
+      const currentFileId = state.current?.id
       if (currentFileId == null) return
 
       const i = state.files.findIndex(f => f.id === currentFileId)

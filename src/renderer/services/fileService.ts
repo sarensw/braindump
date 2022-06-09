@@ -98,7 +98,9 @@ async function createNewFile (): Promise<void> {
   store.dispatch(addFile(file))
   log.debug(`Added ${file.id} to files`)
 
-  store.dispatch(setCurrentFile(file.id))
+  store.dispatch(setCurrentFile({
+    id: file.id
+  }))
   log.debug(`File ${file.id} loaded`)
 
   store.dispatch(setCount(counter))
@@ -107,7 +109,7 @@ async function createNewFile (): Promise<void> {
   state = store.getState()
   const newFiles = {
     files: state.files.files,
-    lastUsed: state.files.current,
+    lastUsed: state.files.current == null ? null : state.files.current.id,
     count: state.files.count
   }
 
@@ -119,7 +121,9 @@ async function setLastUsedFile (id: string): Promise<void> {
 
   // TODO why do I set the current file ID here? This
   //      causes a rerender and reload in the editor
-  store.dispatch(setCurrentFile(id))
+  store.dispatch(setCurrentFile({
+    id
+  }))
 
   const state = store.getState()
   if (state.files.files === null) return
@@ -251,7 +255,9 @@ async function loadFiles (): Promise<void> {
     store.dispatch(setFiles(files.files as File[]))
     log.debug(`Loaded ${files.files.length} files`)
 
-    store.dispatch(setCurrentFile(newFileId))
+    store.dispatch(setCurrentFile({
+      id: newFileId
+    }))
     log.debug(`File ${newFileId} loaded`)
 
     store.dispatch(setCount(1))
@@ -283,17 +289,18 @@ function saveFileContent (path: string, text: string): void {
 function saveFile (): void {
   const state = store.getState()
 
-  if (state !== undefined) {
-    const id = state.files.current
-    const file = state.files.files?.find(f => f.id === id)
+  if (state == null) return
+  if (state.files.current == null) return
 
-    if (state.files.dirty && file !== undefined && file?.path !== undefined) {
-      saveFileContent(file?.path, state.files.text)
+  const id = state.files.current.id
+  const file = state.files.files?.find(f => f.id === id)
 
-      store.dispatch(cleanDirtyText())
+  if (state.files.dirty && file !== undefined && file?.path !== undefined) {
+    saveFileContent(file?.path, state.files.text)
 
-      persist()
-    }
+    store.dispatch(cleanDirtyText())
+
+    persist()
   }
 }
 

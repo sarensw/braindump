@@ -48,11 +48,7 @@ async function handleCloseActiveTab (): Promise<void> {
   flushFile()
   const state = store.getState()
   if (state.files.current !== null) {
-    if (typeof state.files.current === 'string') {
-      await closeFile(state.files.current)
-    } else {
-      await closeFile(state.files.current.id)
-    }
+    await closeFile(state.files.current.id)
   }
 }
 

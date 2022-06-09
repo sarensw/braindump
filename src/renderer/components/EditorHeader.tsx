@@ -11,9 +11,9 @@ import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
 const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactElement => {
   const dispatch = useDispatch()
   const refName = useRef<HTMLInputElement>(null)
-  // let refFileNameInput: HTMLInputElement | null = null
   const [name, setName] = useState('')
   const [cluster, setCluster] = useState('')
+  const current = useAppSelector(state => state.files.current)
   const files = useAppSelector(state => state.files)
   const editor = useAppSelector(state => state.editor)
   const colors = useAppSelector(state => state.themeNew.colors)
@@ -25,22 +25,16 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
     refName
   )
 
-  // useKeyboardNavigation(
-  //   'editor/header/category',
-  //   FocusElementType.Element,
-  //   {}
-  // )
-
   useEffect(() => {
-    if (files.current !== null) {
-      const file = files.files?.find(f => f.id === files.current)
+    if (current == null) return
 
-      if (file !== undefined) {
-        setName(file.name)
-        setCluster(file.cluster)
-      }
+    const file = files.files?.find(f => f.id === current.id)
+
+    if (file !== undefined) {
+      setName(file.name)
+      setCluster(file.cluster)
     }
-  }, [files.current])
+  }, [current])
 
   const handleClusterChange = async (event): Promise<void> => {
     setCluster(event.target.value)
@@ -64,8 +58,9 @@ const EditorHeader: React.FunctionComponent<{ path: string }> = (props): ReactEl
   }
 
   const showShareMenu = (): void => {
-    if (files.current === null) return
-    const file = files.files?.find(f => f.id === files.current)
+    if (current === null) return
+
+    const file = files.files?.find(f => f.id === current.id)
     if (file === undefined) return
 
     dispatch(setShareFile(file))
