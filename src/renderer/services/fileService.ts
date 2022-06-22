@@ -268,8 +268,16 @@ async function loadFiles (): Promise<void> {
     store.dispatch(setFiles(files.files as File[]))
     log.debug(`Loaded ${(files.files as File[]).length} files`)
 
-    store.dispatch(setCurrentFile(files.lastUsed))
-    log.debug(`File ${files.lastUsed as number} loaded`)
+    if (typeof files.lastUsed === 'string') {
+      // check for string for backward compatibility
+      store.dispatch(setCurrentFile({
+        id: files.lastUsed
+      }))
+    } else if (typeof files.lastUsed === 'object') {
+      // now, the last current file might be stored as an object
+      store.dispatch(setCurrentFile(files.lastUsed))
+    }
+    log.debug(`File ${String(files.lastUsed)} loaded`)
 
     store.dispatch(setCount(files.count as number))
     log.debug(`File count set to ${files.count as number}`)
