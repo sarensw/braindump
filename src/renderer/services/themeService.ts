@@ -89,4 +89,22 @@ function updateBlockQuote (theme: ITheme): void {
   document.getElementsByTagName('head')[0].appendChild(style)
 }
 
-export { changeTheme, updateInlineCodeTheme, updateBlockQuote }
+function updateHashtag (theme: ITheme): void {
+  const innerHtml = `
+    .hashtag {
+      background: ${theme.editorTokens.hashtag.background ?? '#04a5fb'};
+      border-radius: 2px;
+    }
+  `
+
+  const style = window.document.createElement('style')
+  style.id = 'hashtagCss'
+  style.innerHTML = innerHtml
+  if (document.getElementById('hashtagCss') !== null) {
+    const element = document.getElementById('hashtagCss')
+    element?.remove()
+  }
+  document.getElementsByTagName('head')[0].appendChild(style)
+}
+
+export { changeTheme, updateInlineCodeTheme, updateBlockQuote, updateHashtag }

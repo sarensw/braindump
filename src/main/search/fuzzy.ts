@@ -15,7 +15,7 @@ interface SearchResult {
 
 class FuzzySearch {
   private readonly fuzzyLimit: number = 100
-  private readonly fuzzyThreshold: number = -100
+  private fuzzyThreshold: number = -100
 
   async searchPath (id: string, path: string, directory: string, what: string): Promise<SearchResult[]> {
     // const id = '717a60b5-be89-49bb-9bbb-f7600a4170c5'
@@ -26,6 +26,11 @@ class FuzzySearch {
     const stream = file.createReadStream({
       encoding: 'utf-8'
     })
+
+    if (what.match(/(#\w+)/) != null) {
+      // the user is looking for a hashtag, so reduce the threshold drastically
+      this.fuzzyThreshold = -40
+    }
 
     const result: SearchResult[] = []
 

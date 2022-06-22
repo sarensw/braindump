@@ -6,7 +6,7 @@ import log from '../log'
 import { Uri } from 'monaco-editor'
 import useAsyncEffect from 'use-async-effect'
 import { ITheme } from '../themes/ITheme'
-import { updateBlockQuote, updateInlineCodeTheme } from '../services/themeService'
+import { updateBlockQuote, updateHashtag, updateInlineCodeTheme } from '../services/themeService'
 
 interface ThemedEditorProps {
   language: string
@@ -80,6 +80,7 @@ export const ThemedEditor = ({
       rules.push({ token: 'taskOpen', foreground: theme.editorTokens.taskOpen.foreground, fontStyle: theme.editorTokens.taskOpen.fontStyle })
       rules.push({ token: 'taskDone', foreground: theme.editorTokens.taskDone.foreground, fontStyle: theme.editorTokens.taskDone.fontStyle })
       rules.push({ token: 'keyword', foreground: theme.editorTokens.keyword.foreground, fontStyle: theme.editorTokens.keyword.fontStyle })
+      rules.push({ token: 'hashtag', foreground: theme.editorTokens.hashtag.foreground, fontStyle: theme.editorTokens.hashtag.fontStyle })
       rules.push({ token: '', foreground: theme.editor.foreground, background: theme.editor.background })
       const themeData: monaco.editor.IStandaloneThemeData = {
         base: theme.type === 'light' ? 'vs' : 'vs-dark', // can also be vs-dark or hc-black
@@ -101,6 +102,7 @@ export const ThemedEditor = ({
 
       updateInlineCodeTheme(theme)
       updateBlockQuote(theme)
+      updateHashtag(theme)
     } catch (err: any) {
       log.error(`Could not set the theme because ${String(err.message)}`)
     }
@@ -162,6 +164,8 @@ export const ThemedEditor = ({
           automaticLayout: true,
           autoIndent: 'full',
           showFoldingControls: 'always',
+          selectionHighlight: false,
+          occurrencesHighlight: false,
           lineNumbers: lineNumbers ? 'on' : 'off',
           suggest: {
             preview: true

@@ -60,6 +60,11 @@ export default {
       foreground: '#fed449',
       fontStyle: ''
     },
+    hashtag: {
+      foreground: '#212427',
+      fontStyle: '',
+      background: '#fcbb21'
+    },
     inlineCode: {
       background: '#ffffff0a',
       borderBottom: '#ffffff0a',

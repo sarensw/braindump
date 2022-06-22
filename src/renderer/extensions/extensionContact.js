@@ -20,15 +20,19 @@ function handleNewWord (text, editor) {
     }
     const lastWord = model.getWordAtPosition(previousPosition)
     if (lastWord) {
-      const hasAt = model.getValueInRange({
+      const character = model.getValueInRange({
         startColumn: lastWord.startColumn - 1,
         endColumn: lastWord.startColumn,
         startLineNumber: previousPosition.lineNumber,
         endLineNumber: previousPosition.lineNumber
-      }) === '@'
+      })
+      const hasAt = character === '@'
+      const hasSharp = character === '#'
 
       if (hasAt) {
         suggestionsDb.put('contact', '@' + lastWord.word)
+      } else if (hasSharp) {
+        suggestionsDb.put('hashtag', '#' + lastWord.word)
       } else {
         suggestionsDb.put('word', lastWord.word)
       }

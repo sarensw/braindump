@@ -1,3 +1,6 @@
+# v0.9
+- [feat] support for hashtags/labels that start with #
+
 # v0.8
 - [feat] allow to change the user data directory
 - [feat] fuzzy search using Cmd+P/Ctrl+P

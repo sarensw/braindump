@@ -4,7 +4,7 @@ import { BraindownLanguageExtension } from './braindownLanguageExtension'
 import { NewLineExtensionHandler } from './extensions/newLineExtensionHandler'
 import { ListExtensionHandler } from './extensions/listExtensionHandler'
 import { Monaco } from '@monaco-editor/react'
-import { loadContactSuggestions, loadWordSuggestions } from './suggestions'
+import { loadContactSuggestions, loadHashtagSuggestions, loadWordSuggestions } from './suggestions'
 import { loadCommandSuggestions } from './suggestions/commandSuggestions'
 import { store } from '../store'
 import { setActivePage } from '../store/storeApp'
@@ -60,6 +60,7 @@ class BraindownLanguage {
           [/\/\/[\w\d-:_;>=+]+\S/, 'keyword'],
           [/\[[a-zA-Z 0-9:]+\]/, 'custom-date'],
           [/\[[a-zA-Z 0-9:]+\]/, 'custom-date'],
+          [/(#\w+)/, 'hashtag'],
 
           // github style code blocks (with backticks and language)
           [/^\s*```\s*((?:\w|[/\-#])+)\s*$/, { token: 'keyword', next: '@codeblockgh', nextEmbedded: '$1' }],
@@ -135,6 +136,12 @@ class BraindownLanguage {
     provider = this.monaco.languages.registerCompletionItemProvider('braindown', {
       triggerCharacters: ['@'],
       provideCompletionItems: (model, position, context, token) => loadContactSuggestions(this.monaco, '@') // eslint-disable-line
+    })
+    this.disposables.push(provider)
+
+    provider = this.monaco.languages.registerCompletionItemProvider('braindown', {
+      triggerCharacters: ['#'],
+      provideCompletionItems: _ => loadHashtagSuggestions(this.monaco, '#') // eslint-disable-line
     })
     this.disposables.push(provider)
 
@@ -447,6 +454,20 @@ class BraindownLanguage {
             isWholeLine: true,
             className: 'blockQuote',
             marginClassName: 'blockQuoteMargin'
+          }
+        })
+      }
+
+      const matches = line.matchAll(/(#\w+)/g)
+      for (const match of matches) {
+        const start = match.index ?? 0
+        const end = start + match[0].length + 1
+        if (start == null || length == null) return
+        decorations.push({
+          range: new me.Range(i, start + 1, i, end),
+          options: {
+            isWholeLine: false,
+            className: 'hashtag'
           }
         })
       }

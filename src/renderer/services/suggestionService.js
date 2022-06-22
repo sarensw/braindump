@@ -2,9 +2,10 @@ import log from '../log'
 import Dexie from 'dexie'
 
 const db = new Dexie('db_suggestions')
-db.version(1).stores({
+db.version(2).stores({
   words: 'word',
-  contacts: 'contact'
+  contacts: 'contact',
+  hashtags: 'hashtag'
 })
 log.info('suggestions db initialized')
 
@@ -22,6 +23,10 @@ async function put (type, text) {
     db.contacts.put({
       contact: text
     })
+  } else if (type === 'hashtag') {
+    db.hashtags.put({
+      hashtag: text
+    })
   }
 }
 
@@ -36,6 +41,9 @@ async function get (type, start) {
     return result
   } else if (type === 'contact') {
     const result = db.contacts.where('contact').startsWith(start).toArray()
+    return result
+  } else if (type === 'hashtag') {
+    const result = db.hashtags.where('hashtag').startsWith(start).toArray()
     return result
   }
   return []

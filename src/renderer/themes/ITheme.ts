@@ -6,6 +6,7 @@ export interface IEditorTokens {
   taskOpen: IEditorToken
   taskDone: IEditorToken
   keyword: IEditorToken
+  hashtag: IEditorToken
   inlineCode: {
     background?: string
     borderBottom?: string
@@ -20,6 +21,7 @@ export interface IEditorTokens {
 export interface IEditorToken {
   foreground: string
   fontStyle: string
+  background?: string
 }
 
 export interface ITheme {
