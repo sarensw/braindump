@@ -105,6 +105,11 @@ export const filesSlice = createSlice({
       state.current = action.payload
     },
     setCount: (state, action: PayloadAction<number>) => {
+      if (action.payload === -1) {
+        log.error('about to set invalid files count to -1')
+        const st = StackTrace.getSync()
+        log.error(st)
+      }
       state.count = action.payload
     },
     increaseCount: (state) => {

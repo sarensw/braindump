@@ -31,6 +31,7 @@ function saveFilesFile (payload: any): void {
     const st = StackTrace.getSync()
     log.error('invalid files.json about to be created')
     log.error(st)
+    return
   }
 
   window.__preload.send({

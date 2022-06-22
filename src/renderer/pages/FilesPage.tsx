@@ -30,6 +30,7 @@ const FilesPage: React.FunctionComponent = (): ReactElement => {
 
   useEffect(() => {
     if (refs == null || selected == null || container == null || container.current == null) return
+    if (refs[selected.id] == null) return
 
     const element = refs[selected.id].current
     if (element != null) {
