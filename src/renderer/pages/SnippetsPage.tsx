@@ -64,7 +64,13 @@ const SnippetsPage: React.FunctionComponent = (): ReactElement => {
           gridTemplateColumns: 'minmax(0, 1fr)'
         }}
       >
-        <ThemedEditor language='yaml' path={editorProps.path} initialText={editorProps.text} onTextChanged={onTextChanged} showMinimap={false} />
+        <ThemedEditor
+          language='yaml'
+          path={editorProps.path}
+          initialText={editorProps.text}
+          onTextChanged={onTextChanged}
+          showMinimap={false}
+        />
         <div className='p-2 justify-self-end'>
           <Button onClick={save}>Save</Button>
         </div>
