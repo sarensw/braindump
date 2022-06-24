@@ -42,7 +42,7 @@ const contents: any = {
     '- Minimalistic\n' +
     '- Auto save\n' +
     '- Based on VSCode editor -> well known experience\n' +
-    '- Available for Mac, Windows Linux\n' +
+    '- Available for Mac, Windows, Linux\n' +
     '- Offline\n' +
     '- Start any first level header in presentation mode\n' +
     '\n' +
@@ -60,7 +60,7 @@ const contents: any = {
     '# Braindump features\n' +
     '- Minimalistic, Auto save, Offline, Tasks, Quick snippets\n' +
     '- Start any first level header in presentation mode\n' +
-    '- Available for Mac, Windows Linux\n' +
+    '- Available for Mac, Windows, Linux\n' +
     '- VIM mode (experimental)\n' +
     '\n' +
     '## Markdown inspired\n' +
@@ -132,7 +132,7 @@ export class FileSystem implements IFileSystem {
         'editor.minimap.show': false,
         'editor.linenumbers.show': true,
         'editor.wordwrap': true,
-        'editor.mode': 'vim',
+        'editor.mode': 'normal',
         'tabs.show': false,
         'presentation.title.subTitle': '',
         'pro.licenseKey': '6FB42E21-E09C4924-937ACF0A-80C86FA0'
