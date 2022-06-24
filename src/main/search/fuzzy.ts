@@ -1,4 +1,4 @@
-import { open } from 'fs/promises'
+import { open, stat } from 'fs/promises'
 import log from 'electron-log'
 import fuzzysort from 'fuzzysort'
 import { join } from 'path'
@@ -18,9 +18,13 @@ class FuzzySearch {
   private fuzzyThreshold: number = -100
 
   async searchPath (id: string, path: string, directory: string, what: string): Promise<SearchResult[]> {
-    // const id = '717a60b5-be89-49bb-9bbb-f7600a4170c5'
-    // const path = 'dump_45_1639538554227'
     const fullPath = join(directory, path)
+    try {
+      await stat(fullPath)
+    } catch (error) {
+      log.error(`file ${fullPath} not existing to be searched`)
+      return []
+    }
     const file = await open(fullPath, 'r')
 
     const stream = file.createReadStream({
